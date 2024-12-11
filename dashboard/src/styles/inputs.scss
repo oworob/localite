@@ -1,0 +1,29 @@
+textarea,
+input[type='text'],
+input[type='password'],
+input[type='email'] {
+  appearance: none;
+  outline: none;
+  font-family: inherit;
+  font-size: 100%;
+  color: var(--text);
+  padding: 5px 15px;
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: 5px;
+  transition: var(--transition);
+  transition-property: border-color, color;
+  &:hover:not(:disabled),
+  &:focus:not(:disabled) {
+    border-color: var(--theme);
+  }
+  &:disabled {
+    color: var(--text-disabled);
+  }
+}
+
+textarea {
+  max-height: 300px;
+  padding: 1rem;
+  resize: vertical;
+}

@@ -1,0 +1,54 @@
+@use 'scrollbar.scss';
+@use 'buttons.scss';
+@use 'inputs.scss';
+
+:root {
+  --background: #111;
+  --text: #eee;
+  --text-disabled: rgb(from var(--text) r g b / 60%);
+  --panel: #181818;
+  --panel-border: #333;
+  --theme: #2b9872;
+  --shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+  --transition: 0.2s;
+  --error: #e84d4d;
+  --warn: #d8ab49;
+  --success: #63ab63;
+}
+
+body {
+  font-family: 'Segoe UI';
+  margin: 0;
+  text-shadow: var(--shadow);
+  background: var(--background);
+  color: var(--text);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin: 0;
+}
+
+.hint {
+  color: var(--text-disabled);
+  font-size: 90%;
+}
+
+.panel {
+  background: var(--panel);
+  padding: 10px 15px;
+  border-radius: 5px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--panel-border);
+  &.hover {
+    transition: var(--transition);
+    &:hover {
+      border-color: var(--theme);
+    }
+  }
+}
