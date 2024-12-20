@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
+import { onClickOutside } from '@vueuse/core'
 import type IApiLanguage from '@/models/project/language'
 import { Icon } from '@iconify/vue/dist/iconify.js'
 
@@ -9,6 +10,17 @@ const props = defineProps<{
 }>()
 
 const select_open = ref(false)
+const query = ref('')
+
+const filtered_languages = computed(() => {
+  const lower_query = query.value.toLowerCase()
+  return props.languages.filter(
+    (language) =>
+      language.title_native.toLowerCase().includes(lower_query) ||
+      language.title_eng.toLowerCase().includes(lower_query) ||
+      language.code.toLowerCase().includes(lower_query),
+  )
+})
 
 const emit = defineEmits(['languageSelected'])
 
@@ -17,14 +29,25 @@ function SelectLanguage(id: number) {
     emit('languageSelected', id)
   }
   select_open.value = !select_open.value
+  query.value = ''
 }
+
+const component = ref(null)
+onClickOutside(component, (event) => {
+  if (select_open.value) {
+    select_open.value = false
+  }
+})
 </script>
 
 <template>
-  <main id="LanguageSelect">
-    <p>Language:</p>
+  <main id="LanguageSelect" ref="component">
     <div class="select-container">
-      <button class="secondary with-icon select-header" @click="select_open = !select_open">
+      <button
+        type="button"
+        class="secondary with-icon select-header"
+        @click="select_open = !select_open"
+      >
         <div class="main">
           <Icon :icon="'circle-flags:' + selected_language.code" />
           <span>{{ selected_language.title_native }}</span>
@@ -32,8 +55,10 @@ function SelectLanguage(id: number) {
         <Icon icon="solar:alt-arrow-down-bold" :class="{ rotated: select_open }" />
       </button>
       <div class="select-window panel" v-if="select_open">
+        <input type="text" class="search" placeholder="Search languages" v-model="query" />
         <button
-          v-for="language in languages"
+          type="button"
+          v-for="language in filtered_languages"
           :key="language.id"
           class="with-icon"
           :class="language.id === selected_language.id ? 'primary' : 'tertiary'"
@@ -52,6 +77,9 @@ function SelectLanguage(id: number) {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  button {
+    width: 100%;
+  }
 }
 
 .select-container {
@@ -78,8 +106,15 @@ function SelectLanguage(id: number) {
   position: absolute;
   top: calc(100%);
   width: calc(100% - 32px);
+  overflow-y: scroll;
+  max-height: 15rem;
+  z-index: 2;
   button.tertiary {
     padding-left: 0;
   }
+}
+
+.search {
+  margin-bottom: 0.5rem;
 }
 </style>

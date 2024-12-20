@@ -2,7 +2,7 @@
 import type { IApiEntry } from '@/models/project/entry'
 import type { IApiProject } from '@/models/project/project'
 import { Icon } from '@iconify/vue/dist/iconify.js'
-import LanguageSelect from './LanguageSelect.vue'
+import LanguageSelect from '../../components/LanguageSelect.vue'
 import type IApiLanguage from '@/models/project/language'
 import { computed } from 'vue'
 
@@ -42,6 +42,7 @@ function SelectEntry(id: number) {
       <p class="hint">The owner of the project has asked to translate the entries below.</p>
     </header>
 
+    <p>Language:</p>
     <LanguageSelect
       :languages="project.languages!"
       :selected_language="selected_language"

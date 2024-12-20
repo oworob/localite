@@ -11,7 +11,6 @@ class User(db.Model, BaseModel, UserMixin):
     username = db.Column(db.String(USERNAME_MAX_LENGTH), unique=True, nullable=False)
     password_hash = db.Column(db.String(PASSWORD_HASH_MAX_LENGTH), nullable=False)
     email = db.Column(db.String(EMAIL_MAX_LENGTH), unique=True, nullable=False)
-    last_visit = db.Column(db.DateTime, nullable=False, default=datetime.now)
     created_projects = db.relationship('Project', backref='owner', lazy=True)
     translations = db.relationship('Translation', backref='author', lazy=True)
     messages = db.relationship('Message', backref='user', lazy=True)

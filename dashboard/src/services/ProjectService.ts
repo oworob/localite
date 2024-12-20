@@ -8,11 +8,11 @@ class ProjectService extends BaseService {
   }
 
   GetProjects(follow?: string[]): Promise<IApiResponse<IApiProject[]>> {
-    return this.get_all(follow)
+    return this.ApiClient.get(`${this.url}?${this.parse_follow(follow)}`)
   }
 
   GetProject(id: number, follow?: string[]): Promise<IApiResponse<IApiProject>> {
-    return this.get_one(id, follow)
+    return this.ApiClient.get(`${this.url}/${id}?${this.parse_follow(follow)}`)
   }
 }
 

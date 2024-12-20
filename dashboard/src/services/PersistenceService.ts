@@ -4,7 +4,6 @@
 // save collapsed project notes for each project
 
 import type { IProjectSettings } from '@/models/system/persistence'
-import type { I } from 'vitest/dist/chunks/reporters.D7Jzd9GS.js'
 
 class PersistenceService {
   Set(key: string, value: any) {

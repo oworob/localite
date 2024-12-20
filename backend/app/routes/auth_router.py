@@ -10,10 +10,6 @@ from app.config import EMAIL_MAX_LENGTH, EMAIL_REGEX, PASSWORD_MIN_LENGTH, PASSW
 
 auth_router = Blueprint('auth', __name__, url_prefix='/auth')
 
-def UpdateLastVisit(user):
-    user.last_visit = datetime.now()
-    db.session.commit()
-
 @auth_router.route('/register', methods=['POST'])
 @limiter.limit("5 per minute")
 def register():
@@ -61,7 +57,6 @@ def login():
         return {'message': 'Invalid username or password.'}, 401
 
     login_user(user)
-    UpdateLastVisit(user)
     data = user.to_dict()
     return data
 
@@ -74,6 +69,5 @@ def logout():
 @auth_router.route('/current_user', methods=['GET'])
 def get_current_user():
     if current_user.is_authenticated:
-        UpdateLastVisit(current_user)
         return current_user.to_dict()
     return {'message': 'No user is currently logged in'}, 401

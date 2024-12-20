@@ -1,27 +1,26 @@
-import ApiClient from './ApiClient'
+import BaseService from './BaseService'
 import type { IApiResponse } from '@/models/system/api-response'
 import type { IApiUser } from '@/models/user/user'
 
-class AuthService {
-  protected url: string
+class AuthService extends BaseService {
   constructor() {
-    this.url = '/auth'
+    super('/auth')
   }
 
   Login(username: string, password: string): Promise<IApiResponse<IApiUser>> {
-    return ApiClient.post(`${this.url}/login`, { username, password })
+    return this.ApiClient.post(`${this.url}/login`, { username, password })
   }
 
   Register(email: string, username: string, password: string): Promise<IApiResponse<IApiUser>> {
-    return ApiClient.post(`${this.url}/register`, { email, username, password })
+    return this.ApiClient.post(`${this.url}/register`, { email, username, password })
   }
 
   GetCurrentUser(): Promise<IApiResponse<IApiUser>> {
-    return ApiClient.get(`${this.url}/current_user`)
+    return this.ApiClient.get(`${this.url}/current_user`)
   }
 
   Logout(): Promise<IApiResponse<any>[]> {
-    return ApiClient.post(`${this.url}/logout`)
+    return this.ApiClient.post(`${this.url}/logout`)
   }
 }
 

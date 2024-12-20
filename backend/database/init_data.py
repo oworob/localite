@@ -8,6 +8,7 @@ from app.models.vote import Vote
 from app.models.note import Note
 from app.models.message import Message
 from app.models.comment import Comment
+from app.models.invite import Invite
 
 def init_data(app):
     with app.app_context():
@@ -18,12 +19,22 @@ def init_data(app):
         language3 = Language(code='fr', title_eng='French', title_native='Français')
         language4 = Language(code='de', title_eng='German', title_native='Deutsch')
         language5 = Language(code='pl', title_eng='Polish', title_native='Polski')
+        language6 = Language(code='it', title_eng='Italian', title_native='Italiano')
+        language7 = Language(code='pt', title_eng='Portuguese', title_native='Português')
+        language8 = Language(code='ru', title_eng='Russian', title_native='Русский')
+        language9 = Language(code='ja', title_eng='Japanese', title_native='日本語')
+        language10 = Language(code='zh', title_eng='Chinese', title_native='中文')
 
         db.session.add(language1)
         db.session.add(language2)
         db.session.add(language3)
         db.session.add(language4)
         db.session.add(language5)
+        db.session.add(language6)
+        db.session.add(language7)
+        db.session.add(language8)
+        db.session.add(language9)
+        db.session.add(language10)
         db.session.commit()
 
         # users
@@ -31,9 +42,12 @@ def init_data(app):
         user1.set_password('admin')
         user2 = User(username='user', email='user@email.com')
         user2.set_password('user')
+        user3 = User(username='bob', email='bob@email.com')
+        user3.set_password('bob')
 
         db.session.add(user1)
         db.session.add(user2)
+        db.session.add(user3)
         db.session.commit()
 
         # messages
@@ -49,22 +63,39 @@ def init_data(app):
         project1 = Project(
             title='Dinosaur Game',
             owner_id=user1.id,
-            original_language_id=language1.id
+            original_language_id=language1.id,
+            description='A simple game where you play as a dinosaur.'
         )
         project2 = Project(
             title='Książka kucharska',
             owner_id=user2.id,
-            original_language_id=language5.id
+            original_language_id=language5.id,
+            description='A Polish cookbook.'
+        )
+        project3 = Project(
+            title='Social media app',
+            owner_id=user3.id,
+            original_language_id=language1.id,
+            description='An app for sharing photos and messages.'
         )
 
         db.session.add(project1)
         db.session.add(project2)
+        db.session.add(project3)
+        db.session.commit()
+
+        # invites
+        invite1 = Invite(user_id=user3.id, project_id=project1.id)
+        invite2 = Invite(user_id=user1.id, project_id=project3.id)
+
+        db.session.add(invite1)
         db.session.commit()
 
         # project contributors and languages
-
+        project1.contributors.append(user1)
         project1.contributors.append(user2)
         project2.contributors.append(user1)
+        project2.contributors.append(user2)
 
         project1.languages.append(language2)
         project1.languages.append(language3)
@@ -73,6 +104,8 @@ def init_data(app):
         project2.languages.append(language2)
         project2.languages.append(language3)
         project2.languages.append(language4)
+
+        project3.languages.append(language2)
         db.session.commit()
 
         # notes
@@ -87,15 +120,18 @@ def init_data(app):
         # entries
         entry1 = Entry(
             project_id=project1.id,
-            content='Press E to eat.'
+            content='Press E to eat.',
+            created_at='2025-01-01'
         )
         entry2 = Entry(
             project_id=project1.id,
-            content='You can hide in the jungle to avoid predators.'
+            content='You can hide in the jungle to avoid predators.',
+            created_at='2025-01-02'
         )
         entry3 = Entry(
             project_id=project2.id,
-            content='Dodaj 1 szklankę mąki.'
+            content='Dodaj 1 szklankę mąki.',
+            created_at='2025-01-03'
         )
 
         db.session.add(entry1)

@@ -1,12 +1,14 @@
-import ApiClient from './ApiClient'
+import BaseService from './BaseService'
 import type { IApiAppStats } from '@/models/system/app-stats'
 import type { IApiResponse } from '@/models/system/api-response'
 
-class MiscService {
-  protected url = '/misc'
+class MiscService extends BaseService {
+  constructor() {
+    super('/misc')
+  }
 
   GetAppSummary(): Promise<IApiResponse<IApiAppStats>> {
-    return ApiClient.get(`${this.url}/app_stats`)
+    return this.ApiClient.get(`${this.url}/app_stats`)
   }
 }
 

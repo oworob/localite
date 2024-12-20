@@ -1,19 +1,27 @@
-import ApiClient from './ApiClient'
+import axios from 'axios'
+
+const ApiClient = axios.create({
+  baseURL: 'http://localhost:5000/api',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  withCredentials: true,
+})
 
 export default abstract class BaseService {
   protected url: string
+  protected ApiClient: axios.AxiosInstance
 
   constructor(url: string) {
     this.url = url
+    this.ApiClient = ApiClient
   }
 
-  get_all<T>(follow?: string[]): Promise<T> {
-    const follow_str = follow ? `?follow=${follow.join(',')}` : ''
-    return ApiClient.get(`${this.url}${follow_str}`)
+  parse_follow(follow?: string[]): string {
+    return follow ? `follow=${follow.join(',')}` : ''
   }
 
-  get_one<T>(id: number, follow?: string[]): Promise<T> {
-    const follow_str = follow ? `?follow=${follow.join(',')}` : ''
-    return ApiClient.get(`${this.url}/${id}${follow_str}`)
+  parse_filter(filter?: string): string {
+    return filter ? `filter=${filter}` : ''
   }
 }

@@ -64,7 +64,8 @@ function Logout() {
 </template>
 
 <style scoped lang="scss">
-nav {
+#TopBar {
+  z-index: 1000;
   background: var(--background);
   position: sticky;
   top: 0;

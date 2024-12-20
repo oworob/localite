@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import LanguageSelect from '../project/LanguageSelect.vue'
+import LanguageSelect from '../../components/LanguageSelect.vue'
 import type IApiLanguage from '@/models/project/language'
 import LanguageService from '@/services/LanguageService'
 
@@ -17,9 +17,6 @@ onMounted(() => {
 
 <template>
   <main id="Filters">
-    <header class="header">
-      <h2>Projects</h2>
-    </header>
     <div class="filters">
       <h4>Search</h4>
       <input type="text" id="search" placeholder="Project name" />

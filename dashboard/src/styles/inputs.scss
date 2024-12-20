@@ -27,3 +27,30 @@ textarea {
   padding: 1rem;
   resize: vertical;
 }
+
+.radio-label {
+  position: relative;
+  padding-left: 1.5rem;
+  cursor: pointer;
+  input[type='radio'] {
+    display: none;
+  }
+
+  &:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0.8rem;
+    aspect-ratio: 1 / 1;
+    border: 2px solid var(--panel);
+    border-radius: 50%;
+    outline: 2px solid var(--theme);
+    transition: var(--transition);
+  }
+
+  &:has(input[type='radio']:checked):before {
+    background-color: var(--theme);
+  }
+}

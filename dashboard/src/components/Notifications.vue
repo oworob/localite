@@ -27,12 +27,14 @@ const NotificationStore = useNotificationStore()
   flex-direction: column;
   gap: 0.5rem;
   width: 20%;
+  pointer-events: none;
 }
 .notification {
   cursor: pointer;
   transition: var(--transition);
   transform: translateY(0);
   position: relative;
+  pointer-events: initial;
   &.removing {
     transform: translateX(calc(100% + 1rem));
   }

@@ -1,3 +1,36 @@
+# Project Roadmap
+
+#### Components
+
+- [ ] Autocomplete (mutiple or singular)
+
+#### Authentication
+
+- [x] Logging in
+- [x] Creating account
+- [ ] Securing endpoints
+
+#### Projects
+
+- [ ] Creating project
+- [ ] Inviting members
+- [ ] Accepting invitations
+- [x] Browsing joined projects
+- [ ] Filtering projects (by name and language)
+- [ ] Leaving projects
+
+#### Singular Project
+
+- [x] Browsing project
+- [ ] Updating _last_project_visit_
+
+#### Testing
+
+- [ ] Backend
+- [ ] Frontend
+
+---
+
 Pages:
 
 - Login
@@ -7,8 +40,8 @@ Pages:
   - entry translations + form + voting
   - comment section
 - Create Project
-- Manage Project
-- Project list
+- Manage Project (inviting)
+- Project list (with invites)
 
 Entry statuses:
 

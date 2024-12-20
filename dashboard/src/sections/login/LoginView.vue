@@ -163,14 +163,14 @@ async function Login() {
       </div>
       <div class="item">
         <header class="item-header">
-          <Icon icon="solar:notes-bold" />
+          <Icon icon="solar:lightbulb-bold" />
           <h3>{{ app_stats?.projects }} projects</h3>
         </header>
         <p class="hint">Create something new or contribute to projects that matter to you.</p>
       </div>
       <div class="item">
         <header class="item-header">
-          <Icon icon="solar:dialog-bold" />
+          <Icon icon="solar:notes-bold" />
           <h3>{{ app_stats?.entries }} entries</h3>
         </header>
         <p class="hint">

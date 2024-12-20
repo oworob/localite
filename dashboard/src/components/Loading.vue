@@ -4,7 +4,7 @@ import { Icon } from '@iconify/vue/dist/iconify.js'
 
 <template>
   <div id="Loading">
-    <Icon class="icon" icon="mingcute:loading-3-fill" />
+    <Icon class="loading-icon" icon="mingcute:loading-3-fill" />
   </div>
 </template>
 
@@ -14,19 +14,8 @@ import { Icon } from '@iconify/vue/dist/iconify.js'
   justify-content: center;
   align-items: center;
   padding: 10% 0;
-  .icon {
-    color: var(--theme);
+  .loading-icon {
     font-size: 5rem;
-    animation: spin 1s linear infinite;
-  }
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
   }
 }
 </style>
