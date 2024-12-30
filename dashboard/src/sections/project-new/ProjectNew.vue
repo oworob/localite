@@ -9,16 +9,27 @@ import LanguageService from '@/services/LanguageService'
 import { Icon } from '@iconify/vue/dist/iconify.js'
 import { onMounted, ref } from 'vue'
 import ImportEntries from './ImportEntries.vue'
+import type { INewEntry } from '@/models/project/entry'
+import type { INewProject } from '@/models/project/project'
+import ProjectService from '@/services/ProjectService'
+import { UNKNOWN_ERROR } from '@/assets/errors'
+import { useNotificationStore } from '@/stores/NotificationStore'
+import { useRouter } from 'vue-router'
 
 const loading = ref(true) // load languages
+const submitting = ref(false)
+const title = ref('')
+const description = ref('')
 const notes = ref<string[]>([])
 const languages = ref<IApiLanguage[]>([])
 const selected_original_language = ref<IApiLanguage>()
 const selected_desired_languages = ref<IApiLanguage[]>([])
 const selected_users = ref<IApiUser[]>([])
-const entries = ref<string[]>([])
-
+const entries = ref<INewEntry[]>([{ content: '', context: '' }])
 const import_window_open = ref(false)
+
+const NotificationStore = useNotificationStore()
+const router = useRouter()
 
 onMounted(() => {
   LanguageService.GetLanguages().then((res) => {
@@ -28,8 +39,29 @@ onMounted(() => {
   })
 })
 
-function Submit() {
-  console.log('submit')
+async function Submit() {
+  submitting.value = true
+  const new_project: INewProject = {
+    title: title.value,
+    description: description.value,
+    notes: notes.value,
+    original_language_id: selected_original_language.value!.id,
+    languages: selected_desired_languages.value.map((language) => language.id),
+    contributors: selected_users.value.map((user) => user.id),
+    entries: entries.value,
+  }
+  try {
+    const res = await ProjectService.CreateProject(new_project)
+    router.push({ path: '/projects/' + res.data })
+    NotificationStore.AddNotification('Project created successfully!', 'success')
+  } catch (err: any) {
+    if (err.response.data.message) {
+      NotificationStore.AddNotification(err.response.data.message, 'error')
+    } else {
+      NotificationStore.AddNotification(UNKNOWN_ERROR, 'error')
+    }
+    submitting.value = false
+  }
 }
 
 function AddNewNote() {
@@ -44,7 +76,7 @@ function DeleteNote(index: number) {
 
 function AddNewEntry() {
   if (entries.value.length < 1000) {
-    entries.value.push('')
+    entries.value.push({ content: '', context: '' })
   }
 }
 
@@ -54,6 +86,9 @@ function DeleteEntry(index: number) {
 
 function HandleOriginalLanguageSelected(id: number) {
   selected_original_language.value = languages.value.find((language) => language.id === id)!
+  selected_desired_languages.value = selected_desired_languages.value.filter(
+    (language) => language.id !== id,
+  )
 }
 
 function HandleDesiredLanguageSelected(id: number) {
@@ -77,7 +112,7 @@ function HandleUserSelected(user: IApiUser) {
   }
 }
 
-function SaveImportedEntries(new_entries: string[], mode: string) {
+function SaveImportedEntries(new_entries: INewEntry[], mode: string) {
   if (mode === 'append') {
     entries.value = entries.value.concat(new_entries)
   } else {
@@ -95,17 +130,23 @@ function SaveImportedEntries(new_entries: string[], mode: string) {
         <h2>Create New Project</h2>
         <h4>Details</h4>
         <div class="form-item">
-          <label class="hint">Project Name*</label>
-          <input type="text" placeholder="My Awesome Project" />
+          <label class="hint">Project Name</label>
+          <input type="text" v-model="title" placeholder="My Awesome Project" />
         </div>
         <div class="form-item">
           <label class="hint">Description</label>
-          <textarea placeholder="A brief description of your project" spellcheck="false"></textarea>
+          <textarea
+            v-model="description"
+            placeholder="A brief description of your project"
+            spellcheck="false"
+          ></textarea>
         </div>
         <div class="form-item">
           <div class="notes-header">
             <h4>Notes</h4>
-            <button class="secondary" type="button" @click="AddNewNote">New Note</button>
+            <button class="primary with-icon" type="button" @click="AddNewNote">
+              <Icon icon="solar:add-circle-bold" />New Note
+            </button>
           </div>
           <div class="notes">
             <div v-if="notes.length === 0" class="hint">
@@ -146,10 +187,12 @@ function SaveImportedEntries(new_entries: string[], mode: string) {
         </div>
 
         <div class="form-item">
-          <h4>Languages*</h4>
+          <h4>Languages</h4>
           <p class="hint">The languages you would like your project to be translated into.</p>
           <LanguageMultiSelect
-            :languages="languages"
+            :languages="
+              languages.filter((language) => language.id !== selected_original_language?.id)
+            "
             :selected_languages="selected_desired_languages"
             @language-selected="HandleDesiredLanguageSelected"
           />
@@ -174,7 +217,11 @@ function SaveImportedEntries(new_entries: string[], mode: string) {
       <div class="form-section">
         <h4>Contributors</h4>
         <p class="hint">Invite users to contribute to your project and translate your entries.</p>
-        <UserMultiSelect :selected_users="selected_users" @userSelected="HandleUserSelected" />
+        <UserMultiSelect
+          :selected_users="selected_users"
+          @userSelected="HandleUserSelected"
+          ignore_self
+        />
         <div class="selected-users">
           <button
             class="secondary with-icon"
@@ -205,17 +252,39 @@ function SaveImportedEntries(new_entries: string[], mode: string) {
             <div class="entry" v-for="(_, index) in entries" :key="index">
               <p class="hint">{{ index + 1 }}.</p>
               <input
+                class="entry-content"
                 type="text"
-                v-model="entries[index]"
+                v-model="entries[index].content"
                 spellcheck="false"
                 placeholder="This is an empty entry."
               />
-              <button type="button" class="tertiary icon" @click="DeleteEntry(index)">
+              <input
+                class="entry-context"
+                type="text"
+                v-model="entries[index].context"
+                placeholder="Optional context"
+                spellcheck="false"
+              />
+              <button
+                type="button"
+                class="tertiary icon"
+                @click="DeleteEntry(index)"
+                :disabled="entries.length === 1"
+              >
                 <Icon icon="solar:trash-bin-2-bold" />
               </button>
             </div>
           </div>
         </div>
+      </div>
+      <div class="actions form-section">
+        <p class="hint">
+          Don't worry, you will be able to add more or delete existing entries, notes, languages,
+          and contributors later.
+        </p>
+        <button class="primary with-icon submit-button" :disabled="submitting">
+          <Icon icon="solar:add-circle-bold" />Create New Project
+        </button>
       </div>
     </form>
   </main>
@@ -309,10 +378,21 @@ function SaveImportedEntries(new_entries: string[], mode: string) {
       display: flex;
       gap: 0.5rem;
       align-items: center;
-      input {
-        flex-grow: 1;
+      .entry-content {
+        flex-grow: 0.75;
+      }
+      .entry-context {
+        flex-grow: 0.25;
       }
     }
   }
+}
+
+.actions {
+  grid-column: span 3;
+  display: flex;
+  flex-direction: row !important;
+  justify-content: space-between;
+  align-items: flex-end;
 }
 </style>

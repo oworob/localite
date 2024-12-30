@@ -1,4 +1,4 @@
-import type { IApiEntry } from './entry'
+import type { IApiEntry, INewEntry } from './entry'
 import type IApiLanguage from './language'
 import type { IApiNote } from './note'
 import type { IApiUser } from '../user/user'
@@ -25,4 +25,5 @@ export interface INewProject {
   original_language_id: number
   languages: number[]
   contributors: number[]
+  entries: INewEntry[]
 }

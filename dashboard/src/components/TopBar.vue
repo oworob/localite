@@ -25,7 +25,7 @@ function Logout() {
 
 <template>
   <nav id="TopBar" ref="topbar">
-    <div class="logo">LOGO</div>
+    <div class="logo">[LOGO] LOCALITE</div>
     <div class="links">
       <RouterLink to="/">
         <button class="tertiary">Home</button>

@@ -19,7 +19,7 @@ class AuthService extends BaseService {
     return this.ApiClient.get(`${this.url}/current_user`)
   }
 
-  Logout(): Promise<IApiResponse<any>[]> {
+  Logout(): Promise<IApiResponse<any>> {
     return this.ApiClient.post(`${this.url}/logout`)
   }
 }

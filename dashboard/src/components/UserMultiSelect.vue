@@ -5,9 +5,11 @@ import { Icon } from '@iconify/vue/dist/iconify.js'
 import type { IApiUser } from '@/models/user/user'
 import UserService from '@/services/UserService'
 import { useNotificationStore } from '@/stores/NotificationStore'
+import { useAuthStore } from '@/stores/AuthStore'
 
 const props = defineProps<{
   selected_users: IApiUser[]
+  ignore_self?: boolean
 }>()
 
 const select_open = ref(false)
@@ -16,14 +18,18 @@ const users = ref<IApiUser[]>([])
 const loading = ref(false)
 
 const NotificationStore = useNotificationStore()
+const AuthStore = useAuthStore()
 
 function UpdateUserList() {
-  console.log('called')
   if (!loading.value && query.value.length > 0 && /^[a-zA-Z0-9]*$/.test(query.value)) {
     loading.value = true
     UserService.GetUsers([], query.value)
       .then((res) => {
-        users.value = res.data
+        if (props.ignore_self) {
+          users.value = res.data.filter((user) => user.id !== AuthStore.user?.id)
+        } else {
+          users.value = res.data
+        }
       })
       .catch(() => {
         NotificationStore.AddNotification('Failed to fetch users.', 'error')

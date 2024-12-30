@@ -8,3 +8,4 @@ class Message(db.Model, BaseModel):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     content = db.Column(db.String(MESSAGE_CONTENT_MAX_LENGTH), nullable=False)
     read = db.Column(db.Boolean, nullable=False, default=False)
+    link = db.Column(db.String, nullable=True)

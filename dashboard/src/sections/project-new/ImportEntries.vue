@@ -2,8 +2,9 @@
 import { onClickOutside, useDropZone } from '@vueuse/core'
 import { ref } from 'vue'
 import Papa from 'papaparse'
+import type { INewEntry } from '@/models/project/entry'
 
-const imported_entries = ref<string[]>([])
+const imported_entries = ref<INewEntry[]>([])
 const drop_zone = ref<HTMLDivElement>()
 const current_file = ref<File>()
 const mode = ref<'append' | 'overwrite'>('append')
@@ -71,7 +72,10 @@ const { isOverDropZone } = useDropZone(drop_zone, {
         <label for="file" class="file-label">
           {{
             current_file
-              ? current_file.name + ` (${imported_entries.length} entries)`
+              ? current_file.name +
+                ` (${imported_entries.length} ${
+                  imported_entries.length === 1 ? 'entry' : 'entries'
+                } found)`
               : 'Select or drag file'
           }}
         </label>
@@ -91,7 +95,10 @@ const { isOverDropZone } = useDropZone(drop_zone, {
       </div>
 
       <div class="actions">
-        <button class="primary" @click="SaveEntries" :disabled="!current_file">Import</button>
+        <button class="primary with-icon" @click="SaveEntries" :disabled="!current_file">
+          <Icon icon="solar:upload-square-bold" />
+          Import
+        </button>
         <button class="tertiary" @click="emit('close')">Cancel</button>
       </div>
     </div>
@@ -119,7 +126,7 @@ const { isOverDropZone } = useDropZone(drop_zone, {
   transition: var(--transition);
   &.is-over,
   &:hover {
-    border-color: var(--text);
+    border-color: var(--theme);
   }
 }
 
@@ -133,6 +140,11 @@ const { isOverDropZone } = useDropZone(drop_zone, {
 }
 input[type='file'] {
   display: none;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
 }
 
 .options {
