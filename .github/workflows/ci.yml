@@ -19,7 +19,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.10.3"
+          python-version: "3.9"
 
       - name: Install backend dependencies
         run: |
@@ -50,15 +50,15 @@ jobs:
 
       - name: Install frontend dependencies
         run: |
-          cd frontend
+          cd dashboard
           npm install
 
       - name: Run frontend lint
         run: |
-          cd frontend
+          cd dashboard
           npm run lint-ci
 
       - name: Run frontend tests
         run: |
-          cd frontend
+          cd dashboard
           npm run test-ci
