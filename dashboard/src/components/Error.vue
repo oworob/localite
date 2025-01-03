@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { IApiError } from '@/models/system/api-error'
 import { Icon } from '@iconify/vue/dist/iconify.js'
+import type { IApiError } from '@/models/system/api-error'
 
 const props = defineProps<{
   error: IApiError

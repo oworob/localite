@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
-import type IApiLanguage from '@/models/project/language'
 import { Icon } from '@iconify/vue/dist/iconify.js'
 import { onClickOutside } from '@vueuse/core'
+import { computed, ref } from 'vue'
+import type IApiLanguage from '@/models/project/language'
+import Checkbox from './Checkbox.vue'
 
 const props = defineProps<{
   languages: IApiLanguage[]
@@ -41,7 +42,7 @@ onClickOutside(component, (event) => {
         @click="select_open = !select_open"
       >
         <span>{{ selected_languages.length }} languages selected</span>
-        <Icon icon="solar:alt-arrow-down-bold" :class="{ rotated: select_open }" />
+        <Icon icon="solar:alt-arrow-down-bold" :rotate="select_open ? 90 : 0" />
       </button>
       <div class="select-window panel" v-if="select_open">
         <input type="text" class="search" placeholder="Search languages" v-model="query" />
@@ -49,16 +50,16 @@ onClickOutside(component, (event) => {
           type="button"
           v-for="language in filtered_languages"
           :key="language.id"
-          class="with-icon"
-          :class="
-            selected_languages.find((selected_language) => selected_language.id === language.id)
-              ? 'primary'
-              : 'tertiary'
-          "
+          class="tertiary with-icon"
           @click="emit('languageSelected', language.id)"
         >
+          <Checkbox
+            :checked="
+              selected_languages.some((selected_language) => selected_language.id === language.id)
+            "
+          />
           <Icon :icon="'circle-flags:' + language.code" />
-          <span>{{ language.title_native }}</span>
+          <span>{{ language.title_eng }} ({{ language.title_native }})</span>
         </button>
       </div>
     </div>

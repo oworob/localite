@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import type { IApiProject } from '@/models/project/project'
-import { useAuthStore } from '@/stores/AuthStore'
 import { Icon } from '@iconify/vue/dist/iconify.js'
 import { RouterLink } from 'vue-router'
+import type { IApiProject } from '@/models/project/project'
+import { useAuthStore } from '@/stores/AuthStore'
 
 const AuthStore = useAuthStore()
 
 function GetNewEntryCount(project: IApiProject): number {
   const user = project.contributors?.find((contributor) => contributor.id === AuthStore.user?.id)
   const new_entries = project.entries?.filter((entry) => {
-    const visit_date = new Date(user?.last_project_visit!)
+    const visit_date = new Date(user!.last_project_visit!)
     const entry_date = new Date(entry.created_at)
     return entry_date > visit_date
   })

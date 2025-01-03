@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue'
 import { Icon } from '@iconify/vue'
+import { computed, ref, watch } from 'vue'
 import type { IApiEntry } from '@/models/project/entry'
-import type { IApiProject } from '@/models/project/project'
 import type IApiLanguage from '@/models/project/language'
-import PersistenceService from '@/services/PersistenceService'
+import type { IApiProject } from '@/models/project/project'
 
 const props = defineProps<{
   project: IApiProject

@@ -1,7 +1,7 @@
+import type { IApiUser } from '../user/user'
 import type { IApiEntry, INewEntry } from './entry'
 import type IApiLanguage from './language'
 import type { IApiNote } from './note'
-import type { IApiUser } from '../user/user'
 
 export interface IApiProject {
   id: number

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onClickOutside, useDropZone } from '@vueuse/core'
-import { ref } from 'vue'
 import Papa from 'papaparse'
+import { ref } from 'vue'
 import type { INewEntry } from '@/models/project/entry'
 
 const imported_entries = ref<INewEntry[]>([])

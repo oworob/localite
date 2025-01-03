@@ -1,6 +1,6 @@
-import BaseService from './BaseService'
-import type { IApiAppStats } from '@/models/system/app-stats'
 import type { IApiResponse } from '@/models/system/api-response'
+import type { IApiAppStats } from '@/models/system/app-stats'
+import BaseService from './BaseService'
 
 class MiscService extends BaseService {
   constructor() {

@@ -28,6 +28,7 @@ const NotificationStore = useNotificationStore()
   gap: 0.5rem;
   width: 20%;
   pointer-events: none;
+  z-index: 100;
 }
 .notification {
   cursor: pointer;

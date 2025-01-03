@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10.3"
+
+      - name: Install backend dependencies
+          run: |
+          cd backend
+          pip install -r requirements.txt
+
+      # - name: Run backend lint
+      #   run: |
+      #     cd backend
+      #     npm run lint
+
+      # - name: Run backend tests
+      #   run: |
+      #     cd backend
+      #     npm run test
+
+  frontend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20.16.0"
+
+      - name: Install frontend dependencies
+        run: |
+          cd frontend
+          npm install
+
+      - name: Run frontend lint
+        run: |
+          cd frontend
+          npm run lint-ci
+
+      - name: Run frontend tests
+        run: |
+          cd frontend
+          npm run test-ci

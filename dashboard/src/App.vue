@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { RouterView } from 'vue-router'
-import TopBar from './components/TopBar.vue'
-import { useAuthStore } from './stores/AuthStore'
 import { onMounted } from 'vue'
-import AuthService from './services/AuthService'
+import { RouterView } from 'vue-router'
 import Notifications from './components/Notifications.vue'
+import TopBar from './components/TopBar.vue'
+import AuthService from './services/AuthService'
+import { useAuthStore } from './stores/AuthStore'
 import { useNotificationStore } from './stores/NotificationStore'
 
 const AuthStore = useAuthStore()

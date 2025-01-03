@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import LanguageSelect from '../../components/LanguageSelect.vue'
+// import LanguageSelect from '../../components/LanguageSelect.vue'
 import type IApiLanguage from '@/models/project/language'
 import LanguageService from '@/services/LanguageService'
 
 const languages = ref<IApiLanguage[]>([])
-const selected_language = ref<IApiLanguage>()
+// const selected_language = ref<IApiLanguage>()
 
 onMounted(() => {
   LanguageService.GetLanguages().then((res) => {

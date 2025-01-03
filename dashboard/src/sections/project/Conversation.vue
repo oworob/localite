@@ -1,3 +1,12 @@
+<script setup lang="ts">
+import type { IApiComment } from '@/models/project/comment'
+import { FormatDate } from '@/tools/FormatDate'
+
+const props = defineProps<{
+  comments: IApiComment[]
+}>()
+</script>
+
 <template>
   <main id="Conversation">
     <header>
@@ -17,15 +26,6 @@
     </form>
   </main>
 </template>
-
-<script setup lang="ts">
-import type { IApiComment } from '@/models/project/comment'
-import { FormatDate } from '@/tools/FormatDate'
-
-const props = defineProps<{
-  comments: IApiComment[]
-}>()
-</script>
 
 <style scoped lang="scss">
 #Conversation {

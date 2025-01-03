@@ -1,6 +1,6 @@
-import BaseService from './BaseService'
-import type { IApiResponse } from '@/models/system/api-response'
 import type IApiLanguage from '@/models/project/language'
+import type { IApiResponse } from '@/models/system/api-response'
+import BaseService from './BaseService'
 
 class LanguageService extends BaseService {
   constructor() {

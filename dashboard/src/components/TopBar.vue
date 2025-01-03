@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import AuthService from '@/services/AuthService'
-import { useAuthStore } from '@/stores/AuthStore'
 import { onMounted, ref } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
+import AuthService from '@/services/AuthService'
+import { useAuthStore } from '@/stores/AuthStore'
 
 const topbar = ref<HTMLElement | null>(null)
 onMounted(() => {

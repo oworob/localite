@@ -1,6 +1,6 @@
-import BaseService from './BaseService'
 import type { IApiResponse } from '@/models/system/api-response'
 import type { IApiUser } from '@/models/user/user'
+import BaseService from './BaseService'
 
 class UserService extends BaseService {
   constructor() {

@@ -1,6 +1,6 @@
+import type { IApiUser } from '../user/user'
 import type { IApiEntry } from './entry'
 import type { IApiProject } from './project'
-import type { IApiUser } from '../user/user'
 
 export interface IApiTranslation {
   id: number

@@ -1,16 +1,15 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue'
-import Conversation from './Conversation.vue'
-import EntryList from './EntryList.vue'
-import EntryWindow from './EntryWindow.vue'
-import type { IApiEntry } from '@/models/project/entry'
-import ProjectService from '@/services/ProjectService'
-import type { IApiProject } from '@/models/project/project'
-import Loading from '@/components/Loading.vue'
-import type IApiLanguage from '@/models/project/language'
 import { useRoute } from 'vue-router'
 import Error from '@/components/Error.vue'
+import Loading from '@/components/Loading.vue'
+import type { IApiEntry } from '@/models/project/entry'
+import type IApiLanguage from '@/models/project/language'
+import type { IApiProject } from '@/models/project/project'
 import type { IApiError } from '@/models/system/api-error'
+import ProjectService from '@/services/ProjectService'
+import EntryList from './EntryList.vue'
+import EntryWindow from './EntryWindow.vue'
 
 const project = ref<IApiProject>()
 const selected_entry = ref<IApiEntry>()
@@ -47,6 +46,7 @@ function FetchData() {
       selected_language.value = res.data.languages![0]
     })
     .catch((err) => {
+      console.log(err)
       error.value = err
     })
     .finally(() => {

@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { IApiEntry } from '@/models/project/entry'
-import type { IApiProject } from '@/models/project/project'
 import { Icon } from '@iconify/vue/dist/iconify.js'
-import LanguageSelect from '../../components/LanguageSelect.vue'
-import type IApiLanguage from '@/models/project/language'
 import { computed } from 'vue'
+import type { IApiEntry } from '@/models/project/entry'
+import type IApiLanguage from '@/models/project/language'
+import type { IApiProject } from '@/models/project/project'
+import LanguageSelect from '../../components/LanguageSelect.vue'
 
 const emit = defineEmits(['entrySelected', 'languageSelected'])
 const props = defineProps<{

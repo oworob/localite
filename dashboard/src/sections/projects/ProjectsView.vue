@@ -1,13 +1,13 @@
 <script setup lang="ts">
+import { Icon } from '@iconify/vue/dist/iconify.js'
 import { computed, onMounted, ref } from 'vue'
-import Filters from './Filters.vue'
+import { RouterLink } from 'vue-router'
+import Loading from '@/components/Loading.vue'
 import type { IApiProject } from '@/models/project/project'
 import ProjectService from '@/services/ProjectService'
 import { useAuthStore } from '@/stores/AuthStore'
-import { Icon } from '@iconify/vue/dist/iconify.js'
-import { RouterLink } from 'vue-router'
+import Filters from './Filters.vue'
 import ProjectButton from './ProjectButton.vue'
-import Loading from '@/components/Loading.vue'
 
 const AuthStore = useAuthStore()
 

@@ -1,20 +1,20 @@
 <script setup lang="ts">
+import { Icon } from '@iconify/vue/dist/iconify.js'
+import { onMounted, ref } from 'vue'
+import { RouterLink, useRouter } from 'vue-router'
+import { UNKNOWN_ERROR } from '@/assets/errors'
 import LanguageMultiSelect from '@/components/LanguageMultiSelect.vue'
 import LanguageSelect from '@/components/LanguageSelect.vue'
 import Loading from '@/components/Loading.vue'
 import UserMultiSelect from '@/components/UserMultiSelect.vue'
-import type IApiLanguage from '@/models/project/language'
-import type { IApiUser } from '@/models/user/user'
-import LanguageService from '@/services/LanguageService'
-import { Icon } from '@iconify/vue/dist/iconify.js'
-import { onMounted, ref } from 'vue'
-import ImportEntries from './ImportEntries.vue'
 import type { INewEntry } from '@/models/project/entry'
+import type IApiLanguage from '@/models/project/language'
 import type { INewProject } from '@/models/project/project'
+import { type IApiUser, UserStatus } from '@/models/user/user'
+import LanguageService from '@/services/LanguageService'
 import ProjectService from '@/services/ProjectService'
-import { UNKNOWN_ERROR } from '@/assets/errors'
 import { useNotificationStore } from '@/stores/NotificationStore'
-import { useRouter } from 'vue-router'
+import ImportEntries from './ImportEntries.vue'
 
 const loading = ref(true) // load languages
 const submitting = ref(false)
@@ -130,8 +130,8 @@ function SaveImportedEntries(new_entries: INewEntry[], mode: string) {
         <h2>Create New Project</h2>
         <h4>Details</h4>
         <div class="form-item">
-          <label class="hint">Project Name</label>
-          <input type="text" v-model="title" placeholder="My Awesome Project" />
+          <label class="hint">Project Title</label>
+          <input type="text" v-model="title" placeholder="Your project's title" />
         </div>
         <div class="form-item">
           <label class="hint">Description</label>
@@ -162,7 +162,7 @@ function SaveImportedEntries(new_entries: INewEntry[], mode: string) {
                 type="text"
                 v-model="notes[index]"
                 spellcheck="false"
-                placeholder="This is an empty note."
+                placeholder="An empty note"
               />
               <button type="button" class="tertiary icon" @click="DeleteNote(index)">
                 <Icon icon="solar:trash-bin-2-bold" />
@@ -198,39 +198,67 @@ function SaveImportedEntries(new_entries: INewEntry[], mode: string) {
           />
 
           <div class="selected-languages">
-            <button
-              type="button"
-              class="secondary with-icon"
-              v-for="language in selected_desired_languages"
-              @click="
-                selected_desired_languages.splice(selected_desired_languages.indexOf(language), 1)
-              "
-            >
-              <Icon :icon="'circle-flags:' + language.code" />
-              <span>{{ language.title_native }}</span>
-              <Icon icon="solar:trash-bin-2-bold" />
-            </button>
+            <div class="lang" v-for="language in selected_desired_languages" :key="language.id">
+              <div class="lang-info panel">
+                <Icon :icon="'circle-flags:' + language.code" />
+                <span>{{ language.title_eng }} ({{ language.title_native }})</span>
+              </div>
+              <button
+                type="button"
+                class="tertiary icon"
+                @click="
+                  selected_desired_languages.splice(selected_desired_languages.indexOf(language), 1)
+                "
+              >
+                <Icon icon="solar:trash-bin-2-bold" />
+              </button>
+            </div>
           </div>
         </div>
       </div>
 
       <div class="form-section">
         <h4>Contributors</h4>
-        <p class="hint">Invite users to contribute to your project and translate your entries.</p>
+        <p class="hint">
+          Select users you would like to translate your entries. Invites will be sent when the
+          project is created.
+        </p>
         <UserMultiSelect
           :selected_users="selected_users"
           @userSelected="HandleUserSelected"
           ignore_self
         />
+
         <div class="selected-users">
-          <button
-            class="secondary with-icon"
-            v-for="user in selected_users"
-            @click="selected_users.splice(selected_users.indexOf(user), 1)"
-          >
-            <span>{{ user.username }}</span>
-            <Icon icon="solar:trash-bin-2-bold" />
-          </button>
+          <div class="user" v-for="user in selected_users" :key="user.id">
+            <div class="user-info panel">
+              <RouterLink :to="'/users/' + user.id">
+                <p>{{ user.username }}</p>
+              </RouterLink>
+
+              <div class="user-stats hint">
+                <p class="stat">
+                  <Icon icon="solar:lightbulb-bold" />
+                  {{ user.stats?.joined_projects }}
+                </p>
+                <p class="stat">
+                  <Icon icon="solar:earth-bold" />
+                  {{ user.stats?.translations }}
+                </p>
+                <p class="stat">
+                  <Icon icon="solar:user-bold" />
+                  {{ UserStatus[user.status] }}
+                </p>
+              </div>
+            </div>
+            <button
+              type="button"
+              class="tertiary icon"
+              @click="selected_users.splice(selected_users.indexOf(user), 1)"
+            >
+              <Icon icon="solar:trash-bin-2-bold" />
+            </button>
+          </div>
         </div>
       </div>
 
@@ -256,7 +284,7 @@ function SaveImportedEntries(new_entries: INewEntry[], mode: string) {
                 type="text"
                 v-model="entries[index].content"
                 spellcheck="false"
-                placeholder="This is an empty entry."
+                placeholder="An empty entry"
               />
               <input
                 class="entry-context"
@@ -354,10 +382,46 @@ function SaveImportedEntries(new_entries: INewEntry[], mode: string) {
   }
 }
 
-.selected-languages {
+.selected-languages,
+.selected-users {
   display: flex;
+  flex-direction: column;
   gap: 0.5rem;
-  flex-wrap: wrap;
+  .lang,
+  .user {
+    display: flex;
+    gap: 0.5rem;
+    .lang-info,
+    .user-info {
+      flex-grow: 1;
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+    .user-info {
+      justify-content: space-between;
+    }
+    .user-stats {
+      display: flex;
+      gap: 1rem;
+      .stat {
+        display: flex;
+        gap: 0.25rem;
+        align-items: center;
+        svg {
+          color: var(--theme);
+        }
+      }
+    }
+    a {
+      color: var(--text);
+      text-decoration: none;
+      transition: var(--transition);
+      &:hover {
+        color: var(--theme);
+      }
+    }
+  }
 }
 
 .entry-section {

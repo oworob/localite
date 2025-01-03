@@ -15,6 +15,7 @@ function GetSuffix(day: number): string {
 }
 
 export function FormatDate(date: Date, show_month: boolean = false): string {
+  date = new Date(date)
   const year = date.getFullYear()
   if (show_month) {
     const day = String(date.getDate())

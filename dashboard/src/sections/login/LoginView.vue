@@ -1,13 +1,13 @@
 <script setup lang="ts">
+import { Icon } from '@iconify/vue/dist/iconify.js'
+import { computed, onMounted, ref, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { UNKNOWN_ERROR } from '@/assets/errors'
 import type { IApiAppStats } from '@/models/system/app-stats'
 import AuthService from '@/services/AuthService'
 import MiscService from '@/services/MiscService'
 import { useAuthStore } from '@/stores/AuthStore'
 import { useNotificationStore } from '@/stores/NotificationStore'
-import { Icon } from '@iconify/vue/dist/iconify.js'
-import { computed, onMounted, ref, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
 
 const AuthStore = useAuthStore()
 const NotificationStore = useNotificationStore()

@@ -44,10 +44,16 @@ def init_data(app):
         user2.set_password('user')
         user3 = User(username='bob', email='bob@email.com')
         user3.set_password('bob')
+        user4 = User(username='user4', email='user4@email.com')
+        user4.set_password('user4')
+        user5 = User(username='user5', email='user5@email.com')
+        user5.set_password('user5')
 
         db.session.add(user1)
         db.session.add(user2)
         db.session.add(user3)
+        db.session.add(user4)
+        db.session.add(user5)
         db.session.commit()
 
         # messages

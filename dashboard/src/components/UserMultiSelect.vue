@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
-import { onClickOutside, useDebounceFn } from '@vueuse/core'
 import { Icon } from '@iconify/vue/dist/iconify.js'
-import type { IApiUser } from '@/models/user/user'
+import { onClickOutside, useDebounceFn } from '@vueuse/core'
+import { ref, watch } from 'vue'
+import { type IApiUser, UserStatus } from '@/models/user/user'
 import UserService from '@/services/UserService'
-import { useNotificationStore } from '@/stores/NotificationStore'
 import { useAuthStore } from '@/stores/AuthStore'
+import { useNotificationStore } from '@/stores/NotificationStore'
+import Checkbox from './Checkbox.vue'
 
 const props = defineProps<{
   selected_users: IApiUser[]
@@ -23,7 +24,7 @@ const AuthStore = useAuthStore()
 function UpdateUserList() {
   if (!loading.value && query.value.length > 0 && /^[a-zA-Z0-9]*$/.test(query.value)) {
     loading.value = true
-    UserService.GetUsers([], query.value)
+    UserService.GetUsers(['stats'], query.value)
       .then((res) => {
         if (props.ignore_self) {
           users.value = res.data.filter((user) => user.id !== AuthStore.user?.id)
@@ -51,7 +52,7 @@ watch(query, () => {
 const emit = defineEmits(['userSelected'])
 
 const component = ref(null)
-onClickOutside(component, (event) => {
+onClickOutside(component, () => {
   if (select_open.value) {
     select_open.value = false
   }
@@ -67,25 +68,25 @@ onClickOutside(component, (event) => {
         @click="select_open = !select_open"
       >
         <span>{{ selected_users.length }} users selected</span>
-        <Icon icon="solar:alt-arrow-down-bold" :class="{ rotated: select_open }" />
+        <Icon icon="solar:alt-arrow-down-bold" :rotate="select_open ? 90 : 0" />
       </button>
       <div class="select-window panel" v-if="select_open">
         <input type="text" class="search" placeholder="Search users" v-model="query" />
         <Icon class="icon loading-icon" icon="mingcute:loading-3-fill" v-if="loading" />
         <button
-          v-if="!loading"
           v-for="user in users"
           type="button"
           :key="user.id"
-          class="with-icon"
-          :class="
-            selected_users.find((selected_user) => selected_user.id === user.id)
-              ? 'primary'
-              : 'tertiary'
-          "
+          class="tertiary with-icon user-button"
           @click="emit('userSelected', user)"
         >
-          <span>{{ user.username }}</span>
+          <div class="main">
+            <Checkbox
+              :checked="selected_users.some((selected_user) => selected_user.id === user.id)"
+            />
+            <span>{{ user.username }}</span>
+          </div>
+          <span class="hint status">{{ UserStatus[user.status] }}</span>
         </button>
       </div>
     </div>
@@ -124,8 +125,18 @@ onClickOutside(component, (event) => {
   width: calc(100% - 32px);
   overflow-y: scroll;
   max-height: 15rem;
-  button.tertiary {
+
+  .user-button {
     padding-left: 0;
+    justify-content: space-between;
+    .main {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .status {
+      font-weight: normal;
+    }
   }
 }
 

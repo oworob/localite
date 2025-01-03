@@ -12,7 +12,7 @@
 
 #### Projects
 
-- [ ] Creating project
+- [x] Creating project
 - [ ] Inviting members
 - [ ] Accepting invitations
 - [x] Browsing joined projects
@@ -27,7 +27,8 @@
 #### Testing
 
 - [ ] Backend
-- [ ] Frontend
+- [x] Frontend
+- [ ] CI
 
 ---
 
