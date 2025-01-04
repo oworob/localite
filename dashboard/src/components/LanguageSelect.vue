@@ -2,6 +2,7 @@
 import { Icon } from '@iconify/vue/dist/iconify.js'
 import { onClickOutside } from '@vueuse/core'
 import { computed, ref } from 'vue'
+import { ICONS } from '@/assets/icons'
 import type IApiLanguage from '@/models/project/language'
 import Checkbox from './Checkbox.vue'
 
@@ -53,11 +54,7 @@ onClickOutside(component, (event) => {
           <Icon :icon="'circle-flags:' + selected_language.code" />
           <span>{{ selected_language.title_eng }} ({{ selected_language.title_native }})</span>
         </div>
-        <Icon
-          icon="solar:alt-arrow-down-bold"
-          :class="{ rotated: select_open }"
-          :rotate="select_open ? 90 : 0"
-        />
+        <Icon :icon="ICONS.arrow_down" :rotate="select_open ? 2 : 0" />
       </button>
       <div class="select-window panel" v-if="select_open">
         <input type="text" class="search" placeholder="Search languages" v-model="query" />

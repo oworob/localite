@@ -3,6 +3,7 @@ import { Icon } from '@iconify/vue/dist/iconify.js'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { UNKNOWN_ERROR } from '@/assets/errors'
+import { ICONS } from '@/assets/icons'
 import type { IApiAppStats } from '@/models/system/app-stats'
 import AuthService from '@/services/AuthService'
 import MiscService from '@/services/MiscService'
@@ -153,7 +154,7 @@ async function Login() {
     <aside class="summary pane">
       <div class="item">
         <header class="item-header">
-          <Icon icon="solar:users-group-rounded-bold" />
+          <Icon :icon="ICONS.users" />
           <h3>{{ app_stats?.users }} users</h3>
         </header>
         <p class="hint">
@@ -163,14 +164,14 @@ async function Login() {
       </div>
       <div class="item">
         <header class="item-header">
-          <Icon icon="solar:lightbulb-bold" />
+          <Icon :icon="ICONS.project" />
           <h3>{{ app_stats?.projects }} projects</h3>
         </header>
         <p class="hint">Create something new or contribute to projects that matter to you.</p>
       </div>
       <div class="item">
         <header class="item-header">
-          <Icon icon="solar:notes-bold" />
+          <Icon :icon="ICONS.entry" />
           <h3>{{ app_stats?.entries }} entries</h3>
         </header>
         <p class="hint">
@@ -179,7 +180,7 @@ async function Login() {
       </div>
       <div class="item">
         <header class="item-header">
-          <Icon icon="solar:earth-bold" />
+          <Icon :icon="ICONS.translation" />
           <h3>{{ app_stats?.translations }} translations</h3>
         </header>
         <p class="hint">Contribute to translations and bridge language barriers.</p>

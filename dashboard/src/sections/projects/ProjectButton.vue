@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue/dist/iconify.js'
 import { RouterLink } from 'vue-router'
+import { ICONS } from '@/assets/icons'
 import type { IApiProject } from '@/models/project/project'
 import { useAuthStore } from '@/stores/AuthStore'
 
@@ -34,7 +35,7 @@ const props = defineProps<{
           <h4>{{ project.title }}</h4>
           <p class="hint">by {{ project.owner?.username }}</p>
         </div>
-        <Icon icon="solar:menu-dots-bold" class="menu-button" />
+        <Icon :icon="ICONS.menu" class="menu-button" :rotate="1" />
       </header>
       <p class="hint">{{ project.description }}</p>
 
@@ -47,10 +48,8 @@ const props = defineProps<{
           />
         </div>
         <div class="other hint">
-          <p class="contributors">
-            <Icon icon="solar:users-group-rounded-bold" />{{ project.contributors?.length }}
-          </p>
-          <p class="entries"><Icon icon="solar:notes-bold" />{{ project.entries?.length }}</p>
+          <p class="contributors"><Icon :icon="ICONS.users" />{{ project.contributors?.length }}</p>
+          <p class="entries"><Icon :icon="ICONS.entry" />{{ project.entries?.length }}</p>
         </div>
       </div>
 
@@ -82,7 +81,6 @@ const props = defineProps<{
       gap: 0.5rem;
     }
     .menu-button {
-      rotate: 90deg;
       transition: var(--transition);
       font-size: 100%;
       &:hover {

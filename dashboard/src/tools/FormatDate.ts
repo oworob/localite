@@ -1,4 +1,4 @@
-import { MONTHS } from '@/assets/contants'
+import { MONTHS } from '@/assets/constants'
 
 function GetSuffix(day: number): string {
   if (day > 3 && day < 21) return 'th'

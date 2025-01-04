@@ -3,6 +3,7 @@ import { Icon } from '@iconify/vue/dist/iconify.js'
 import { onMounted, ref } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 import { UNKNOWN_ERROR } from '@/assets/errors'
+import { ICONS } from '@/assets/icons'
 import LanguageMultiSelect from '@/components/LanguageMultiSelect.vue'
 import LanguageSelect from '@/components/LanguageSelect.vue'
 import Loading from '@/components/Loading.vue'
@@ -145,7 +146,7 @@ function SaveImportedEntries(new_entries: INewEntry[], mode: string) {
           <div class="notes-header">
             <h4>Notes</h4>
             <button class="primary with-icon" type="button" @click="AddNewNote">
-              <Icon icon="solar:add-circle-bold" />New Note
+              <Icon :icon="ICONS.add" />New Note
             </button>
           </div>
           <div class="notes">
@@ -165,7 +166,7 @@ function SaveImportedEntries(new_entries: INewEntry[], mode: string) {
                 placeholder="An empty note"
               />
               <button type="button" class="tertiary icon" @click="DeleteNote(index)">
-                <Icon icon="solar:trash-bin-2-bold" />
+                <Icon :icon="ICONS.delete" />
               </button>
             </div>
           </div>
@@ -210,7 +211,7 @@ function SaveImportedEntries(new_entries: INewEntry[], mode: string) {
                   selected_desired_languages.splice(selected_desired_languages.indexOf(language), 1)
                 "
               >
-                <Icon icon="solar:trash-bin-2-bold" />
+                <Icon :icon="ICONS.delete" />
               </button>
             </div>
           </div>
@@ -238,15 +239,15 @@ function SaveImportedEntries(new_entries: INewEntry[], mode: string) {
 
               <div class="user-stats hint">
                 <p class="stat">
-                  <Icon icon="solar:lightbulb-bold" />
+                  <Icon :icon="ICONS.project" />
                   {{ user.stats?.joined_projects }}
                 </p>
                 <p class="stat">
-                  <Icon icon="solar:earth-bold" />
+                  <Icon :icon="ICONS.translation" />
                   {{ user.stats?.translations }}
                 </p>
                 <p class="stat">
-                  <Icon icon="solar:user-bold" />
+                  <Icon :icon="ICONS.user" />
                   {{ UserStatus[user.status] }}
                 </p>
               </div>
@@ -256,7 +257,7 @@ function SaveImportedEntries(new_entries: INewEntry[], mode: string) {
               class="tertiary icon"
               @click="selected_users.splice(selected_users.indexOf(user), 1)"
             >
-              <Icon icon="solar:trash-bin-2-bold" />
+              <Icon :icon="ICONS.delete" />
             </button>
           </div>
         </div>
@@ -268,10 +269,10 @@ function SaveImportedEntries(new_entries: INewEntry[], mode: string) {
             <h2>Entries</h2>
             <div class="entry-actions">
               <button type="button" class="primary with-icon" @click="AddNewEntry">
-                <Icon icon="solar:add-circle-bold" />New Entry
+                <Icon :icon="ICONS.add" />New Entry
               </button>
               <button type="button" class="secondary with-icon" @click="import_window_open = true">
-                <Icon icon="solar:upload-square-bold" />Import from CSV
+                <Icon :icon="ICONS.upload" />Import from CSV
               </button>
             </div>
           </header>
@@ -299,7 +300,7 @@ function SaveImportedEntries(new_entries: INewEntry[], mode: string) {
                 @click="DeleteEntry(index)"
                 :disabled="entries.length === 1"
               >
-                <Icon icon="solar:trash-bin-2-bold" />
+                <Icon :icon="ICONS.delete" />
               </button>
             </div>
           </div>
@@ -311,7 +312,7 @@ function SaveImportedEntries(new_entries: INewEntry[], mode: string) {
           and contributors later.
         </p>
         <button class="primary with-icon submit-button" :disabled="submitting">
-          <Icon icon="solar:add-circle-bold" />Create New Project
+          <Icon :icon="ICONS.add" />Create New Project
         </button>
       </div>
     </form>

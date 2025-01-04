@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue/dist/iconify.js'
+import { ICONS } from '@/assets/icons'
 import type { IApiError } from '@/models/system/api-error'
 
 const props = defineProps<{
@@ -9,7 +10,7 @@ const props = defineProps<{
 
 <template>
   <div id="Error">
-    <Icon class="icon" icon="solar:sad-circle-bold" />
+    <Icon class="icon" :icon="ICONS.error" />
     <h4>{{ error.message }}</h4>
     <RouterLink to="/">
       <button class="secondary">Return Home</button>

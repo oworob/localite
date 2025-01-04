@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import { Icon } from '@iconify/vue/dist/iconify.js'
 import { onMounted, ref } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
+import { ICONS } from '@/assets/icons'
 import AuthService from '@/services/AuthService'
 import { useAuthStore } from '@/stores/AuthStore'
 
@@ -30,11 +32,17 @@ function Logout() {
       <RouterLink to="/">
         <button class="tertiary">Home</button>
       </RouterLink>
-      <RouterLink to="/about">
-        <button class="tertiary">About</button>
-      </RouterLink>
       <RouterLink to="/projects">
-        <button class="tertiary">Projects</button>
+        <button class="tertiary with-icon">
+          <Icon :icon="ICONS.project" />
+          Projects
+        </button>
+      </RouterLink>
+      <RouterLink to="/users">
+        <button class="tertiary with-icon">
+          <Icon :icon="ICONS.users" />
+          Users
+        </button>
       </RouterLink>
       <RouterLink to="/projects/1">
         <button class="tertiary">Project 1</button>

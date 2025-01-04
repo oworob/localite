@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue/dist/iconify.js'
+import { ICONS } from '@/assets/icons'
 </script>
 
 <template>
   <div id="Loading">
-    <Icon class="loading-icon" icon="mingcute:loading-3-fill" />
+    <Icon class="loading-icon" :icon="ICONS.loading" />
   </div>
 </template>
 

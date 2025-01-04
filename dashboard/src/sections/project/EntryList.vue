@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue/dist/iconify.js'
 import { computed } from 'vue'
+import { ICONS } from '@/assets/icons'
 import type { IApiEntry } from '@/models/project/entry'
 import type IApiLanguage from '@/models/project/language'
 import type { IApiProject } from '@/models/project/project'
@@ -32,7 +33,7 @@ function SelectEntry(id: number) {
     <nav class="nav">
       <RouterLink to="/projects">
         <button class="tertiary with-icon back-button">
-          <Icon icon="solar:alt-arrow-left-bold" />
+          <Icon :icon="ICONS.arrow_left" />
           Back to Projects
         </button>
       </RouterLink>

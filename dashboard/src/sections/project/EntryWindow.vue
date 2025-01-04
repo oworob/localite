@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
 import { computed, ref, watch } from 'vue'
+import { ICONS } from '@/assets/icons'
 import type { IApiEntry } from '@/models/project/entry'
 import type IApiLanguage from '@/models/project/language'
 import type { IApiProject } from '@/models/project/project'
@@ -13,7 +14,7 @@ const props = defineProps<{
 
 const translation_content = ref('')
 const char_count = computed(() => translation_content.value.length)
-const show_notes = ref(true)
+const show_notes = ref(false)
 const filtered_translations = computed(() =>
   props.selected_entry.translations?.filter(
     (translation) => translation.language_id === props.selected_language.id,
@@ -47,11 +48,11 @@ watch(
       <h3>Add {{ selected_language.title_eng }} Translation</h3>
     </header>
 
-    <div class="notes panel">
+    <div class="notes panel" v-if="project.notes!.length > 0">
       <div class="notes-header">
         <p class="hint">Notes from the owner</p>
         <button class="tertiary with-icon" @click="show_notes = !show_notes">
-          <Icon icon="solar:alt-arrow-up-bold" :class="{ rotated: show_notes }" />
+          <Icon :icon="ICONS.arrow_down" :rotate="show_notes ? 2 : 0" />
           {{ show_notes ? 'Hide' : 'Show' }}
         </button>
       </div>
@@ -85,7 +86,7 @@ watch(
           {{ char_count }} / {{ selected_entry.content.length }}
         </p>
         <button class="primary with-icon" :disabled="translation_content.length === 0">
-          <Icon icon="solar:add-circle-bold" />
+          <Icon :icon="ICONS.add" />
           Submit
         </button>
       </footer>
@@ -118,11 +119,11 @@ watch(
           </div>
           <div class="upvotes">
             <button class="secondary">
-              <Icon icon="solar:alt-arrow-up-bold" />
+              <Icon :icon="ICONS.arrow_down" :rotate="2" />
             </button>
             <p>{{ (translation.total_votes > 0 ? '+' : '') + translation.total_votes }}</p>
             <button class="secondary">
-              <Icon icon="solar:alt-arrow-down-bold" />
+              <Icon :icon="ICONS.arrow_down" />
             </button>
           </div>
         </div>
@@ -147,9 +148,6 @@ watch(
     display: flex;
     align-items: center;
     justify-content: space-between;
-  }
-  svg.rotated {
-    transform: rotate(180deg);
   }
 }
 

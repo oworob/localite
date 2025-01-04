@@ -2,6 +2,7 @@
 import { onClickOutside, useDropZone } from '@vueuse/core'
 import Papa from 'papaparse'
 import { ref } from 'vue'
+import { ICONS } from '@/assets/icons'
 import type { INewEntry } from '@/models/project/entry'
 
 const imported_entries = ref<INewEntry[]>([])
@@ -96,7 +97,7 @@ const { isOverDropZone } = useDropZone(drop_zone, {
 
       <div class="actions">
         <button class="primary with-icon" @click="SaveEntries" :disabled="!current_file">
-          <Icon icon="solar:upload-square-bold" />
+          <Icon :icon="ICONS.upload" />
           Import
         </button>
         <button class="tertiary" @click="emit('close')">Cancel</button>

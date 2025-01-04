@@ -2,6 +2,7 @@
 import { Icon } from '@iconify/vue/dist/iconify.js'
 import { onClickOutside, useDebounceFn } from '@vueuse/core'
 import { ref, watch } from 'vue'
+import { ICONS } from '@/assets/icons'
 import { type IApiUser, UserStatus } from '@/models/user/user'
 import UserService from '@/services/UserService'
 import { useAuthStore } from '@/stores/AuthStore'
@@ -68,11 +69,11 @@ onClickOutside(component, () => {
         @click="select_open = !select_open"
       >
         <span>{{ selected_users.length }} users selected</span>
-        <Icon icon="solar:alt-arrow-down-bold" :rotate="select_open ? 90 : 0" />
+        <Icon :icon="ICONS.arrow_down" :rotate="select_open ? 2 : 0" />
       </button>
       <div class="select-window panel" v-if="select_open">
         <input type="text" class="search" placeholder="Search users" v-model="query" />
-        <Icon class="icon loading-icon" icon="mingcute:loading-3-fill" v-if="loading" />
+        <Icon class="icon loading-icon" :icon="ICONS.loading" v-if="loading" />
         <button
           v-for="user in users"
           type="button"
