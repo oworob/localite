@@ -31,9 +31,10 @@
 
 #### Testing
 
-- [ ] Backend
-- [x] Frontend
-- [ ] CI
+- [ ] Backend setup
+- [x] Frontend setup
+  - [ ] Improved coverage
+- [x] CI
 
 #### Bugs To Fix
 
