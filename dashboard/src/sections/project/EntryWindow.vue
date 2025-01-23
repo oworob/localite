@@ -1,10 +1,14 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
 import { computed, ref, watch } from 'vue'
+import { UNKNOWN_ERROR } from '@/assets/errors'
 import { ICONS } from '@/assets/icons'
 import type { IApiEntry } from '@/models/project/entry'
 import type IApiLanguage from '@/models/project/language'
 import type { IApiProject } from '@/models/project/project'
+import type { INewTranslation } from '@/models/project/translation'
+import TranslationService from '@/services/TranslationService'
+import { useNotificationStore } from '@/stores/NotificationStore'
 
 const props = defineProps<{
   project: IApiProject
@@ -15,17 +19,14 @@ const props = defineProps<{
 const translation_content = ref('')
 const char_count = computed(() => translation_content.value.length)
 const show_notes = ref(false)
+const show_translations = ref(true)
+const submitting = ref(false)
+const NotificationStore = useNotificationStore()
 const filtered_translations = computed(() =>
   props.selected_entry.translations?.filter(
     (translation) => translation.language_id === props.selected_language.id,
   ),
 )
-
-const punctuation_match = computed(() => {
-  const original = props.selected_entry.content
-  const translation = translation_content.value
-  return original.match(/[.,!?]/g)?.length === translation.match(/[.,!?]/g)?.length
-})
 
 watch(
   () => props.selected_entry.id,
@@ -34,12 +35,28 @@ watch(
   },
 )
 
-// onMounted(() => {
-//   const project_settings = PersistenceService.GetProjectSettings(props.project.id)
-//   if (project_settings) {
-//     show_notes.value = project_settings.show_notes ? project_settings.show_notes : true
-//   }
-// })
+async function SubmitTranslation() {
+  submitting.value = true
+  const new_translation: INewTranslation = {
+    project_id: props.project.id,
+    entry_id: props.selected_entry.id,
+    language_id: props.selected_language.id,
+    content: translation_content.value,
+  }
+  try {
+    const res = await TranslationService.CreateTranslation(new_translation)
+    NotificationStore.AddNotification('Translation added successfully.', 'success')
+    // translation_content.value = ''
+    filtered_translations.value?.push(res.data)
+  } catch (err: any) {
+    if (err.response.data.message) {
+      NotificationStore.AddNotification(err.response.data.message, 'error')
+    } else {
+      NotificationStore.AddNotification(UNKNOWN_ERROR, 'error')
+    }
+    submitting.value = false
+  }
+}
 </script>
 
 <template>
@@ -85,25 +102,26 @@ watch(
         >
           {{ char_count }} / {{ selected_entry.content.length }}
         </p>
-        <button class="primary with-icon" :disabled="translation_content.length === 0">
+        <button
+          class="primary with-icon"
+          :disabled="translation_content.length === 0 || submitting"
+          @click="SubmitTranslation"
+        >
           <Icon :icon="ICONS.add" />
           Submit
         </button>
       </footer>
     </div>
 
-    <ul class="warnings" v-if="char_count > 0">
-      <li v-if="char_count > selected_entry.content.length!" class="hint warn">
-        Translation length should not exceed the original length as it may cause layout issues.
-      </li>
-      <li v-if="!punctuation_match" class="hint warn">
-        Punctuation should match the original text.
-      </li>
-    </ul>
-
     <div class="submitted">
-      <h4>Submitted {{ selected_language.title_eng }} Translations</h4>
-      <div class="translations">
+      <header class="header">
+        <h4>Submitted {{ selected_language.title_eng }} Translations</h4>
+        <button class="tertiary icon" type="button" @click="show_translations = !show_translations">
+          <Icon :icon="ICONS.arrow_down" :rotate="show_translations ? 0 : 2" />
+        </button>
+      </header>
+
+      <div class="translations" v-if="show_translations">
         <p v-if="filtered_translations?.length === 0" class="hint">
           No translations have been submitted yet.
         </p>
@@ -113,7 +131,7 @@ watch(
           :key="translation.id"
           class="translation panel"
         >
-          <div class="data">
+          <div class="data" @click="translation_content = translation.content">
             <p>{{ translation.content }}</p>
             <p class="hint">Submitted by: {{ translation.author?.username }}</p>
           </div>
@@ -180,16 +198,15 @@ watch(
   }
 }
 
-.warnings {
-  .warn {
-    color: var(--warn);
-  }
-}
-
 .submitted {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
   .translations {
     display: flex;
     flex-direction: column;
@@ -199,6 +216,15 @@ watch(
       flex-direction: row;
       justify-content: space-between;
       align-items: center;
+      transition: var(--transition);
+      &:has(.data:hover) {
+        border-color: var(--theme);
+      }
+      .data {
+        flex-grow: 1;
+        height: max-content;
+        cursor: pointer;
+      }
       .upvotes {
         display: flex;
         flex-direction: column;

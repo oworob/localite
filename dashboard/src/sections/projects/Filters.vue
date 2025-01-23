@@ -10,7 +10,6 @@ const languages = ref<IApiLanguage[]>([])
 onMounted(() => {
   LanguageService.GetLanguages().then((res) => {
     languages.value = res.data
-    console.log(res.data)
   })
 })
 </script>

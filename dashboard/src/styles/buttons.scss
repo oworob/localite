@@ -56,24 +56,10 @@ label.label-button {
 
   &.icon {
     padding: 3px 5px;
+    display: inline-flex;
+    align-items: center;
     svg {
       font-size: 140%;
     }
   }
-
-  //   &.icon {
-  //     display: flex;
-  //     align-items: center;
-  //     gap: 4px;
-  //     svg {
-  //       font-size: 120%;
-  //     }
-  //   }
-  //   &.icon-button {
-  //     padding: 6px;
-  //     display: flex;
-  //     svg {
-  //       font-size: 120%;
-  //     }
-  //   }
 }

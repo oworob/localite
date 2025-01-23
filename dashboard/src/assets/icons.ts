@@ -13,4 +13,5 @@ export const ICONS = {
   upload: 'solar:upload-square-bold',
   delete: 'solar:trash-bin-2-bold',
   menu: 'solar:menu-dots-bold',
+  message: 'solar:letter-bold',
 }

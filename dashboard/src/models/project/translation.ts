@@ -15,4 +15,13 @@ export interface IApiTranslation {
   project_id: number
   project?: IApiProject
   total_votes: number
+  user_upvoted: boolean
+  user_downvoted: boolean
+}
+
+export interface INewTranslation {
+  project_id: number
+  entry_id: number
+  language_id: number
+  content: string
 }

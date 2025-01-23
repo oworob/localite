@@ -16,6 +16,15 @@ export interface IApiProject {
   contributors?: IApiUser[]
   entries?: IApiEntry[]
   languages?: IApiLanguage[]
+  stats?: IApiStats
+}
+
+export interface IApiStats {
+  languages: number
+  contributors: number
+  entries: number
+  translations: number
+  notes: number
 }
 
 export interface INewProject {

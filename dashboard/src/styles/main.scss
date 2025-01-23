@@ -18,6 +18,10 @@
   --success: #63ab63;
 }
 
+html {
+  scrollbar-gutter: stable;
+}
+
 body {
   font-family: 'Segoe UI';
   margin: 0;

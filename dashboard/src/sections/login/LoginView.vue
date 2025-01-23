@@ -50,7 +50,7 @@ async function Register() {
   try {
     const res = await AuthService.Register(email.value, username.value, password.value)
     AuthStore.SetUser(res.data)
-    router.push({ path: '/' })
+    router.push({ path: '/projects' })
     NotificationStore.AddNotification(
       `Account created successfully! Welcome, ${res.data.username}!`,
       'success',
@@ -71,7 +71,7 @@ async function Login() {
   try {
     const res = await AuthService.Login(username.value, password.value)
     AuthStore.SetUser(res.data)
-    router.push({ path: '/' })
+    router.push({ path: '/projects' })
     NotificationStore.AddNotification(`Welcome back, ${res.data.username}!`, 'success')
   } catch (err: any) {
     if (err.response.data.message) {

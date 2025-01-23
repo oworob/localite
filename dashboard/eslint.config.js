@@ -49,6 +49,12 @@ export default [
           groups: [['^\\u0000', '^@?\\w', '^[^.]', '^\\.']],
         },
       ],
+      'no-console': [
+        'error',
+        {
+          allow: ['error'],
+        },
+      ],
     },
   },
 ]

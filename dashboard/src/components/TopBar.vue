@@ -9,7 +9,7 @@ import { useAuthStore } from '@/stores/AuthStore'
 const topbar = ref<HTMLElement | null>(null)
 onMounted(() => {
   if (topbar.value) {
-    const topbarHeight = topbar.value.clientHeight
+    const topbarHeight = topbar.value.clientHeight - 1
     document.documentElement.style.setProperty('--topbar-height', `${topbarHeight + 1}px`)
   }
 })
@@ -19,8 +19,8 @@ const router = useRouter()
 
 function Logout() {
   AuthService.Logout().then(() => {
-    AuthStore.SetUser(null)
     router.push('/login')
+    AuthStore.SetUser(null)
   })
 }
 </script>
@@ -44,14 +44,20 @@ function Logout() {
           Users
         </button>
       </RouterLink>
+      <RouterLink to="/messages">
+        <button class="tertiary with-icon">
+          <Icon :icon="ICONS.message" />
+          Inbox
+        </button>
+      </RouterLink>
       <RouterLink to="/projects/1">
-        <button class="tertiary">Project 1</button>
+        <button class="tertiary">P1</button>
       </RouterLink>
       <RouterLink to="/projects/2">
-        <button class="tertiary">Project 2</button>
+        <button class="tertiary">P2</button>
       </RouterLink>
       <RouterLink to="/projects/3">
-        <button class="tertiary">Project 3</button>
+        <button class="tertiary">P3</button>
       </RouterLink>
     </div>
 

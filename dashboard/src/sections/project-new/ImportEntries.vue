@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Icon } from '@iconify/vue/dist/iconify.js'
 import { onClickOutside, useDropZone } from '@vueuse/core'
 import Papa from 'papaparse'
 import { ref } from 'vue'
@@ -41,6 +42,9 @@ function ReadCSVFile(file: File) {
         const split = results.data
           .map((row: string[]) => row[0])
           .filter((row: string) => row.length > 0)
+          .map((row: string) => {
+            return { content: row.split(';')[0], context: row.split(';')[1] }
+          })
         imported_entries.value = split
       },
     })
@@ -66,8 +70,23 @@ const { isOverDropZone } = useDropZone(drop_zone, {
     <div class="content panel" ref="component">
       <header class="header">
         <h3>Import Entries</h3>
-        <p class="hint">Upload a CSV file containing only the entries (one per line).</p>
+        <p class="hint">
+          Upload a CSV file containing only the entries. Your CSV file should look like this:
+        </p>
       </header>
+
+      <table class="example-table hint">
+        <tbody>
+          <tr>
+            <td>Column A</td>
+            <td>Column B</td>
+          </tr>
+          <tr>
+            <td>Entry content</td>
+            <td>Optional entry context</td>
+          </tr>
+        </tbody>
+      </table>
 
       <div class="drag-window" ref="drop_zone" :class="{ 'is-over': isOverDropZone }">
         <label for="file" class="file-label">
@@ -115,6 +134,18 @@ const { isOverDropZone } = useDropZone(drop_zone, {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+  }
+}
+
+.example-table {
+  text-align: left;
+  border-collapse: collapse;
+
+  th,
+  td {
+    border: 1px solid var(--text-disabled);
+    padding: 0.25rem;
+    width: 50%;
   }
 }
 

@@ -11,7 +11,7 @@ const props = defineProps<{
 <template>
   <div id="Error">
     <Icon class="icon" :icon="ICONS.error" />
-    <h4>{{ error.message }}</h4>
+    <h4>{{ error.response.data.message }}</h4>
     <RouterLink to="/">
       <button class="secondary">Return Home</button>
     </RouterLink>

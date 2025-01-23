@@ -25,7 +25,7 @@ const props = defineProps<{
 <template>
   <RouterLink :to="'/projects/' + project.id">
     <div class="project panel">
-      <p class="new hint">
+      <p class="new hint" v-if="GetNewEntryCount(project) > 0">
         {{ GetNewEntryCount(project) }} new
         {{ GetNewEntryCount(project) === 1 ? 'entry' : 'entries' }} since last visit
       </p>
@@ -35,7 +35,6 @@ const props = defineProps<{
           <h4>{{ project.title }}</h4>
           <p class="hint">by {{ project.owner?.username }}</p>
         </div>
-        <Icon :icon="ICONS.menu" class="menu-button" :rotate="1" />
       </header>
       <p class="hint">{{ project.description }}</p>
 

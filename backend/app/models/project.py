@@ -19,6 +19,7 @@ class Project(db.Model, BaseModel):
     
     title = db.Column(db.String(PROJECT_TITLE_MAX_LENGTH), nullable=False)
     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    owner_last_project_visit = db.Column(db.DateTime, nullable=False, default=datetime.now)
     description = db.Column(db.String(PROJECT_DESCRIPTION_MAX_LENGTH), nullable=True)
     original_language_id = db.Column(db.Integer, db.ForeignKey('language.id'), nullable=False)
     original_language = db.relationship('Language', foreign_keys=[original_language_id]) # ???
@@ -35,7 +36,14 @@ class Project(db.Model, BaseModel):
         if 'contributors' in follow:
             for contributor in data['contributors']:
                 contributor['last_project_visit'] = self.get_last_visit(contributor['id'])
-        
+        if 'stats' in follow:
+            data['stats'] = {
+                'languages': len(self.languages),
+                'contributors': len(self.contributors),
+                'entries': len(self.entries),
+                'translations': len(self.translations),
+                'notes': len(self.notes)
+            }
         return data
               
     def get_last_visit(self, user_id):

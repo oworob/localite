@@ -185,14 +185,21 @@ def init_data(app):
 
         # comments
 
-        comment1 = Comment(
-            user_id=user1.id,
-            translation_id=translation1.id,
-            content='You forgot to translate the word "press".'
-        )
+        # comment1 = Comment(
+        #     user_id=user1.id,
+        #     entry_id=entry1.id,
+        #     language_id=lang
+        #     content='You forgot to translate the word "press".'
+        # )
 
-        db.session.add(comment1)
-        db.session.commit()
+        # comment2 = Comment(
+        #     user_id=user1.id,
+        #     entry_id=entry2.id,
+        #     content='Hello everyone!'
+        # )
+
+        # db.session.add(comment1)
+        # db.session.commit()
 
         # votes
 

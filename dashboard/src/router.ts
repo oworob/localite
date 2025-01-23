@@ -19,11 +19,6 @@ const router = createRouter({
       component: () => import('@/sections/login/LoginView.vue'),
     },
     {
-      path: '/about',
-      name: 'about',
-      component: () => import('@/sections/AboutView.vue'),
-    },
-    {
       path: '/projects',
       name: 'projects',
       component: () => import('@/sections/projects/ProjectsView.vue'),
@@ -37,6 +32,11 @@ const router = createRouter({
       path: '/projects/:id',
       name: 'project',
       component: () => import('@/sections/project/ProjectView.vue'),
+    },
+    {
+      path: '/:pathMatch(.*)',
+      name: 'not-found',
+      component: () => import('@/sections/PageNotFoundView.vue'),
     },
   ],
 })

@@ -7,10 +7,12 @@ class Comment(db.Model, BaseModel):
 
     content = db.Column(db.String(COMMENT_CONTENT_MAX_LENGTH), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    translation_id = db.Column(db.Integer, db.ForeignKey('translation.id'), nullable=False)
+    entry_id = db.Column(db.Integer, db.ForeignKey('entry.id'), nullable=False)
+    language_id = db.Column(db.Integer, db.ForeignKey('language.id'), nullable=True) # no language -> show for all languages
 
     user = db.relationship('User', backref=db.backref('comments', lazy=True))
-    translation = db.relationship('Translation', backref=db.backref('comments', lazy=True))
+    entry = db.relationship('Entry', backref=db.backref('comments', lazy=True))
+    language = db.relationship('Language', backref=db.backref('languages', lazy=True))
 
     
 

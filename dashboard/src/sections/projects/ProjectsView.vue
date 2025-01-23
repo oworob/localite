@@ -4,10 +4,12 @@ import { computed, onMounted, ref } from 'vue'
 import { RouterLink } from 'vue-router'
 import { ICONS } from '@/assets/icons'
 import Loading from '@/components/Loading.vue'
+import type { IApiInvite } from '@/models/project/invite'
 import type { IApiProject } from '@/models/project/project'
 import ProjectService from '@/services/ProjectService'
 import { useAuthStore } from '@/stores/AuthStore'
 import Filters from './Filters.vue'
+import Invite from './Invite.vue'
 import ProjectButton from './ProjectButton.vue'
 
 const AuthStore = useAuthStore()
@@ -21,13 +23,39 @@ const created_projects = computed(() =>
 const joined_projects = computed(() =>
   projects.value.filter((project) => project.owner_id !== AuthStore.user?.id),
 )
+const invites = ref<IApiInvite[]>([])
 
-onMounted(() => {
+function FetchProjects() {
   ProjectService.GetProjects(['owner', 'languages', 'original_language', 'contributors', 'entries'])
     .then((res) => {
       projects.value = res.data
       loading.value = false
-      console.log(res.data)
+    })
+    .catch((err) => {
+      console.error(err)
+    })
+}
+
+function HandleInviteAccept(id: number) {
+  invites.value = invites.value.filter((invite) => invite.id !== id)
+  FetchProjects()
+}
+
+function HandleInviteDecline(id: number) {
+  invites.value = invites.value.filter((invite) => invite.id !== id)
+}
+
+onMounted(() => {
+  FetchProjects()
+  // too much data is sent, not safe (entries, contributors), send just numbers instead
+  ProjectService.GetInvites([
+    'project.owner',
+    'project.stats',
+    'project.original_language',
+    'project.languages',
+  ])
+    .then((res) => {
+      invites.value = res.data
     })
     .catch((err) => {
       console.error(err)
@@ -66,9 +94,21 @@ onMounted(() => {
       </div>
 
       <div class="invites">
-        <header class="project-header">
-          <h3>Pending Invites</h3>
+        <header class="invites-header">
+          <h3>Invites</h3>
         </header>
+        <span class="hint"
+          >You have {{ invites.length }} pending invite{{ invites.length !== 1 ? 's' : '' }}.</span
+        >
+        <div class="invites-list">
+          <Invite
+            v-for="invite in invites"
+            :key="invite.id"
+            :invite="invite"
+            @accept="HandleInviteAccept"
+            @reject="HandleInviteDecline"
+          />
+        </div>
       </div>
     </section>
   </main>
@@ -95,7 +135,8 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  .projects {
+  .projects,
+  .invite-list {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;

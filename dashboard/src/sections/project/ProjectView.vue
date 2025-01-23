@@ -8,6 +8,7 @@ import type IApiLanguage from '@/models/project/language'
 import type { IApiProject } from '@/models/project/project'
 import type { IApiError } from '@/models/system/api-error'
 import ProjectService from '@/services/ProjectService'
+import Conversation from './Conversation.vue'
 import EntryList from './EntryList.vue'
 import EntryWindow from './EntryWindow.vue'
 
@@ -39,14 +40,18 @@ function FetchData() {
     'notes',
     'languages',
     'original_language',
+    'entries.translations.comments',
+    'entries.translations.votes',
   ])
     .then((res) => {
       project.value = res.data
       selected_entry.value = res.data.entries![0]
       selected_language.value = res.data.languages![0]
+      /* eslint-disable-next-line no-console */
+      console.log(res.data)
     })
     .catch((err) => {
-      console.log(err)
+      console.error(err)
       error.value = err
     })
     .finally(() => {
@@ -55,11 +60,11 @@ function FetchData() {
 }
 
 function HandleEntrySelected(id: number) {
-  selected_entry.value = project.value!.entries!.find((entry) => entry.id === id)
+  selected_entry.value = project.value?.entries?.find((entry) => entry.id === id)
 }
 
 function HandleLanguageSelected(id: number) {
-  selected_language.value = project.value!.languages!.find((language) => language.id === id)
+  selected_language.value = project.value?.languages?.find((language) => language.id === id)
 }
 </script>
 
@@ -80,7 +85,7 @@ function HandleLanguageSelected(id: number) {
       :selected_entry="selected_entry"
       :selected_language="selected_language"
     />
-    <!-- <Conversation :comments="selected_entry.comments" /> -->
+    <Conversation :comments="[]" />
   </main>
 </template>
 
