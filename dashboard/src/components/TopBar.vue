@@ -59,6 +59,12 @@ function Logout() {
       <RouterLink to="/projects/3">
         <button class="tertiary">P3</button>
       </RouterLink>
+      <a href="https://github.com/oworob/localite" target="_blank">
+        <button class="tertiary with-icon">
+          <Icon :icon="ICONS.github" />
+          GitHub
+        </button>
+      </a>
     </div>
 
     <div class="actions" v-if="!AuthStore.user">

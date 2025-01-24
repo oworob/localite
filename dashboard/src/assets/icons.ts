@@ -14,4 +14,5 @@ export const ICONS = {
   delete: 'solar:trash-bin-2-bold',
   menu: 'solar:menu-dots-bold',
   message: 'solar:letter-bold',
+  github: 'mdi:github',
 }
