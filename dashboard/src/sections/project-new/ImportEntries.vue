@@ -40,11 +40,10 @@ function ReadCSVFile(file: File) {
       header: false,
       complete: (results: any) => {
         const split = results.data
-          .map((row: string[]) => row[0])
-          .filter((row: string) => row.length > 0)
-          .map((row: string) => {
-            return { content: row.split(';')[0], context: row.split(';')[1] }
+          .map((row: string[]) => {
+            return { content: row[0], context: row.slice(1).join(';') }
           })
+          .filter((row: INewEntry) => row.content)
         imported_entries.value = split
       },
     })
@@ -83,7 +82,7 @@ const { isOverDropZone } = useDropZone(drop_zone, {
           </tr>
           <tr>
             <td>Entry content</td>
-            <td>Optional entry context</td>
+            <td>Entry context (optional)</td>
           </tr>
         </tbody>
       </table>

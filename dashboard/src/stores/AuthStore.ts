@@ -1,14 +1,13 @@
 import { defineStore } from 'pinia'
+import { ref } from 'vue'
 import type { IApiUser } from '@/models/user/user'
 
-export const useAuthStore = defineStore('auth', {
-  state: () => ({
-    user: null as IApiUser | null,
-  }),
+export const useAuthStore = defineStore('auth', () => {
+  const user = ref<IApiUser | null>(null)
 
-  actions: {
-    SetUser(user: IApiUser | null) {
-      this.user = user
-    },
-  },
+  function SetUser(new_user: IApiUser | null) {
+    user.value = new_user
+  }
+
+  return { user, SetUser }
 })

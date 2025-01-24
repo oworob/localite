@@ -3,18 +3,12 @@ import { Icon } from '@iconify/vue'
 import { computed, ref, watch } from 'vue'
 import { UNKNOWN_ERROR } from '@/assets/errors'
 import { ICONS } from '@/assets/icons'
-import type { IApiEntry } from '@/models/project/entry'
-import type IApiLanguage from '@/models/project/language'
-import type { IApiProject } from '@/models/project/project'
 import type { INewTranslation } from '@/models/project/translation'
 import TranslationService from '@/services/TranslationService'
 import { useNotificationStore } from '@/stores/NotificationStore'
+import { useProjectStore } from '@/stores/ProjectStore'
 
-const props = defineProps<{
-  project: IApiProject
-  selected_entry: IApiEntry
-  selected_language: IApiLanguage
-}>()
+const ProjectStore = useProjectStore()
 
 const translation_content = ref('')
 const char_count = computed(() => translation_content.value.length)
@@ -23,13 +17,13 @@ const show_translations = ref(true)
 const submitting = ref(false)
 const NotificationStore = useNotificationStore()
 const filtered_translations = computed(() =>
-  props.selected_entry.translations?.filter(
-    (translation) => translation.language_id === props.selected_language.id,
+  ProjectStore.selected_entry!.translations!.filter(
+    (translation) => translation.language_id === ProjectStore.selected_language!.id,
   ),
 )
 
 watch(
-  () => props.selected_entry.id,
+  () => ProjectStore.selected_entry!.id,
   () => {
     translation_content.value = ''
   },
@@ -38,16 +32,16 @@ watch(
 async function SubmitTranslation() {
   submitting.value = true
   const new_translation: INewTranslation = {
-    project_id: props.project.id,
-    entry_id: props.selected_entry.id,
-    language_id: props.selected_language.id,
+    project_id: ProjectStore.project!.id,
+    entry_id: ProjectStore.selected_entry!.id,
+    language_id: ProjectStore.selected_language!.id,
     content: translation_content.value,
   }
   try {
     const res = await TranslationService.CreateTranslation(new_translation)
     NotificationStore.AddNotification('Translation added successfully.', 'success')
     // translation_content.value = ''
-    filtered_translations.value?.push(res.data)
+    filtered_translations.value!.push(res.data)
   } catch (err: any) {
     if (err.response.data.message) {
       NotificationStore.AddNotification(err.response.data.message, 'error')
@@ -62,10 +56,10 @@ async function SubmitTranslation() {
 <template>
   <main id="EntryWindow">
     <header>
-      <h3>Add {{ selected_language.title_eng }} Translation</h3>
+      <h3>Add {{ ProjectStore.selected_language!.title_eng }} Translation</h3>
     </header>
 
-    <div class="notes panel" v-if="project.notes!.length > 0">
+    <div class="notes panel" v-if="ProjectStore.project!.notes!.length > 0">
       <div class="notes-header">
         <p class="hint">Notes from the owner</p>
         <button class="tertiary with-icon" @click="show_notes = !show_notes">
@@ -74,21 +68,25 @@ async function SubmitTranslation() {
         </button>
       </div>
       <ol v-if="show_notes">
-        <li v-for="note in project.notes" :key="note.id" class="hint">{{ note.content }}</li>
+        <li v-for="note in ProjectStore.project!.notes" :key="note.id" class="hint">
+          {{ note.content }}
+        </li>
       </ol>
     </div>
 
     <div class="original panel">
-      <p class="hint">{{ project.original_language?.title_native }}:</p>
-      <p class="content">{{ selected_entry.content }}</p>
+      <p class="hint">{{ ProjectStore.project!.original_language!.title_native }}:</p>
+      <p class="content">{{ ProjectStore.selected_entry!.content }}</p>
     </div>
 
-    <p class="hint">Enter your {{ selected_language.title_eng }} translation below:</p>
+    <p class="hint">
+      Enter your {{ ProjectStore.selected_language!.title_eng }} translation below:
+    </p>
 
     <div class="translation">
       <textarea
-        :maxlength="selected_entry.content.length! * 2"
-        :placeholder="selected_entry.content"
+        :maxlength="ProjectStore.selected_entry!.content.length! * 2"
+        :placeholder="ProjectStore.selected_entry!.content"
         v-model="translation_content"
         autofocus
         spellcheck="false"
@@ -97,10 +95,10 @@ async function SubmitTranslation() {
         <p
           class="counter hint"
           :class="{
-            warn: char_count > selected_entry.content.length!,
+            warn: char_count > ProjectStore.selected_entry!.content.length!,
           }"
         >
-          {{ char_count }} / {{ selected_entry.content.length }}
+          {{ char_count }} / {{ ProjectStore.selected_entry!.content.length }}
         </p>
         <button
           class="primary with-icon"
@@ -115,14 +113,14 @@ async function SubmitTranslation() {
 
     <div class="submitted">
       <header class="header">
-        <h4>Submitted {{ selected_language.title_eng }} Translations</h4>
+        <h4>Submitted {{ ProjectStore.selected_language!.title_eng }} Translations</h4>
         <button class="tertiary icon" type="button" @click="show_translations = !show_translations">
           <Icon :icon="ICONS.arrow_down" :rotate="show_translations ? 0 : 2" />
         </button>
       </header>
 
       <div class="translations" v-if="show_translations">
-        <p v-if="filtered_translations?.length === 0" class="hint">
+        <p v-if="filtered_translations!.length === 0" class="hint">
           No translations have been submitted yet.
         </p>
         <div
@@ -133,7 +131,7 @@ async function SubmitTranslation() {
         >
           <div class="data" @click="translation_content = translation.content">
             <p>{{ translation.content }}</p>
-            <p class="hint">Submitted by: {{ translation.author?.username }}</p>
+            <p class="hint">Submitted by: {{ translation.author!.username }}</p>
           </div>
           <div class="upvotes">
             <button class="secondary">

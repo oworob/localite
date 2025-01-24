@@ -29,9 +29,43 @@ const password = ref('')
 const submitting = ref(false)
 const app_stats = ref<IApiAppStats>()
 
+const users_stats_count = ref(0)
+const projects_stats_count = ref(0)
+const entries_stats_count = ref(0)
+const translations_stats_count = ref(0)
+
+function AnimateStats() {
+  let i = 0
+  const max = Math.max(
+    app_stats.value!.users,
+    app_stats.value!.projects,
+    app_stats.value!.entries,
+    app_stats.value!.translations,
+  )
+  const interval = setInterval(() => {
+    if (i < app_stats.value!.users) {
+      users_stats_count.value = i
+    }
+    if (i < app_stats.value!.projects) {
+      projects_stats_count.value = i
+    }
+    if (i < app_stats.value!.entries) {
+      entries_stats_count.value = i
+    }
+    if (i < app_stats.value!.translations) {
+      translations_stats_count.value = i
+    }
+    i++
+    if (i > max) {
+      clearInterval(interval)
+    }
+  }, 20)
+}
+
 onMounted(() => {
   MiscService.GetAppSummary().then((res) => {
     app_stats.value = res.data
+    AnimateStats()
   })
 })
 
@@ -155,7 +189,7 @@ async function Login() {
       <div class="item">
         <header class="item-header">
           <Icon :icon="ICONS.users" />
-          <h3>{{ app_stats?.users }} users</h3>
+          <h3>{{ users_stats_count }} users</h3>
         </header>
         <p class="hint">
           Join a community of passionate individuals and collaborate with people from all over the
@@ -165,14 +199,14 @@ async function Login() {
       <div class="item">
         <header class="item-header">
           <Icon :icon="ICONS.project" />
-          <h3>{{ app_stats?.projects }} projects</h3>
+          <h3>{{ projects_stats_count }} projects</h3>
         </header>
         <p class="hint">Create something new or contribute to projects that matter to you.</p>
       </div>
       <div class="item">
         <header class="item-header">
           <Icon :icon="ICONS.entry" />
-          <h3>{{ app_stats?.entries }} entries</h3>
+          <h3>{{ entries_stats_count }} entries</h3>
         </header>
         <p class="hint">
           Help translate entries into a variety of languages and make them accessible to everyone.
@@ -181,7 +215,7 @@ async function Login() {
       <div class="item">
         <header class="item-header">
           <Icon :icon="ICONS.translation" />
-          <h3>{{ app_stats?.translations }} translations</h3>
+          <h3>{{ translations_stats_count }} translations</h3>
         </header>
         <p class="hint">Contribute to translations and bridge language barriers.</p>
       </div>

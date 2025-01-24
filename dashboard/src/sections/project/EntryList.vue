@@ -2,30 +2,19 @@
 import { Icon } from '@iconify/vue/dist/iconify.js'
 import { computed } from 'vue'
 import { ICONS } from '@/assets/icons'
-import type { IApiEntry } from '@/models/project/entry'
-import type IApiLanguage from '@/models/project/language'
-import type { IApiProject } from '@/models/project/project'
+import { useProjectStore } from '@/stores/ProjectStore'
 import LanguageSelect from '../../components/LanguageSelect.vue'
 
-const emit = defineEmits(['entrySelected', 'languageSelected'])
-const props = defineProps<{
-  project: IApiProject
-  selected_entry: IApiEntry
-  selected_language: IApiLanguage
-}>()
+const ProjectStore = useProjectStore()
 
 const entries_with_status = computed(() => {
-  return props.project!.entries!.map((entry) => {
+  return ProjectStore.project!.entries!.map((entry) => {
     const status = entry.languages!.find(
-      (language) => language.id === props.selected_language.id,
+      (language) => language.id === ProjectStore.selected_language!.id,
     )!.status
     return { ...entry, status }
   })
 })
-
-function SelectEntry(id: number) {
-  emit('entrySelected', id)
-}
 </script>
 
 <template>
@@ -39,15 +28,15 @@ function SelectEntry(id: number) {
       </RouterLink>
     </nav>
     <header class="header">
-      <h4>{{ project.title || 'Project' }}</h4>
+      <h4>{{ ProjectStore.project!.title || 'Project' }}</h4>
       <p class="hint">The owner of the project has asked to translate the entries below.</p>
     </header>
 
     <p>Language:</p>
     <LanguageSelect
-      :languages="project.languages!"
-      :selected_language="selected_language"
-      @languageSelected="emit('languageSelected', $event)"
+      :languages="ProjectStore.project!.languages!"
+      :selected_language="ProjectStore.selected_language!"
+      @languageSelected="ProjectStore.SetSelectedLanguage($event)"
     />
 
     <div class="entries">
@@ -56,8 +45,8 @@ function SelectEntry(id: number) {
         v-for="entry in entries_with_status"
         :key="entry.id"
         class="entry panel hover"
-        @click="SelectEntry(entry.id)"
-        :class="{ selected: entry.id === selected_entry.id }"
+        @click="ProjectStore.SetSelectedEntry(entry.id)"
+        :class="{ selected: entry.id === ProjectStore.selected_entry!.id }"
       >
         <div class="title-wrapper">
           <p class="title">{{ entry.content }}</p>
@@ -68,8 +57,9 @@ function SelectEntry(id: number) {
           <p v-else-if="entry.status === 'accepted'">Accepted.</p>
           <p v-else-if="entry.status === 'pending'">
             Pending ({{
-              entry.languages?.find((language) => language.id === selected_language.id)
-                ?.translation_count
+              entry.languages!.find(
+                (language) => language.id === ProjectStore.selected_language!.id,
+              )!.translation_count
             }})
           </p>
         </div>
