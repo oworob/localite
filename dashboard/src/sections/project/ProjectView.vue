@@ -37,6 +37,7 @@ function FetchData() {
     'original_language',
     'entries.translations.comments',
     'entries.translations.votes',
+    'owner',
   ])
     .then((res) => {
       ProjectStore.SetProject(res.data)

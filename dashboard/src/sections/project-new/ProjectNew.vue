@@ -213,7 +213,7 @@ watch(
                 spellcheck="false"
                 placeholder="An empty note"
               />
-              <button type="button" class="tertiary icon" @click="DeleteNote(index)">
+              <button type="button" class="tertiary icon danger" @click="DeleteNote(index)">
                 <Icon :icon="ICONS.delete" />
               </button>
             </div>
@@ -254,7 +254,7 @@ watch(
               </div>
               <button
                 type="button"
-                class="tertiary icon"
+                class="tertiary icon danger"
                 @click="
                   selected_desired_languages.splice(selected_desired_languages.indexOf(language), 1)
                 "
@@ -302,7 +302,7 @@ watch(
             </div>
             <button
               type="button"
-              class="tertiary icon"
+              class="tertiary icon danger"
               @click="selected_users.splice(selected_users.indexOf(user), 1)"
             >
               <Icon :icon="ICONS.delete" />
@@ -352,7 +352,7 @@ watch(
               />
               <button
                 type="button"
-                class="tertiary icon"
+                class="tertiary icon danger"
                 @click="DeleteEntry(index)"
                 :disabled="entries.length === 1"
               >
@@ -402,6 +402,7 @@ watch(
 <style scoped lang="scss">
 .ProjectNew {
   padding: 0.5rem;
+  margin-bottom: 1rem; // footer
   .header {
     padding: 0.5rem;
     display: flex;

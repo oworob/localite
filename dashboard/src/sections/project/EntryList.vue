@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue/dist/iconify.js'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { ICONS } from '@/assets/icons'
 import { useProjectStore } from '@/stores/ProjectStore'
 import LanguageSelect from '../../components/LanguageSelect.vue'
+import ProjectInfo from './ProjectInfo.vue'
 
 const ProjectStore = useProjectStore()
+const info_open = ref(false)
 
 const entries_with_status = computed(() => {
   return ProjectStore.project!.entries!.map((entry) => {
@@ -28,8 +30,10 @@ const entries_with_status = computed(() => {
       </RouterLink>
     </nav>
     <header class="header">
-      <h4>{{ ProjectStore.project!.title || 'Project' }}</h4>
-      <p class="hint">The owner of the project has asked to translate the entries below.</p>
+      <h3>{{ ProjectStore.project!.title }}</h3>
+      <button class="tertiary icon" @click="info_open = !info_open">
+        <Icon :icon="ICONS.settings" />
+      </button>
     </header>
 
     <p>Language:</p>
@@ -65,6 +69,8 @@ const entries_with_status = computed(() => {
         </div>
       </div>
     </div>
+
+    <ProjectInfo v-if="info_open" @close="info_open = false" />
   </main>
 </template>
 
@@ -77,6 +83,12 @@ const entries_with_status = computed(() => {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .nav {

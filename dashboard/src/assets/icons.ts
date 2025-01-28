@@ -15,4 +15,5 @@ export const ICONS = {
   menu: 'solar:menu-dots-bold',
   message: 'solar:letter-bold',
   github: 'mdi:github',
+  settings: 'solar:settings-bold',
 }

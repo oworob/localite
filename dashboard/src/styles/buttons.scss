@@ -31,11 +31,19 @@ label.label-button {
   &.primary {
     background: var(--theme);
     color: var(--text);
+    &.danger {
+      background-color: var(--error);
+      border-color: var(--error);
+    }
   }
 
   &.secondary {
     background: none;
     color: var(--theme);
+    &.danger {
+      color: var(--error);
+      border-color: var(--error);
+    }
   }
 
   &.tertiary {
@@ -43,6 +51,9 @@ label.label-button {
     color: var(--theme);
     border-color: transparent;
     box-shadow: none;
+    &.danger {
+      color: var(--error);
+    }
   }
 
   &.with-icon {

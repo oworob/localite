@@ -23,15 +23,18 @@
 - [x] Browsing projects
   - [x] Accepting and declining invitations
 - [ ] Filtering projects (by name and language)
-- [ ] Leaving projects
-- [ ] Editing project
+- [x] Leaving project
+- [ ] Project owner dashboard
+  - [ ] Editing project (description, notes)
   - [ ] Inviting members
   - [ ] Adding entries
   - [ ] Deleting translations
+  - [ ] Exporting translations to CSV
 
 #### Testing
 
 - [ ] Backend setup
+  - [ ] Improved coverage
 - [x] Frontend setup
   - [ ] Improved coverage
 - [x] CI

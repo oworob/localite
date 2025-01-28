@@ -21,39 +21,6 @@ def get_all():
     data = [item.to_dict(follow) for item in items]
     return data
 
-@project_router.route('/invites', methods=['GET'])
-@login_required
-def get_all_invites():
-    follow = parse_follow(request)
-    user = current_user
-    items = db.session.query(Invite).filter(Invite.user_id == user.id).all()
-    data = [item.to_dict(follow) for item in items]
-    return data
-
-@project_router.route('/invites/<int:id>/accept', methods=['POST'])
-@login_required
-def accept_invite(id):
-    invite = Invite.query.get_or_404(id)
-    if invite.user_id != current_user.id:
-        return {'message': 'Unauthorized'}, 403
-
-    project = Project.query.get(invite.project_id)
-    project.contributors.append(current_user)
-    db.session.delete(invite)
-    db.session.commit()
-    return {'message': 'Invite accepted'}, 200
-
-@project_router.route('/invites/<int:id>/decline', methods=['POST'])
-@login_required
-def decline_invite(id):
-    invite = Invite.query.get_or_404(id)
-    if invite.user_id != current_user.id:
-        return {'message': 'Unauthorized'}, 403
-
-    db.session.delete(invite)
-    db.session.commit()
-    return {'message': 'Invite declined'}, 200
-
 @project_router.route('/<int:id>', methods=['GET'])
 @login_required
 def get_one(id):
@@ -64,7 +31,6 @@ def get_one(id):
     if not item:
         abort(404)
     return item.to_dict(follow)
-
 
 @project_router.route('/', methods=['POST'])
 @login_required
@@ -131,3 +97,13 @@ def create():
     db.session.commit()
 
     return str(project.id), 201
+
+@project_router.route('/<int:id>/leave', methods=['DELETE'])
+@login_required
+def leave_project(id):
+    project = Project.query.get(id)
+    if current_user not in project.contributors:
+        return {'message': 'You do not have access to this project.'}, 403
+    project.contributors.remove(current_user)
+    db.session.commit()
+    return True, 204

@@ -14,6 +14,7 @@ from app.routes.misc_router import misc_router
 from app.routes.language_router import language_router
 from app.routes.message_router import message_router
 from app.routes.translation_router import translation_router
+from app.routes.invite_router import invite_router
 
 load_dotenv()
 
@@ -50,6 +51,7 @@ api.register_blueprint(misc_router)
 api.register_blueprint(language_router)
 api.register_blueprint(message_router)
 api.register_blueprint(translation_router)
+api.register_blueprint(invite_router)
 app.register_blueprint(api)
 
 if __name__ == '__main__':

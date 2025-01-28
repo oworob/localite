@@ -3,7 +3,7 @@ import { Icon } from '@iconify/vue/dist/iconify.js'
 import { ref } from 'vue'
 import { ICONS } from '@/assets/icons'
 import type { IApiInvite } from '@/models/project/invite'
-import ProjectService from '@/services/ProjectService'
+import InviteService from '@/services/InviteService'
 
 const props = defineProps<{
   invite: IApiInvite
@@ -14,7 +14,7 @@ const emit = defineEmits(['accept', 'reject'])
 const submitting = ref(false)
 
 function AcceptInvite() {
-  ProjectService.AcceptInvite(props.invite.id)
+  InviteService.AcceptInvite(props.invite.id)
     .then(() => {
       emit('accept', props.invite.id)
     })
@@ -25,7 +25,7 @@ function AcceptInvite() {
 }
 
 function DeclineInvite() {
-  ProjectService.DeclineInvite(props.invite.id)
+  InviteService.DeclineInvite(props.invite.id)
     .then(() => {
       emit('reject', props.invite.id)
     })

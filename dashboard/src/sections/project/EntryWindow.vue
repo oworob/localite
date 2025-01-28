@@ -12,7 +12,6 @@ const ProjectStore = useProjectStore()
 
 const translation_content = ref('')
 const char_count = computed(() => translation_content.value.length)
-const show_notes = ref(false)
 const show_translations = ref(true)
 const submitting = ref(false)
 const NotificationStore = useNotificationStore()
@@ -58,21 +57,6 @@ async function SubmitTranslation() {
     <header>
       <h3>Add {{ ProjectStore.selected_language!.title_eng }} Translation</h3>
     </header>
-
-    <div class="notes panel" v-if="ProjectStore.project!.notes!.length > 0">
-      <div class="notes-header">
-        <p class="hint">Notes from the owner</p>
-        <button class="tertiary with-icon" @click="show_notes = !show_notes">
-          <Icon :icon="ICONS.arrow_down" :rotate="show_notes ? 2 : 0" />
-          {{ show_notes ? 'Hide' : 'Show' }}
-        </button>
-      </div>
-      <ol v-if="show_notes">
-        <li v-for="note in ProjectStore.project!.notes" :key="note.id" class="hint">
-          {{ note.content }}
-        </li>
-      </ol>
-    </div>
 
     <div class="original panel">
       <p class="hint">{{ ProjectStore.project!.original_language!.title_native }}:</p>
@@ -154,17 +138,6 @@ async function SubmitTranslation() {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-}
-
-.notes {
-  button {
-    padding: 0;
-  }
-  .notes-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
 }
 
 .original {

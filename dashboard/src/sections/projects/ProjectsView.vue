@@ -6,6 +6,7 @@ import { ICONS } from '@/assets/icons'
 import Loading from '@/components/Loading.vue'
 import type { IApiInvite } from '@/models/project/invite'
 import type { IApiProject } from '@/models/project/project'
+import InviteService from '@/services/InviteService'
 import ProjectService from '@/services/ProjectService'
 import { useAuthStore } from '@/stores/AuthStore'
 import Filters from './Filters.vue'
@@ -47,8 +48,7 @@ function HandleInviteDecline(id: number) {
 
 onMounted(() => {
   FetchProjects()
-  // too much data is sent, not safe (entries, contributors), send just numbers instead
-  ProjectService.GetInvites([
+  InviteService.GetInvites([
     'project.owner',
     'project.stats',
     'project.original_language',
@@ -136,7 +136,7 @@ onMounted(() => {
   flex-direction: column;
   gap: 0.5rem;
   .projects,
-  .invite-list {
+  .invites-list {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;

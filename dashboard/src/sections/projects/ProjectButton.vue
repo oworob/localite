@@ -51,9 +51,6 @@ const props = defineProps<{
           <p class="entries"><Icon :icon="ICONS.entry" />{{ project.entries?.length }}</p>
         </div>
       </div>
-
-      <!-- <h3>{{ props.project.name }}</h3>
-    <p>{{ props.project.description }}</p> -->
     </div>
   </RouterLink>
 </template>
