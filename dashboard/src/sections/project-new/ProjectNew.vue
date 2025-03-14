@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue/dist/iconify.js'
-import { onMounted, ref, watch } from 'vue'
-import { RouterLink, useRoute, useRouter } from 'vue-router'
+import { onMounted, ref } from 'vue'
+import { RouterLink, useRouter } from 'vue-router'
 import { UNKNOWN_ERROR } from '@/assets/errors'
 import { ICONS } from '@/assets/icons'
 import LanguageMultiSelect from '@/components/LanguageMultiSelect.vue'
@@ -18,12 +18,13 @@ import { useNotificationStore } from '@/stores/NotificationStore'
 import ImportEntries from './ImportEntries.vue'
 
 const loading = ref(true) // load languages
-const form_step = ref(1)
 const submitting = ref(false)
 const title = ref('')
 const description = ref('')
 const notes = ref<string[]>([])
 const notes_collapsed = ref(false)
+const desired_languages_collapsed = ref(false)
+const users_collapsed = ref(false)
 const languages = ref<IApiLanguage[]>([])
 const selected_original_language = ref<IApiLanguage>()
 const selected_desired_languages = ref<IApiLanguage[]>([])
@@ -34,7 +35,6 @@ const import_window_open = ref(false)
 
 const NotificationStore = useNotificationStore()
 const router = useRouter()
-const route = useRoute()
 
 onMounted(() => {
   LanguageService.GetLanguages().then((res) => {
@@ -62,9 +62,6 @@ async function Submit() {
   } catch (err: any) {
     if (err.response.data.message) {
       NotificationStore.AddNotification(err.response.data.message, 'error')
-      if (err.response.data.step) {
-        UpdateFormStep(err.response.data.step)
-      }
     } else {
       NotificationStore.AddNotification(UNKNOWN_ERROR, 'error')
     }
@@ -122,7 +119,7 @@ function HandleUserSelected(user: IApiUser) {
   }
 }
 
-function SaveImportedEntries(new_entries: INewEntry[], mode: string) {
+function SaveImportedEntries(new_entries: INewEntry[], mode: 'append' | 'overwrite') {
   if (mode === 'append') {
     entries.value = entries.value.concat(new_entries)
   } else {
@@ -131,21 +128,6 @@ function SaveImportedEntries(new_entries: INewEntry[], mode: string) {
   import_window_open.value = false
   entries_collapsed.value = false
 }
-
-function UpdateFormStep(step: number) {
-  router.push(`new?step=${step}`)
-}
-
-watch(
-  () => route.query.step,
-  (newStep) => {
-    if (newStep) {
-      form_step.value = parseInt(newStep as string, 10)
-    } else {
-      form_step.value = 1
-    }
-  },
-)
 </script>
 
 <template>
@@ -154,30 +136,17 @@ watch(
   <main class="ProjectNew" v-if="!loading">
     <header class="header">
       <h2>Create New Project</h2>
-      <div class="steps">
-        <span
-          class="step"
-          :class="{ active: form_step === index + 1 }"
-          @click="UpdateFormStep(index + 1)"
-          v-for="(step, index) in ['Details', 'Languages', 'Contributors', 'Entries']"
-          :key="index"
-        >
-          <span class="step-number">{{ index + 1 }}</span>
-          <p>{{ step }}</p>
-          <div class="divider" v-if="index < 3"></div>
-        </span>
-      </div>
     </header>
 
     <form class="project-form" @submit.prevent="Submit">
-      <div class="form-section" v-if="form_step === 1">
-        <h4>Details</h4>
+      <div class="form-section">
+        <h3 class="section-title">I. Project Details</h3>
         <div class="form-item">
-          <label class="hint">Title</label>
+          <h4>Title</h4>
           <input type="text" v-model="title" placeholder="Your project's title" />
         </div>
         <div class="form-item">
-          <label class="hint">Description</label>
+          <h4>Description</h4>
           <textarea
             v-model="description"
             placeholder="A brief description of your project"
@@ -188,11 +157,16 @@ watch(
           <div class="notes-header">
             <h4>Notes</h4>
             <div class="right">
-              <button class="primary with-icon" type="button" @click="AddNewNote">
+              <button
+                class="primary with-icon"
+                type="button"
+                @click="AddNewNote"
+                :disabled="notes.length === 5"
+              >
                 <Icon :icon="ICONS.add" />New Note
               </button>
               <button
-                class="tertiary icon"
+                class="secondary icon"
                 type="button"
                 @click="notes_collapsed = !notes_collapsed"
               >
@@ -221,7 +195,8 @@ watch(
         </div>
       </div>
 
-      <div class="form-section languages-section" v-if="form_step === 2">
+      <div class="form-section">
+        <h3 class="section-title">II. Languages</h3>
         <div class="form-item">
           <h4>Original Language</h4>
           <p class="hint">
@@ -236,9 +211,22 @@ watch(
         </div>
 
         <div class="form-item">
-          <h4>Desired Languages</h4>
-          <p class="hint">The languages you would like your project to be translated into.</p>
+          <div class="languages-header">
+            <h4>Desired Languages</h4>
+            <button
+              type="button"
+              class="secondary icon"
+              @click="desired_languages_collapsed = !desired_languages_collapsed"
+            >
+              <Icon :icon="ICONS.arrow_down" :rotate="desired_languages_collapsed ? 0 : 2" />
+            </button>
+          </div>
+
+          <p class="hint" v-if="!desired_languages_collapsed">
+            The languages you would like your project to be translated into.
+          </p>
           <LanguageMultiSelect
+            v-if="!desired_languages_collapsed"
             :languages="
               languages.filter((language) => language.id !== selected_original_language?.id)
             "
@@ -246,7 +234,7 @@ watch(
             @language-selected="HandleDesiredLanguageSelected"
           />
 
-          <div class="selected-languages">
+          <div class="selected-languages" v-if="!desired_languages_collapsed">
             <div class="lang" v-for="language in selected_desired_languages" :key="language.id">
               <div class="lang-info panel">
                 <Icon :icon="'circle-flags:' + language.code" />
@@ -266,55 +254,72 @@ watch(
         </div>
       </div>
 
-      <div class="form-section contributors-section" v-if="form_step === 3">
-        <h4>Contributors</h4>
-        <p class="hint">
-          Select users you would like to translate your entries. Invites will be sent when the
-          project is created.
-        </p>
-        <UserMultiSelect
-          :selected_users="selected_users"
-          @userSelected="HandleUserSelected"
-          ignore_self
-        />
-
-        <div class="selected-users">
-          <div class="user" v-for="user in selected_users" :key="user.id">
-            <div class="user-info panel">
-              <RouterLink :to="'/users/' + user.id">
-                <p>{{ user.username }}</p>
-              </RouterLink>
-
-              <div class="user-stats hint">
-                <p class="stat">
-                  <Icon :icon="ICONS.project" />
-                  {{ user.stats?.joined_projects }}
-                </p>
-                <p class="stat">
-                  <Icon :icon="ICONS.translation" />
-                  {{ user.stats?.translations }}
-                </p>
-                <p class="stat">
-                  <Icon :icon="ICONS.user" />
-                  {{ UserStatus[user.status] }}
-                </p>
-              </div>
-            </div>
+      <div class="form-section">
+        <h3 class="section-title">III. Contributors</h3>
+        <div class="form-item">
+          <p class="hint users-header">
+            Users you would like to translate your entries. Invites will be sent after the project
+            is created.
             <button
               type="button"
-              class="tertiary icon danger"
-              @click="selected_users.splice(selected_users.indexOf(user), 1)"
+              class="secondary icon"
+              @click="users_collapsed = !users_collapsed"
             >
-              <Icon :icon="ICONS.delete" />
+              <Icon :icon="ICONS.arrow_down" :rotate="users_collapsed ? 0 : 2" />
             </button>
+          </p>
+          <UserMultiSelect
+            v-if="!users_collapsed"
+            :selected_users="selected_users"
+            @userSelected="HandleUserSelected"
+            ignore_self
+          />
+
+          <div class="selected-users" v-if="!users_collapsed">
+            <div class="user" v-for="user in selected_users" :key="user.id">
+              <div class="user-info panel">
+                <RouterLink :to="'/users/' + user.id">
+                  <p>{{ user.username }}</p>
+                </RouterLink>
+
+                <div class="user-stats hint">
+                  <p class="stat">
+                    <Icon :icon="ICONS.project" />
+                    Contributed to {{ user.stats?.joined_projects }}
+                    {{ user.stats?.joined_projects === 1 ? 'project' : 'projects' }}
+                  </p>
+                  <p class="stat">
+                    <Icon :icon="ICONS.translation" />
+                    {{ user.stats?.translations }}
+                    {{ user.stats?.translations === 1 ? 'translation' : 'translations' }} submitted
+                  </p>
+                  <p class="stat">
+                    <Icon :icon="ICONS.user" />
+                    {{ UserStatus[user.status] }}
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                class="tertiary icon danger"
+                @click="selected_users.splice(selected_users.indexOf(user), 1)"
+              >
+                <Icon :icon="ICONS.delete" />
+              </button>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="form-section entry-section" v-if="form_step === 4">
+      <div class="form-section entry-section">
+        <h3 class="section-title">IV. Entries</h3>
         <div class="form-item">
           <header class="entry-header">
-            <h3>Entries</h3>
+            <p class="hint">
+              Entries in {{ selected_original_language?.title_eng }} ({{
+                selected_original_language?.title_native
+              }}) to be translated. Each entry should be unique.
+            </p>
             <div class="entry-actions">
               <button type="button" class="primary with-icon" @click="AddNewEntry">
                 <Icon :icon="ICONS.add" />New Entry
@@ -323,7 +328,7 @@ watch(
                 <Icon :icon="ICONS.upload" />Import from CSV
               </button>
               <button
-                class="tertiary icon"
+                class="secondary icon"
                 type="button"
                 @click="entries_collapsed = !entries_collapsed"
               >
@@ -331,7 +336,6 @@ watch(
               </button>
             </div>
           </header>
-          <p class="hint">Add entries to be translated. Each entry should be unique.</p>
 
           <div class="entries" v-if="!entries_collapsed">
             <div class="entry" v-for="(_, index) in entries" :key="index">
@@ -364,31 +368,27 @@ watch(
       </div>
 
       <div class="actions">
-        <button
-          class="secondary with-icon"
-          type="button"
-          :disabled="form_step === 1"
-          @click="UpdateFormStep(form_step - 1)"
-        >
-          <Icon :icon="ICONS.arrow_left" />Previous Step
-        </button>
-        <div class="right">
-          <button
-            class="primary with-icon"
-            type="button"
-            :disabled="form_step === 4"
-            @click="UpdateFormStep(form_step + 1)"
-          >
-            Next Step
-            <Icon :icon="ICONS.arrow_left" :rotate="2" />
-          </button>
-          <button
-            class="primary with-icon submit-button"
-            :disabled="submitting || !title || selected_desired_languages.length === 0"
-          >
-            <Icon :icon="ICONS.add" />Create New Project
-          </button>
+        <div class="stats">
+          <p class="hint">
+            <Icon :icon="ICONS.project" />
+            {{ entries.length }} {{ entries.length === 1 ? 'entry' : 'entries' }}
+          </p>
+          <p class="hint">
+            <Icon :icon="ICONS.translation" />
+            {{ selected_desired_languages.length }}
+            {{ selected_desired_languages.length === 1 ? 'language' : 'languages' }}
+          </p>
+          <p class="hint">
+            <Icon :icon="ICONS.user" />
+            {{ selected_users.length }} {{ selected_users.length === 1 ? 'user' : 'users' }}
+          </p>
         </div>
+        <button
+          class="primary with-icon submit-button"
+          :disabled="submitting || !title || selected_desired_languages.length === 0"
+        >
+          <Icon :icon="ICONS.add" />Create New Project
+        </button>
       </div>
     </form>
   </main>
@@ -401,57 +401,9 @@ watch(
 
 <style scoped lang="scss">
 .ProjectNew {
-  padding: 0.5rem;
-  margin-bottom: 1rem; // footer
+  // margin-bottom: 1rem; // leave space for the footer
   .header {
-    padding: 0.5rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: sticky;
-    top: var(--topbar-height);
-    background: var(--background);
-    .steps {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      .step {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        cursor: pointer;
-        transition: var(--transition);
-        color: var(--text-disabled);
-        &:hover .step-number {
-          border-color: var(--text);
-          color: var(--text);
-        }
-        .step-number {
-          padding: 0.5rem;
-          border: solid 1px var(--text-disabled);
-          border-radius: 50%;
-          width: 1rem;
-          height: 1rem;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          transition: var(--transition);
-        }
-        .divider {
-          height: 2px;
-          width: 2rem;
-          background: var(--text-disabled);
-        }
-        &.active {
-          color: var(--text);
-          .step-number {
-            background: var(--theme);
-            border-color: var(--text);
-            color: var(--text);
-          }
-        }
-      }
-    }
+    padding: 1rem 2rem;
   }
 }
 
@@ -459,15 +411,29 @@ watch(
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  padding: 2rem 6rem;
+  padding: 1rem 4rem;
   .form-section {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    margin-bottom: 2rem;
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      &::after {
+        content: '';
+        flex-grow: 1;
+        height: 1px;
+        background-color: var(--theme);
+      }
+    }
     .form-item {
       display: flex;
       flex-direction: column;
       gap: 0.5rem;
+      padding: 0 2rem;
       textarea {
         min-height: 5rem;
       }
@@ -475,7 +441,9 @@ watch(
   }
 }
 
-.notes-header {
+.notes-header,
+.languages-header,
+.users-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -505,15 +473,6 @@ watch(
   flex-direction: row;
 }
 
-.contributors-section {
-  display: grid !important;
-  grid-template-columns: 1fr 1fr;
-  h4,
-  p {
-    grid-column: span 2;
-  }
-}
-
 .selected-languages,
 .selected-users {
   display: flex;
@@ -523,6 +482,7 @@ watch(
   .user {
     display: flex;
     gap: 0.5rem;
+    font-size: 0.9rem;
     .lang-info,
     .user-info {
       flex-grow: 1;
@@ -561,6 +521,7 @@ watch(
   .entry-header {
     display: flex;
     justify-content: space-between;
+    align-items: center;
   }
   .entry-actions {
     display: flex;
@@ -585,18 +546,27 @@ watch(
 }
 
 .actions {
-  position: fixed;
+  position: sticky;
   display: flex;
   justify-content: space-between;
-  width: calc(100% - 2rem);
+  align-items: center;
+  // width: calc(100% - 2rem);
   left: 0;
   bottom: 0;
   padding: 0.5rem 1rem;
   background: var(--background);
-  .right {
+  .stats {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 1rem;
+    p {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      svg {
+        color: var(--theme);
+      }
+    }
   }
 }
 </style>

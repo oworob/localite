@@ -24,6 +24,7 @@ html {
 
 body {
   font-family: 'Segoe UI';
+  // font-family: 'Trebuchet MS';
   margin: 0;
   text-shadow: var(--shadow);
   background: var(--background);
@@ -45,7 +46,7 @@ p {
 
 .hint {
   color: var(--text-disabled);
-  font-size: 90%;
+  font-size: 0.9rem;
 }
 
 .panel {

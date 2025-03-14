@@ -36,7 +36,7 @@ const router = createRouter({
     {
       path: '/projects/:id/manage',
       name: 'project-manage',
-      component: () => import('@/sections/PageNotFoundView.vue'),
+      component: () => import('@/sections/project-manage/ProjectManage.vue'),
     },
     {
       path: '/:pathMatch(.*)',

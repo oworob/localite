@@ -12,6 +12,7 @@ import Checkbox from './Checkbox.vue'
 const props = defineProps<{
   selected_users: IApiUser[]
   ignore_self?: boolean
+  disabled?: boolean
 }>()
 
 const select_open = ref(false)
@@ -39,8 +40,6 @@ function UpdateUserList() {
       .finally(() => {
         loading.value = false
       })
-  } else if (query.value.length === 0) {
-    users.value = []
   }
 }
 
@@ -65,10 +64,16 @@ onClickOutside(component, () => {
     <div class="select-container">
       <button
         type="button"
-        class="secondary with-icon select-header"
+        class="select with-icon select-header"
+        :class="{ open: select_open }"
+        :disabled="props.disabled"
         @click="select_open = !select_open"
       >
-        <span>{{ selected_users.length }} users selected</span>
+        <Icon :icon="ICONS.users" />
+        <span>
+          {{ selected_users.length }}
+          {{ selected_users.length === 1 ? 'user' : 'users' }} selected</span
+        >
         <Icon :icon="ICONS.arrow_down" :rotate="select_open ? 2 : 0" />
       </button>
       <div class="select-window panel" v-if="select_open">
@@ -112,9 +117,12 @@ onClickOutside(component, () => {
 
 .select-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   padding: 10px 15px;
+  span {
+    flex-grow: 1;
+    text-align: left;
+  }
 }
 
 .select-window {
@@ -126,6 +134,10 @@ onClickOutside(component, () => {
   width: calc(100% - 32px);
   overflow-y: scroll;
   max-height: 15rem;
+  z-index: 2;
+  border-top: 0;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
 
   .user-button {
     padding-left: 0;

@@ -146,7 +146,7 @@ async function SubmitTranslation() {
   flex-direction: column;
   gap: 0.5rem;
   .content {
-    font-size: 120%;
+    font-size: 1.2rem;
   }
 }
 

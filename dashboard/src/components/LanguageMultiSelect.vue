@@ -9,6 +9,7 @@ import Checkbox from './Checkbox.vue'
 const props = defineProps<{
   languages: IApiLanguage[]
   selected_languages: IApiLanguage[]
+  disabled?: boolean
 }>()
 
 const select_open = ref(false)
@@ -39,10 +40,16 @@ onClickOutside(component, (event) => {
     <div class="select-container">
       <button
         type="button"
-        class="secondary with-icon select-header"
+        :disabled="props.disabled"
+        class="select with-icon select-header"
         @click="select_open = !select_open"
+        :class="{ open: select_open }"
       >
-        <span>{{ selected_languages.length }} languages selected</span>
+        <Icon :icon="ICONS.language" />
+        <span
+          >{{ selected_languages.length }}
+          {{ selected_languages.length === 1 ? 'language' : 'languages' }} selected</span
+        >
         <Icon :icon="ICONS.arrow_down" :rotate="select_open ? 2 : 0" />
       </button>
       <div class="select-window panel" v-if="select_open">
@@ -85,9 +92,12 @@ onClickOutside(component, (event) => {
 
 .select-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   padding: 10px 15px;
+  span {
+    flex-grow: 1;
+    text-align: left;
+  }
 }
 
 .select-window {
@@ -99,6 +109,10 @@ onClickOutside(component, (event) => {
   width: calc(100% - 32px);
   overflow-y: scroll;
   max-height: 15rem;
+  z-index: 2;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-top: 0;
   button.tertiary {
     padding-left: 0;
   }

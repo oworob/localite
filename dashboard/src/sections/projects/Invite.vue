@@ -93,7 +93,7 @@ function DeclineInvite() {
     }
     .menu-button {
       transition: var(--transition);
-      font-size: 100%;
+      font-size: 1rem;
       &:hover {
         color: var(--theme);
       }

@@ -114,11 +114,11 @@ const { isOverDropZone } = useDropZone(drop_zone, {
       </div>
 
       <div class="actions">
+        <button class="tertiary" @click="emit('close')">Cancel</button>
         <button class="primary with-icon" @click="SaveEntries" :disabled="!current_file">
           <Icon :icon="ICONS.upload" />
           Import
         </button>
-        <button class="tertiary" @click="emit('close')">Cancel</button>
       </div>
     </div>
   </main>
@@ -176,10 +176,13 @@ input[type='file'] {
 .actions {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
 }
 
 .options {
   display: flex;
   gap: 1rem;
+  justify-content: space-around;
 }
 </style>

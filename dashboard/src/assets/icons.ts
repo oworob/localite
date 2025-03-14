@@ -16,4 +16,6 @@ export const ICONS = {
   message: 'solar:letter-bold',
   github: 'mdi:github',
   settings: 'solar:settings-bold',
+  search: 'solar:magnifier-linear',
+  language: 'solar:map-bold',
 }

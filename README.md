@@ -41,24 +41,5 @@
 
 #### Bugs To Fix
 
-- [ ] Submitting a translation doesn't update the pending(n) count in entries list
-
----
-
-Pages:
-
-- Login
-- Register
-- Entry Page
-  - entry list
-  - entry translations + form + voting
-  - comment section
-- Create Project
-- Manage Project (inviting)
-- Project list (with invites)
-
-Entry statuses:
-
-- pending (has at least one translation added)
-- needs_translation (has zero translations)
-- accepted (one of the translations was accepted by the project owner)
+- [ ] Submitting a translation doesn't update the pending(n) count in entries list and the translations doesn't appear immediately under translations
+- [ ] User multiselect sometimes unselects the wrong user

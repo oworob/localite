@@ -1,8 +1,9 @@
 button,
 label.label-button {
+  background: none;
   appearance: none;
   font-family: inherit;
-  font-size: 90%;
+  font-size: 0.9rem;
   border: none;
   color: var(--text);
   cursor: pointer;
@@ -10,8 +11,8 @@ label.label-button {
   text-shadow: var(--shadow);
   box-shadow: var(--shadow);
   transition: var(--transition);
+  transition-property: color, border-color, opacity;
   width: fit-content;
-
   padding: 5px 20px;
   border-radius: 5px;
   border: 1px solid var(--theme);
@@ -21,16 +22,16 @@ label.label-button {
     cursor: default;
   }
 
-  &:hover:not(&:disabled) {
-    color: var(--text);
-    &:not(.tertiary) {
+  &:hover:not(:disabled) {
+    color: var(--text) !important; // sometimes doesn't change color so this is needed
+    &:not(.tertiary, .select) {
       border-color: var(--text);
     }
   }
 
   &.primary {
     background: var(--theme);
-    color: var(--text);
+    letter-spacing: 1px;
     &.danger {
       background-color: var(--error);
       border-color: var(--error);
@@ -38,7 +39,6 @@ label.label-button {
   }
 
   &.secondary {
-    background: none;
     color: var(--theme);
     &.danger {
       color: var(--error);
@@ -47,7 +47,6 @@ label.label-button {
   }
 
   &.tertiary {
-    background: none;
     color: var(--theme);
     border-color: transparent;
     box-shadow: none;
@@ -56,12 +55,29 @@ label.label-button {
     }
   }
 
+  &.select {
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    padding: 5px 15px;
+    border-radius: 5px;
+    &:hover:not(:disabled) {
+      border-color: var(--theme);
+    }
+    &.open {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+    svg {
+      color: var(--theme);
+    }
+  }
+
   &.with-icon {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
     svg {
-      font-size: 120%;
+      font-size: 1.2rem;
     }
   }
 
@@ -70,7 +86,7 @@ label.label-button {
     display: inline-flex;
     align-items: center;
     svg {
-      font-size: 140%;
+      font-size: 1.4rem;
     }
   }
 }

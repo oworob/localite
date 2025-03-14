@@ -45,27 +45,27 @@ def create():
     contributors = data.get('contributors')
 
     if len(title) < PROJECT_TITLE_MIN_LENGTH or len(title) > PROJECT_TITLE_MAX_LENGTH:
-        return {'message': f"Project title must be between {PROJECT_TITLE_MIN_LENGTH} and {PROJECT_TITLE_MAX_LENGTH} characters.", 'step':1}, 400
+        return {'message': f"Project title must be between {PROJECT_TITLE_MIN_LENGTH} and {PROJECT_TITLE_MAX_LENGTH} characters."}, 400
     elif len(description) > PROJECT_DESCRIPTION_MAX_LENGTH:
-        return {'message': f"Project description must be less than {PROJECT_DESCRIPTION_MAX_LENGTH} characters.", 'step':1}, 400
+        return {'message': f"Project description must be less than {PROJECT_DESCRIPTION_MAX_LENGTH} characters."}, 400
     elif len(entries) == 0:
-        return {'message': 'Please add at least one entry.', 'step':4}, 400
+        return {'message': 'Please add at least one entry.'}, 400
     elif (len(entries) > PROJECT_MAX_ENTRY_COUNT):
-        return {'message': f"Project can have maximum {PROJECT_MAX_ENTRY_COUNT} entries.", 'step':4}, 400
+        return {'message': f"Project can have maximum {PROJECT_MAX_ENTRY_COUNT} entries."}, 400
     elif len(notes) > PROJECT_MAX_NOTE_COUNT:
-        return {'message': f"Project can have maximum {PROJECT_MAX_NOTE_COUNT} notes.", 'step':1}, 400
+        return {'message': f"Project can have maximum {PROJECT_MAX_NOTE_COUNT} notes."}, 400
     elif len(languages) == 0:
-        return {'message': 'Please add at least one language to translate to.', 'step':2}, 400
+        return {'message': 'Please add at least one language to translate to.'}, 400
 
     for note in data.get('notes'):
         if len(note) < PROJECT_NOTE_CONTENT_MIN_LENGTH or len(note) > PROJECT_NOTE_CONTENT_MAX_LENGTH:
-            return {'message': f"Project notes must be between {PROJECT_NOTE_CONTENT_MIN_LENGTH} and {PROJECT_NOTE_CONTENT_MAX_LENGTH} characters.", 'step':1}, 400
+            return {'message': f"Project notes must be between {PROJECT_NOTE_CONTENT_MIN_LENGTH} and {PROJECT_NOTE_CONTENT_MAX_LENGTH} characters."}, 400
 
     for entry in data.get('entries'):
         if len(entry.get('content')) < ENTRY_CONTENT_MIN_LENGTH or len(entry.get('content')) > ENTRY_CONTENT_MAX_LENGTH:
-            return {'message': f"Entry content must be between {ENTRY_CONTENT_MIN_LENGTH} and {ENTRY_CONTENT_MAX_LENGTH} characters.", 'step':4}, 400
+            return {'message': f"Entry content must be between {ENTRY_CONTENT_MIN_LENGTH} and {ENTRY_CONTENT_MAX_LENGTH} characters."}, 400
         if len(entry.get('context')) > ENTRY_CONTEXT_MAX_LENGTH:
-            return {'message': f"Entry context must be less than {ENTRY_CONTEXT_MAX_LENGTH} characters.", 'step':4}, 400
+            return {'message': f"Entry context must be less than {ENTRY_CONTEXT_MAX_LENGTH} characters."}, 400
 
     db_entries = [Entry(**entry) for entry in entries]
     db_notes = [Note(content=note) for note in notes]

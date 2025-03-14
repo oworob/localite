@@ -85,7 +85,7 @@ function Logout() {
 
 <style scoped lang="scss">
 #TopBar {
-  z-index: 1000;
+  z-index: 100;
   background: var(--background);
   position: sticky;
   top: 0;
