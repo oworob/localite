@@ -11,6 +11,7 @@ export default mergeConfig(
       root: fileURLToPath(new URL('./', import.meta.url)),
       watch: false,
       coverage: {
+        provider: 'istanbul',
         clean: true,
         exclude: ['src/**/__tests__', 'src/models', 'src/assets'],
         include: ['src'],

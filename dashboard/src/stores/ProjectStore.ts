@@ -7,7 +7,7 @@ import { useAuthStore } from './AuthStore'
 
 const AuthStore = useAuthStore()
 
-export const useProjectStore = defineStore('project', () => {
+export const useProjectStore = defineStore('ProjectStore', () => {
   const project = ref<IApiProject>()
   const selected_entry = ref<IApiEntry>()
   const selected_language = ref<IApiLanguage>()

@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import type { INotification } from '@/models/system/notification'
 
-export const useNotificationStore = defineStore('notification', () => {
+export const useNotificationStore = defineStore('NotificationStore', () => {
   const notifications = ref<INotification[]>([])
 
   function AddNotification(message: string, type: 'success' | 'info' | 'warn' | 'error') {

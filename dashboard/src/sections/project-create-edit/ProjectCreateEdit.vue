@@ -115,7 +115,9 @@ function HandleUserSelected(user: IApiUser) {
   if (!selected_users.value.find((selected_user) => selected_user.id === user.id)) {
     selected_users.value.push(user)
   } else {
-    selected_users.value.splice(selected_users.value.indexOf(user), 1)
+    selected_users.value = selected_users.value.filter(
+      (selected_user) => selected_user.id !== user.id,
+    )
   }
 }
 
@@ -133,12 +135,13 @@ function SaveImportedEntries(new_entries: INewEntry[], mode: 'append' | 'overwri
 <template>
   <Loading v-if="loading" />
 
-  <main class="ProjectNew" v-if="!loading">
+  <main class="ProjectCreateEdit" v-if="!loading">
     <header class="header">
       <h2>Create New Project</h2>
     </header>
 
     <form class="project-form" @submit.prevent="Submit">
+      <!-- DETAILS -->
       <div class="form-section">
         <h3 class="section-title">I. Project Details</h3>
         <div class="form-item">
@@ -195,6 +198,7 @@ function SaveImportedEntries(new_entries: INewEntry[], mode: 'append' | 'overwri
         </div>
       </div>
 
+      <!-- LANGUAGES -->
       <div class="form-section">
         <h3 class="section-title">II. Languages</h3>
         <div class="form-item">
@@ -254,6 +258,7 @@ function SaveImportedEntries(new_entries: INewEntry[], mode: 'append' | 'overwri
         </div>
       </div>
 
+      <!-- USERS -->
       <div class="form-section">
         <h3 class="section-title">III. Contributors</h3>
         <div class="form-item">
@@ -311,6 +316,7 @@ function SaveImportedEntries(new_entries: INewEntry[], mode: 'append' | 'overwri
         </div>
       </div>
 
+      <!-- ENTRIES -->
       <div class="form-section entry-section">
         <h3 class="section-title">IV. Entries</h3>
         <div class="form-item">
@@ -367,6 +373,7 @@ function SaveImportedEntries(new_entries: INewEntry[], mode: 'append' | 'overwri
         </div>
       </div>
 
+      <!-- FOOTER -->
       <div class="actions">
         <div class="stats">
           <p class="hint">
@@ -400,7 +407,7 @@ function SaveImportedEntries(new_entries: INewEntry[], mode: 'append' | 'overwri
 </template>
 
 <style scoped lang="scss">
-.ProjectNew {
+.ProjectCreateEdit {
   // margin-bottom: 1rem; // leave space for the footer
   .header {
     padding: 1rem 2rem;

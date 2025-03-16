@@ -4,7 +4,7 @@ import Loading from '../Loading.vue'
 
 describe('Loading', () => {
   it('renders correctly', () => {
-    const wrapper = mount(Loading)
-    expect(wrapper).toBeTruthy()
+    const component = mount(Loading)
+    expect(component).toBeTruthy()
   })
 })

@@ -12,6 +12,8 @@ const props = defineProps<{
   disabled?: boolean
 }>()
 
+const emit = defineEmits(['languageSelected'])
+
 const select_open = ref(false)
 const query = ref('')
 
@@ -24,8 +26,6 @@ const filtered_languages = computed(() => {
       language.code.toLowerCase().includes(lower_query),
   )
 })
-
-const emit = defineEmits(['languageSelected'])
 
 function SelectLanguage(id: number) {
   if (id !== props.selected_language.id) {
@@ -66,7 +66,7 @@ onClickOutside(component, (event) => {
           type="button"
           v-for="language in filtered_languages"
           :key="language.id"
-          class="tertiary with-icon"
+          class="language-button tertiary with-icon"
           @click="SelectLanguage(language.id)"
         >
           <Checkbox :checked="language.id === selected_language.id" />

@@ -15,6 +15,8 @@ const props = defineProps<{
   disabled?: boolean
 }>()
 
+const emit = defineEmits(['userSelected'])
+
 const select_open = ref(false)
 const query = ref('')
 const users = ref<IApiUser[]>([])
@@ -49,8 +51,6 @@ watch(query, () => {
   UpdateUserListDebounced()
 })
 
-const emit = defineEmits(['userSelected'])
-
 const component = ref(null)
 onClickOutside(component, () => {
   if (select_open.value) {
@@ -79,21 +79,23 @@ onClickOutside(component, () => {
       <div class="select-window panel" v-if="select_open">
         <input type="text" class="search" placeholder="Search users" v-model="query" />
         <Icon class="icon loading-icon" :icon="ICONS.loading" v-if="loading" />
-        <button
-          v-for="user in users"
-          type="button"
-          :key="user.id"
-          class="tertiary with-icon user-button"
-          @click="emit('userSelected', user)"
-        >
-          <div class="main">
-            <Checkbox
-              :checked="selected_users.some((selected_user) => selected_user.id === user.id)"
-            />
-            <span>{{ user.username }}</span>
-          </div>
-          <span class="hint status">{{ UserStatus[user.status] }}</span>
-        </button>
+        <div class="user-list" v-else>
+          <button
+            v-for="user in users"
+            type="button"
+            :key="user.id"
+            class="tertiary with-icon user-button"
+            @click="emit('userSelected', user)"
+          >
+            <div class="main">
+              <Checkbox
+                :checked="selected_users.some((selected_user) => selected_user.id === user.id)"
+              />
+              <span>{{ user.username }}</span>
+            </div>
+            <span class="hint status">{{ UserStatus[user.status] }}</span>
+          </button>
+        </div>
       </div>
     </div>
   </main>

@@ -4,12 +4,12 @@ import Checkbox from '../Checkbox.vue'
 
 describe('Checkbox', () => {
   it('renders correctly when checked', () => {
-    const wrapper = mount(Checkbox, { props: { checked: true } })
-    expect(wrapper.classes()).toContain('checked')
+    const component = mount(Checkbox, { props: { checked: true } })
+    expect(component.classes()).toContain('checked')
   })
 
   it('renders correctly when unchecked', () => {
-    const wrapper = mount(Checkbox, { props: { checked: false } })
-    expect(wrapper.classes()).not.toContain('checked')
+    const component = mount(Checkbox, { props: { checked: false } })
+    expect(component.classes()).not.toContain('checked')
   })
 })
