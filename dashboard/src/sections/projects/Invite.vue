@@ -4,6 +4,9 @@ import { ref } from 'vue'
 import { ICONS } from '@/assets/icons'
 import type { IApiInvite } from '@/models/project/invite'
 import InviteService from '@/services/InviteService'
+import { useNotificationStore } from '@/stores/NotificationStore'
+
+const NotificationStore = useNotificationStore()
 
 const props = defineProps<{
   invite: IApiInvite
@@ -19,7 +22,11 @@ function AcceptInvite() {
       emit('accept', props.invite.id)
     })
     .catch((err) => {
-      console.error(err)
+      if (err.response?.data.message) {
+        NotificationStore.AddNotification(err.response.data.message, 'error')
+      } else {
+        NotificationStore.AddNotification(err.message, 'error')
+      }
       submitting.value = false
     })
 }
@@ -30,7 +37,11 @@ function DeclineInvite() {
       emit('reject', props.invite.id)
     })
     .catch((err) => {
-      console.error(err)
+      if (err.response?.data.message) {
+        NotificationStore.AddNotification(err.response.data.message, 'error')
+      } else {
+        NotificationStore.AddNotification(err.message, 'error')
+      }
       submitting.value = false
     })
 }
@@ -40,7 +51,7 @@ function DeclineInvite() {
   <div class="project panel">
     <header class="header">
       <div class="main">
-        <Icon :icon="'circle-flags:' + invite.project?.original_language?.code" />
+        <Icon :icon="'circle-flags:' + invite.project?.source_language?.code" />
         <h4>{{ invite.project?.title }}</h4>
         <p class="hint">by {{ invite.project?.owner?.username }}</p>
       </div>

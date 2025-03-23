@@ -1,131 +1,158 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue/dist/iconify.js'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
-import { UNKNOWN_ERROR } from '@/assets/errors'
 import { ICONS } from '@/assets/icons'
+import Error from '@/components/Error.vue'
 import LanguageMultiSelect from '@/components/LanguageMultiSelect.vue'
 import LanguageSelect from '@/components/LanguageSelect.vue'
 import Loading from '@/components/Loading.vue'
 import UserMultiSelect from '@/components/UserMultiSelect.vue'
 import type { INewEntry } from '@/models/project/entry'
-import type IApiLanguage from '@/models/project/language'
-import type { INewProject } from '@/models/project/project'
+import type { IApiLanguage } from '@/models/project/language'
+import type { INewProject,INewProjectForm } from '@/models/project/project'
 import { type IApiUser, UserStatus } from '@/models/user/user'
 import LanguageService from '@/services/LanguageService'
 import ProjectService from '@/services/ProjectService'
 import { useNotificationStore } from '@/stores/NotificationStore'
 import ImportEntries from './ImportEntries.vue'
 
-const loading = ref(true) // load languages
+const NotificationStore = useNotificationStore()
+const Router = useRouter()
+
+const loading = ref(true)
+const error = ref('')
 const submitting = ref(false)
-const title = ref('')
-const description = ref('')
-const notes = ref<string[]>([])
+const languages = ref<IApiLanguage[]>([])
 const notes_collapsed = ref(false)
 const desired_languages_collapsed = ref(false)
 const users_collapsed = ref(false)
-const languages = ref<IApiLanguage[]>([])
-const selected_original_language = ref<IApiLanguage>()
-const selected_desired_languages = ref<IApiLanguage[]>([])
-const selected_users = ref<IApiUser[]>([])
-const entries = ref<INewEntry[]>([{ content: '', context: '' }])
 const entries_collapsed = ref(false)
 const import_window_open = ref(false)
 
-const NotificationStore = useNotificationStore()
-const router = useRouter()
-
-onMounted(() => {
-  LanguageService.GetLanguages().then((res) => {
-    languages.value = res.data
-    selected_original_language.value = languages.value[0]
-    loading.value = false
-  })
+const project_form = ref<INewProjectForm>({
+  title: '',
+  description: '',
+  notes: [] as string[],
+  source_language_id: 1,
+  languages: [] as IApiLanguage[],
+  contributors: [] as IApiUser[],
+  entries: [{ content: '', context: '' }] as INewEntry[],
 })
 
-async function Submit() {
+const form_valid = computed(() => {
+  return (
+    project_form.value.title &&
+    project_form.value.languages.length > 0 &&
+    project_form.value.entries.length > 0
+  )
+})
+
+onMounted(() => {
+  FetchData()
+})
+
+async function FetchData() {
+  try {
+    const res = await LanguageService.GetLanguages()
+    languages.value = res.data
+  } catch (err: any) {
+    if (err.response?.data.message) {
+      error.value = err.response.data.message
+    } else {
+      error.value = err.message
+    }
+  } finally {
+    loading.value = false
+  }
+}
+
+async function SubmitProject() {
   submitting.value = true
   const new_project: INewProject = {
-    title: title.value,
-    description: description.value,
-    notes: notes.value,
-    original_language_id: selected_original_language.value!.id,
-    languages: selected_desired_languages.value.map((language) => language.id),
-    contributors: selected_users.value.map((user) => user.id),
-    entries: entries.value,
+    title: project_form.value.title,
+    description: project_form.value.description,
+    notes: project_form.value.notes,
+    source_language_id: project_form.value.source_language_id,
+    languages: project_form.value.languages.map((language) => language.id),
+    contributors: project_form.value.contributors.map((user) => user.id),
+    entries: project_form.value.entries,
   }
   try {
     const res = await ProjectService.CreateProject(new_project)
-    router.push({ path: '/projects/' + res.data })
     NotificationStore.AddNotification('Project created successfully.', 'success')
+    Router.push({ path: '/projects/' + res.data })
   } catch (err: any) {
-    if (err.response.data.message) {
+    if (err.response?.data.message) {
       NotificationStore.AddNotification(err.response.data.message, 'error')
     } else {
-      NotificationStore.AddNotification(UNKNOWN_ERROR, 'error')
+      NotificationStore.AddNotification(err.message, 'error')
     }
     submitting.value = false
   }
 }
 
 function AddNewNote() {
-  if (notes.value.length < 5) {
-    notes.value.push('')
+  if (project_form.value.notes.length < 5) {
+    project_form.value.notes.push('')
     notes_collapsed.value = false
   }
 }
 
 function DeleteNote(index: number) {
-  notes.value.splice(index, 1)
+  project_form.value.notes.splice(index, 1)
 }
 
 function AddNewEntry() {
-  if (entries.value.length < 1000) {
-    entries.value.push({ content: '', context: '' })
+  if (project_form.value.entries.length < 1000) {
+    project_form.value.entries.push({ content: '', context: '' })
     entries_collapsed.value = false
   }
 }
 
 function DeleteEntry(index: number) {
-  entries.value.splice(index, 1)
+  project_form.value.entries.splice(index, 1)
 }
 
-function HandleOriginalLanguageSelected(id: number) {
-  selected_original_language.value = languages.value.find((language) => language.id === id)!
-  selected_desired_languages.value = selected_desired_languages.value.filter(
+function HandleSourceLanguageSelected(id: number) {
+  project_form.value.source_language_id = id
+  project_form.value.languages = project_form.value.languages.filter(
     (language) => language.id !== id,
   )
 }
 
 function HandleDesiredLanguageSelected(id: number) {
   const language = languages.value.find((language) => language.id === id)!
-  if (
-    !selected_desired_languages.value.find(
-      (selected_language) => selected_language.id === language.id,
-    )
-  ) {
-    selected_desired_languages.value.push(language)
+  if (!project_form.value.languages.find((language) => language.id === id)) {
+    project_form.value.languages.push(language)
   } else {
-    selected_desired_languages.value.splice(selected_desired_languages.value.indexOf(language), 1)
+    DeleteDesiredLanguage(id)
   }
 }
 
+function DeleteDesiredLanguage(id: number) {
+  project_form.value.languages = project_form.value.languages.filter(
+    (language) => language.id !== id,
+  )
+}
+
 function HandleUserSelected(user: IApiUser) {
-  if (!selected_users.value.find((selected_user) => selected_user.id === user.id)) {
-    selected_users.value.push(user)
+  if (!project_form.value.contributors.find((contributor) => contributor.id === user.id)) {
+    project_form.value.contributors.push(user)
   } else {
-    selected_users.value = selected_users.value.filter(
-      (selected_user) => selected_user.id !== user.id,
-    )
+    DeleteUser(user.id)
   }
+}
+
+function DeleteUser(id: number) {
+  project_form.value.contributors = project_form.value.contributors.filter((user) => user.id !== id)
 }
 
 function SaveImportedEntries(new_entries: INewEntry[], mode: 'append' | 'overwrite') {
   if (mode === 'append') {
-    entries.value = entries.value.concat(new_entries)
+    project_form.value.entries = project_form.value.entries.concat(new_entries)
   } else {
-    entries.value = new_entries
+    project_form.value.entries = new_entries
   }
   import_window_open.value = false
   entries_collapsed.value = false
@@ -134,26 +161,33 @@ function SaveImportedEntries(new_entries: INewEntry[], mode: 'append' | 'overwri
 
 <template>
   <Loading v-if="loading" />
+  <Error v-if="error" :error="error" />
 
-  <main class="ProjectCreateEdit" v-if="!loading">
+  <main class="ProjectCreateEdit" v-if="!loading && !error">
     <header class="header">
       <h2>Create New Project</h2>
     </header>
 
-    <form class="project-form" @submit.prevent="Submit">
+    <form class="project-form" @submit.prevent="SubmitProject">
       <!-- DETAILS -->
       <div class="form-section">
         <h3 class="section-title">I. Project Details</h3>
         <div class="form-item">
           <h4>Title</h4>
-          <input type="text" v-model="title" placeholder="Your project's title" />
+          <input
+            type="text"
+            v-model="project_form.title"
+            placeholder="Your project's title"
+            class="title-input"
+          />
         </div>
         <div class="form-item">
           <h4>Description</h4>
           <textarea
-            v-model="description"
+            v-model="project_form.description"
             placeholder="A brief description of your project"
             spellcheck="false"
+            class="description-input"
           ></textarea>
         </div>
         <div class="form-item">
@@ -161,15 +195,15 @@ function SaveImportedEntries(new_entries: INewEntry[], mode: 'append' | 'overwri
             <h4>Notes</h4>
             <div class="right">
               <button
-                class="primary with-icon"
+                class="primary with-icon add-note"
                 type="button"
                 @click="AddNewNote"
-                :disabled="notes.length === 5"
+                :disabled="project_form.notes.length === 5"
               >
                 <Icon :icon="ICONS.add" />New Note
               </button>
               <button
-                class="secondary icon"
+                class="secondary icon toggle-notes"
                 type="button"
                 @click="notes_collapsed = !notes_collapsed"
               >
@@ -178,19 +212,24 @@ function SaveImportedEntries(new_entries: INewEntry[], mode: 'append' | 'overwri
             </div>
           </div>
           <div class="notes" v-if="!notes_collapsed">
-            <div v-if="notes.length === 0" class="hint">
+            <div v-if="project_form.notes.length === 0" class="hint">
               Add some notes to guide your contributors! For example: "Please remember about
               punctuation!".
             </div>
-            <div class="note" v-for="(_, index) in notes" :key="index">
+            <div class="note" v-for="(_, index) in project_form.notes" :key="index">
               <p class="hint">{{ index + 1 }}.</p>
               <input
                 type="text"
-                v-model="notes[index]"
+                v-model="project_form.notes[index]"
                 spellcheck="false"
                 placeholder="An empty note"
+                class="note-input"
               />
-              <button type="button" class="tertiary icon danger" @click="DeleteNote(index)">
+              <button
+                type="button"
+                class="delete-note tertiary icon danger"
+                @click="DeleteNote(index)"
+              >
                 <Icon :icon="ICONS.delete" />
               </button>
             </div>
@@ -202,15 +241,15 @@ function SaveImportedEntries(new_entries: INewEntry[], mode: 'append' | 'overwri
       <div class="form-section">
         <h3 class="section-title">II. Languages</h3>
         <div class="form-item">
-          <h4>Original Language</h4>
+          <h4>Source Language</h4>
           <p class="hint">
-            The language in which the original text is written. This will be the base for all
+            The language in which the source text is written. This will be the base for all
             translations.
           </p>
           <LanguageSelect
             :languages="languages"
-            :selected_language="selected_original_language!"
-            @language-selected="HandleOriginalLanguageSelected"
+            :selected_language_id="project_form.source_language_id"
+            @language-selected="HandleSourceLanguageSelected"
           />
         </div>
 
@@ -219,7 +258,7 @@ function SaveImportedEntries(new_entries: INewEntry[], mode: 'append' | 'overwri
             <h4>Desired Languages</h4>
             <button
               type="button"
-              class="secondary icon"
+              class="toggle-languages secondary icon"
               @click="desired_languages_collapsed = !desired_languages_collapsed"
             >
               <Icon :icon="ICONS.arrow_down" :rotate="desired_languages_collapsed ? 0 : 2" />
@@ -232,24 +271,22 @@ function SaveImportedEntries(new_entries: INewEntry[], mode: 'append' | 'overwri
           <LanguageMultiSelect
             v-if="!desired_languages_collapsed"
             :languages="
-              languages.filter((language) => language.id !== selected_original_language?.id)
+              languages.filter((language) => language.id !== project_form.source_language_id)
             "
-            :selected_languages="selected_desired_languages"
+            :selected_languages="project_form.languages"
             @language-selected="HandleDesiredLanguageSelected"
           />
 
           <div class="selected-languages" v-if="!desired_languages_collapsed">
-            <div class="lang" v-for="language in selected_desired_languages" :key="language.id">
+            <div class="lang" v-for="language in project_form.languages" :key="language.id">
               <div class="lang-info panel">
                 <Icon :icon="'circle-flags:' + language.code" />
                 <span>{{ language.title_eng }} ({{ language.title_native }})</span>
               </div>
               <button
                 type="button"
-                class="tertiary icon danger"
-                @click="
-                  selected_desired_languages.splice(selected_desired_languages.indexOf(language), 1)
-                "
+                class="delete-language tertiary icon danger"
+                @click="DeleteDesiredLanguage(language.id)"
               >
                 <Icon :icon="ICONS.delete" />
               </button>
@@ -267,7 +304,7 @@ function SaveImportedEntries(new_entries: INewEntry[], mode: 'append' | 'overwri
             is created.
             <button
               type="button"
-              class="secondary icon"
+              class="toggle-users secondary icon"
               @click="users_collapsed = !users_collapsed"
             >
               <Icon :icon="ICONS.arrow_down" :rotate="users_collapsed ? 0 : 2" />
@@ -275,13 +312,13 @@ function SaveImportedEntries(new_entries: INewEntry[], mode: 'append' | 'overwri
           </p>
           <UserMultiSelect
             v-if="!users_collapsed"
-            :selected_users="selected_users"
+            :selected_users="project_form.contributors"
             @userSelected="HandleUserSelected"
             ignore_self
           />
 
           <div class="selected-users" v-if="!users_collapsed">
-            <div class="user" v-for="user in selected_users" :key="user.id">
+            <div class="user" v-for="user in project_form.contributors" :key="user.id">
               <div class="user-info panel">
                 <RouterLink :to="'/users/' + user.id">
                   <p>{{ user.username }}</p>
@@ -306,8 +343,8 @@ function SaveImportedEntries(new_entries: INewEntry[], mode: 'append' | 'overwri
               </div>
               <button
                 type="button"
-                class="tertiary icon danger"
-                @click="selected_users.splice(selected_users.indexOf(user), 1)"
+                class="delete-user tertiary icon danger"
+                @click="DeleteUser(user.id)"
               >
                 <Icon :icon="ICONS.delete" />
               </button>
@@ -322,19 +359,21 @@ function SaveImportedEntries(new_entries: INewEntry[], mode: 'append' | 'overwri
         <div class="form-item">
           <header class="entry-header">
             <p class="hint">
-              Entries in {{ selected_original_language?.title_eng }} ({{
-                selected_original_language?.title_native
-              }}) to be translated. Each entry should be unique.
+              Entries in the source language to be translated. Each entry should be unique.
             </p>
             <div class="entry-actions">
-              <button type="button" class="primary with-icon" @click="AddNewEntry">
+              <button type="button" class="add-entry primary with-icon" @click="AddNewEntry">
                 <Icon :icon="ICONS.add" />New Entry
               </button>
-              <button type="button" class="secondary with-icon" @click="import_window_open = true">
+              <button
+                type="button"
+                class="open-import secondary with-icon"
+                @click="import_window_open = true"
+              >
                 <Icon :icon="ICONS.upload" />Import from CSV
               </button>
               <button
-                class="secondary icon"
+                class="toggle-entries secondary icon"
                 type="button"
                 @click="entries_collapsed = !entries_collapsed"
               >
@@ -344,27 +383,27 @@ function SaveImportedEntries(new_entries: INewEntry[], mode: 'append' | 'overwri
           </header>
 
           <div class="entries" v-if="!entries_collapsed">
-            <div class="entry" v-for="(_, index) in entries" :key="index">
+            <div class="entry" v-for="(_, index) in project_form.entries" :key="index">
               <p class="hint">{{ index + 1 }}.</p>
               <input
                 class="entry-content"
                 type="text"
-                v-model="entries[index].content"
+                v-model="project_form.entries[index].content"
                 spellcheck="false"
                 placeholder="An empty entry"
               />
               <input
                 class="entry-context"
                 type="text"
-                v-model="entries[index].context"
+                v-model="project_form.entries[index].context"
                 placeholder="Optional context"
                 spellcheck="false"
               />
               <button
                 type="button"
-                class="tertiary icon danger"
+                class="delete-entry tertiary icon danger"
                 @click="DeleteEntry(index)"
-                :disabled="entries.length === 1"
+                :disabled="project_form.entries.length === 1"
               >
                 <Icon :icon="ICONS.delete" />
               </button>
@@ -378,27 +417,27 @@ function SaveImportedEntries(new_entries: INewEntry[], mode: 'append' | 'overwri
         <div class="stats">
           <p class="hint">
             <Icon :icon="ICONS.project" />
-            {{ entries.length }} {{ entries.length === 1 ? 'entry' : 'entries' }}
+            {{ project_form.entries.length }}
+            {{ project_form.entries.length === 1 ? 'entry' : 'entries' }}
           </p>
           <p class="hint">
             <Icon :icon="ICONS.translation" />
-            {{ selected_desired_languages.length }}
-            {{ selected_desired_languages.length === 1 ? 'language' : 'languages' }}
+            {{ project_form.languages.length }}
+            {{ project_form.languages.length === 1 ? 'language' : 'languages' }}
           </p>
           <p class="hint">
             <Icon :icon="ICONS.user" />
-            {{ selected_users.length }} {{ selected_users.length === 1 ? 'user' : 'users' }}
+            {{ project_form.contributors.length }}
+            {{ project_form.contributors.length === 1 ? 'user' : 'users' }}
           </p>
         </div>
-        <button
-          class="primary with-icon submit-button"
-          :disabled="submitting || !title || selected_desired_languages.length === 0"
-        >
+        <button class="primary with-icon submit-button" :disabled="submitting || !form_valid">
           <Icon :icon="ICONS.add" />Create New Project
         </button>
       </div>
     </form>
   </main>
+
   <ImportEntries
     v-if="import_window_open"
     @close="import_window_open = false"

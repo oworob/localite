@@ -1,4 +1,4 @@
-import type IApiLanguage from '@/models/project/language'
+import type { IApiLanguage } from '@/models/project/language'
 
 export const languages: IApiLanguage[] = [
   { id: 1, title_eng: 'English', title_native: 'English', code: 'en', created_at: new Date() },

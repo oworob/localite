@@ -40,7 +40,7 @@ def create():
     description = data.get('description')
     notes = data.get('notes')
     entries = data.get('entries')
-    original_language_id = data.get('original_language_id')
+    source_language_id = data.get('source_language_id')
     languages = data.get('languages')
     contributors = data.get('contributors')
 
@@ -74,7 +74,7 @@ def create():
     project = Project(
         title=title,
         description=description,
-        original_language_id=original_language_id,
+        source_language_id=source_language_id,
         languages=db_languages,
         notes=db_notes,
         entries=db_entries,

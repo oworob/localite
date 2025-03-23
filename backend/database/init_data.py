@@ -69,19 +69,19 @@ def init_data(app):
         project1 = Project(
             title='Dinosaur Game',
             owner_id=user1.id,
-            original_language_id=language1.id,
+            source_language_id=language1.id,
             description='A simple game where you play as a dinosaur.'
         )
         project2 = Project(
             title='Książka kucharska',
             owner_id=user2.id,
-            original_language_id=language5.id,
+            source_language_id=language5.id,
             description='A Polish cookbook.'
         )
         project3 = Project(
             title='Social media app',
             owner_id=user3.id,
-            original_language_id=language1.id,
+            source_language_id=language1.id,
             description='An app for sharing photos and messages.'
         )
 

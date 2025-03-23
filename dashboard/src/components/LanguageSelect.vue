@@ -3,17 +3,20 @@ import { Icon } from '@iconify/vue/dist/iconify.js'
 import { onClickOutside } from '@vueuse/core'
 import { computed, ref } from 'vue'
 import { ICONS } from '@/assets/icons'
-import type IApiLanguage from '@/models/project/language'
+import type { IApiLanguage } from '@/models/project/language'
 import Checkbox from './Checkbox.vue'
 
 const props = defineProps<{
   languages: IApiLanguage[]
-  selected_language: IApiLanguage
+  selected_language_id: number
   disabled?: boolean
 }>()
 
 const emit = defineEmits(['languageSelected'])
 
+const selected_language = computed(() => {
+  return props.languages.find((language) => language.id === props.selected_language_id || 0)!
+})
 const select_open = ref(false)
 const query = ref('')
 
@@ -28,7 +31,7 @@ const filtered_languages = computed(() => {
 })
 
 function SelectLanguage(id: number) {
-  if (id !== props.selected_language.id) {
+  if (id !== props.selected_language_id) {
     emit('languageSelected', id)
   }
   select_open.value = !select_open.value

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue/dist/iconify.js'
 import { onClickOutside, useDropZone } from '@vueuse/core'
-import Papa from 'papaparse'
 import { ref } from 'vue'
 import { ICONS } from '@/assets/icons'
 import type { INewEntry } from '@/models/project/entry'
@@ -36,17 +35,14 @@ function ReadCSVFile(file: File) {
   const reader = new FileReader()
   reader.onload = (e) => {
     const csv = e.target?.result as string
-    Papa.parse(csv, {
-      header: false,
-      complete: (results: any) => {
-        const split = results.data
-          .map((row: string[]) => {
-            return { content: row[0], context: row.slice(1).join(';') }
-          })
-          .filter((row: INewEntry) => row.content)
-        imported_entries.value = split
-      },
-    })
+    const rows = csv.split('\n')
+    const split = rows
+      .map((row: string) => {
+        const row_data = row.split(';')
+        return { content: row_data[0], context: row_data.slice(1).join(';') }
+      })
+      .filter((row: INewEntry) => row.content)
+    imported_entries.value = split
   }
   reader.readAsText(file)
 }
@@ -114,8 +110,8 @@ const { isOverDropZone } = useDropZone(drop_zone, {
       </div>
 
       <div class="actions">
-        <button class="tertiary" @click="emit('close')">Cancel</button>
-        <button class="primary with-icon" @click="SaveEntries" :disabled="!current_file">
+        <button class="cancel tertiary" @click="emit('close')">Cancel</button>
+        <button class="submit primary with-icon" @click="SaveEntries" :disabled="!current_file">
           <Icon :icon="ICONS.upload" />
           Import
         </button>

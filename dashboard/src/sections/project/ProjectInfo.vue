@@ -34,7 +34,11 @@ function LeaveProject() {
       router.push('/projects')
     })
     .catch((err) => {
-      console.error(err)
+      if (err.response?.data.message) {
+        NotificationStore.AddNotification(err.response.data.message, 'error')
+      } else {
+        NotificationStore.AddNotification(err.message, 'error')
+      }
     })
 }
 </script>

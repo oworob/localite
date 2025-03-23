@@ -1,4 +1,4 @@
-export default interface IApiLanguage {
+export interface IApiLanguage {
   id: number
   created_at: Date
   code: string

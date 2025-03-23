@@ -2,7 +2,6 @@
 import { Icon } from '@iconify/vue/dist/iconify.js'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { UNKNOWN_ERROR } from '@/assets/errors'
 import { ICONS } from '@/assets/icons'
 import type { IApiAppStats } from '@/models/system/app-stats'
 import AuthService from '@/services/AuthService'
@@ -90,10 +89,10 @@ async function Register() {
       'success',
     )
   } catch (err: any) {
-    if (err.response.data.message) {
+    if (err.response?.data.message) {
       NotificationStore.AddNotification(err.response.data.message, 'error')
     } else {
-      NotificationStore.AddNotification(UNKNOWN_ERROR, 'error')
+      NotificationStore.AddNotification(err.message, 'error')
     }
   } finally {
     submitting.value = false
@@ -108,10 +107,10 @@ async function Login() {
     router.push({ path: '/projects' })
     NotificationStore.AddNotification(`Welcome back, ${res.data.username}!`, 'success')
   } catch (err: any) {
-    if (err.response.data.message) {
+    if (err.response?.data.message) {
       NotificationStore.AddNotification(err.response.data.message, 'error')
     } else {
-      NotificationStore.AddNotification(UNKNOWN_ERROR, 'error')
+      NotificationStore.AddNotification(err.mesage, 'error')
     }
   } finally {
     submitting.value = false

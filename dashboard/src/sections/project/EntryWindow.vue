@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
 import { computed, ref, watch } from 'vue'
-import { UNKNOWN_ERROR } from '@/assets/errors'
 import { ICONS } from '@/assets/icons'
 import type { INewTranslation } from '@/models/project/translation'
 import TranslationService from '@/services/TranslationService'
@@ -9,12 +8,12 @@ import { useNotificationStore } from '@/stores/NotificationStore'
 import { useProjectStore } from '@/stores/ProjectStore'
 
 const ProjectStore = useProjectStore()
+const NotificationStore = useNotificationStore()
 
 const translation_content = ref('')
 const char_count = computed(() => translation_content.value.length)
 const show_translations = ref(true)
 const submitting = ref(false)
-const NotificationStore = useNotificationStore()
 const filtered_translations = computed(() =>
   ProjectStore.selected_entry!.translations!.filter(
     (translation) => translation.language_id === ProjectStore.selected_language!.id,
@@ -42,10 +41,10 @@ async function SubmitTranslation() {
     // translation_content.value = ''
     filtered_translations.value!.push(res.data)
   } catch (err: any) {
-    if (err.response.data.message) {
-      NotificationStore.AddNotification(err.response.data.message, 'error')
+    if (err.response?.data.message) {
+      NotificationStore.AddNotification(err.response.data?.message, 'error')
     } else {
-      NotificationStore.AddNotification(UNKNOWN_ERROR, 'error')
+      NotificationStore.AddNotification(err.message, 'error')
     }
     submitting.value = false
   }
@@ -58,8 +57,8 @@ async function SubmitTranslation() {
       <h3>Add {{ ProjectStore.selected_language!.title_eng }} Translation</h3>
     </header>
 
-    <div class="original panel">
-      <p class="hint">{{ ProjectStore.project!.original_language!.title_native }}:</p>
+    <div class="source panel">
+      <p class="hint">{{ ProjectStore.project!.source_language!.title_native }}:</p>
       <p class="content">{{ ProjectStore.selected_entry!.content }}</p>
     </div>
 
@@ -140,7 +139,7 @@ async function SubmitTranslation() {
   gap: 1rem;
 }
 
-.original {
+.source {
   padding: 1rem;
   display: flex;
   flex-direction: column;

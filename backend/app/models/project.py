@@ -21,8 +21,8 @@ class Project(db.Model, BaseModel):
     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     owner_last_project_visit = db.Column(db.DateTime, nullable=False, default=datetime.now)
     description = db.Column(db.String(PROJECT_DESCRIPTION_MAX_LENGTH), nullable=True)
-    original_language_id = db.Column(db.Integer, db.ForeignKey('language.id'), nullable=False)
-    original_language = db.relationship('Language', foreign_keys=[original_language_id]) # ???
+    source_language_id = db.Column(db.Integer, db.ForeignKey('language.id'), nullable=False)
+    source_language = db.relationship('Language', foreign_keys=[source_language_id]) # ???
     languages = db.relationship('Language', secondary=project_language, lazy='subquery',
         backref=db.backref('projects', lazy=True))
     contributors = db.relationship('User', secondary=project_contributor, lazy='subquery',

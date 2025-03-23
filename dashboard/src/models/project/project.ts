@@ -1,6 +1,6 @@
 import type { IApiUser } from '../user/user'
 import type { IApiEntry, INewEntry } from './entry'
-import type IApiLanguage from './language'
+import type { IApiLanguage } from './language'
 import type { IApiNote } from './note'
 
 export interface IApiProject {
@@ -10,8 +10,8 @@ export interface IApiProject {
   description: string
   owner_id: number
   owner?: IApiUser
-  original_language_id: number
-  original_language?: IApiLanguage
+  source_language_id: number
+  source_language?: IApiLanguage
   notes?: IApiNote[]
   contributors?: IApiUser[]
   entries?: IApiEntry[]
@@ -31,8 +31,13 @@ export interface INewProject {
   title: string
   description: string
   notes: string[]
-  original_language_id: number
+  source_language_id: number
   languages: number[]
   contributors: number[]
   entries: INewEntry[]
+}
+
+export interface INewProjectForm extends Omit<INewProject, 'languages' | 'contributors'> {
+  languages: IApiLanguage[]
+  contributors: IApiUser[]
 }

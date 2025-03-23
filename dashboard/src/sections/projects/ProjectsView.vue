@@ -3,6 +3,7 @@ import { Icon } from '@iconify/vue/dist/iconify.js'
 import { computed, onMounted, ref } from 'vue'
 import { RouterLink } from 'vue-router'
 import { ICONS } from '@/assets/icons'
+import Error from '@/components/Error.vue'
 import Loading from '@/components/Loading.vue'
 import type { IApiInvite } from '@/models/project/invite'
 import type { IApiProject } from '@/models/project/project'
@@ -16,30 +17,47 @@ import ProjectButton from './ProjectButton.vue'
 const AuthStore = useAuthStore()
 
 const loading = ref(true)
-
+const error = ref('')
 const projects = ref<IApiProject[]>([])
+const invites = ref<IApiInvite[]>([])
 const created_projects = computed(() =>
   projects.value.filter((project) => project.owner_id === AuthStore.user?.id),
 )
 const joined_projects = computed(() =>
   projects.value.filter((project) => project.owner_id !== AuthStore.user?.id),
 )
-const invites = ref<IApiInvite[]>([])
 
-function FetchProjects() {
-  ProjectService.GetProjects(['owner', 'languages', 'original_language', 'contributors', 'entries'])
-    .then((res) => {
-      projects.value = res.data
-      loading.value = false
-    })
-    .catch((err) => {
-      console.error(err)
-    })
+async function FetchData() {
+  try {
+    loading.value = true
+    const res = await ProjectService.GetProjects([
+      'owner',
+      'languages',
+      'source_language',
+      'contributors',
+      'entries',
+    ])
+    projects.value = res.data
+    const res2 = await InviteService.GetInvites([
+      'project.owner',
+      'project.stats',
+      'project.source_language',
+      'project.languages',
+    ])
+    invites.value = res2.data
+  } catch (err: any) {
+    if (err.response?.data.message) {
+      error.value = err.response.data.message
+    } else {
+      error.value = err.message
+    }
+  } finally {
+    loading.value = false
+  }
 }
 
 function HandleInviteAccept(id: number) {
-  invites.value = invites.value.filter((invite) => invite.id !== id)
-  FetchProjects()
+  FetchData()
 }
 
 function HandleInviteDecline(id: number) {
@@ -47,25 +65,15 @@ function HandleInviteDecline(id: number) {
 }
 
 onMounted(() => {
-  FetchProjects()
-  InviteService.GetInvites([
-    'project.owner',
-    'project.stats',
-    'project.original_language',
-    'project.languages',
-  ])
-    .then((res) => {
-      invites.value = res.data
-    })
-    .catch((err) => {
-      console.error(err)
-    })
+  FetchData()
 })
 </script>
 
 <template>
   <Loading v-if="loading" />
-  <main id="Projects" v-if="!loading">
+  <Error v-if="error" :error="error" />
+
+  <main id="Projects" v-if="!loading && !error">
     <header class="header">
       <h2>Your Projects</h2>
       <RouterLink to="/projects/new">

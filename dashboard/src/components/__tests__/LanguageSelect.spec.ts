@@ -10,7 +10,7 @@ describe('LanguageSelect', () => {
     component = mount(LanguageSelect, {
       props: {
         languages: languages,
-        selected_language: languages[0],
+        selected_language_id: languages[0].id,
       },
     })
   })

@@ -31,7 +31,7 @@ const props = defineProps<{
       </p>
       <header class="header">
         <div class="main">
-          <Icon :icon="'circle-flags:' + project.original_language?.code" />
+          <Icon :icon="'circle-flags:' + project.source_language?.code" />
           <h4>{{ project.title }}</h4>
           <p class="hint">by {{ project.owner?.username }}</p>
         </div>
@@ -87,10 +87,12 @@ const props = defineProps<{
   .info {
     display: flex;
     justify-content: space-between;
+
     .contributors,
     .entries {
       display: flex;
       align-items: center;
+      align-self: flex-start;
       gap: 0.25rem;
     }
     .other {
@@ -101,6 +103,7 @@ const props = defineProps<{
   }
   .languages {
     display: flex;
+    flex-wrap: wrap;
     transition: var(--transition);
     gap: 0;
     svg:not(:first-child) {
