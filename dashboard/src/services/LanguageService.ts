@@ -1,4 +1,4 @@
-import type IApiLanguage from '@/models/project/language'
+import type { IApiLanguage } from '@/models/project/language'
 import type { IApiResponse } from '@/models/system/api-response'
 import BaseService from './BaseService'
 

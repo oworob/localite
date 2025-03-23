@@ -7,7 +7,7 @@ class MiscService extends BaseService {
     super('/misc')
   }
 
-  GetAppSummary(): Promise<IApiResponse<IApiAppStats>> {
+  GetAppStats(): Promise<IApiResponse<IApiAppStats>> {
     return this.ApiClient.get(`${this.url}/app_stats`)
   }
 }

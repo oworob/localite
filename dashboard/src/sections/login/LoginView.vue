@@ -62,7 +62,7 @@ function AnimateStats() {
 }
 
 onMounted(() => {
-  MiscService.GetAppSummary().then((res) => {
+  MiscService.GetAppStats().then((res) => {
     app_stats.value = res.data
     AnimateStats()
   })

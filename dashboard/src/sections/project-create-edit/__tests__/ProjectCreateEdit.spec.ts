@@ -115,6 +115,12 @@ describe('ProjectCreateEdit', () => {
     expect(component.find('.note-input').exists()).toBe(false)
   })
 
+  it('does not add a note if the limit is reached', async () => {
+    component.vm.project_form.notes = ['Note 1', 'Note 2', 'Note 3', 'Note 4', 'Note 5']
+    await component.find('.add-note').trigger('click')
+    expect(component.vm.project_form.notes).toHaveLength(5)
+  })
+
   it('opens and closes desired languages tab', async () => {
     await component.find('.toggle-languages').trigger('click')
     expect(component.find('.selected-languages').exists()).toBe(false)

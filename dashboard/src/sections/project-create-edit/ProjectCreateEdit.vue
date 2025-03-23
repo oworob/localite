@@ -10,7 +10,7 @@ import Loading from '@/components/Loading.vue'
 import UserMultiSelect from '@/components/UserMultiSelect.vue'
 import type { INewEntry } from '@/models/project/entry'
 import type { IApiLanguage } from '@/models/project/language'
-import type { INewProject,INewProjectForm } from '@/models/project/project'
+import type { INewProject, INewProjectForm } from '@/models/project/project'
 import { type IApiUser, UserStatus } from '@/models/user/user'
 import LanguageService from '@/services/LanguageService'
 import ProjectService from '@/services/ProjectService'
@@ -104,10 +104,8 @@ function DeleteNote(index: number) {
 }
 
 function AddNewEntry() {
-  if (project_form.value.entries.length < 1000) {
-    project_form.value.entries.push({ content: '', context: '' })
-    entries_collapsed.value = false
-  }
+  project_form.value.entries.push({ content: '', context: '' })
+  entries_collapsed.value = false
 }
 
 function DeleteEntry(index: number) {
