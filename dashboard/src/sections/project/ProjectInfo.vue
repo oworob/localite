@@ -9,7 +9,7 @@ import { FormatDate } from '@/tools/FormatDate'
 
 const ProjectStore = useProjectStore()
 const NotificationStore = useNotificationStore()
-const emit = defineEmits(['close', 'saveEntries'])
+const emit = defineEmits(['close'])
 const leave_confirm_open = ref(false)
 const router = useRouter()
 

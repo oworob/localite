@@ -212,7 +212,7 @@ describe('ProjectCreateEdit', () => {
     expect(component.find('#ImportEntries').exists()).toBe(true)
 
     const import_component = component.findComponent({ name: 'ImportEntries' })
-    await import_component.vm.$emit('save-entries', new_entries, 'overwrite')
+    await import_component.vm.$emit('saveEntries', new_entries, 'overwrite')
     expect(component.vm.project_form.entries).toEqual(new_entries)
   })
 
@@ -222,7 +222,7 @@ describe('ProjectCreateEdit', () => {
     expect(component.find('#ImportEntries').exists()).toBe(true)
 
     const import_component = component.findComponent({ name: 'ImportEntries' })
-    await import_component.vm.$emit('save-entries', new_entries, 'append')
+    await import_component.vm.$emit('saveEntries', new_entries, 'append')
     expect(component.vm.project_form.entries).toEqual([...new_entries, ...new_entries])
   })
 })
