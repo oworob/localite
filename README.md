@@ -1,5 +1,13 @@
 # Project Roadmap
 
+#### Core Goals
+
+1. High test coverage
+2. Code open for extension
+3. Usage of services
+4. Reusable components
+5. UX & Accessibility
+
 #### Authentication & Users
 
 - [x] Logging in
