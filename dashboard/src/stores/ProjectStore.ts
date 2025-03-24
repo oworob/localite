@@ -1,11 +1,9 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import type { IApiEntry } from '@/models/project/entry'
-import type IApiLanguage from '@/models/project/language'
+import type { IApiLanguage } from '@/models/project/language'
 import type { IApiProject } from '@/models/project/project'
 import { useAuthStore } from './AuthStore'
-
-const AuthStore = useAuthStore()
 
 export const useProjectStore = defineStore('ProjectStore', () => {
   const project = ref<IApiProject>()
@@ -33,6 +31,7 @@ export const useProjectStore = defineStore('ProjectStore', () => {
   }
 
   function IsProjectOwner() {
+    const AuthStore = useAuthStore()
     return project.value!.owner_id === AuthStore.user!.id
   }
 

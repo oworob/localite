@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue/dist/iconify.js'
 import { computed, onMounted, ref, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { ICONS } from '@/assets/icons'
 import type { IApiAppStats } from '@/models/system/app-stats'
 import AuthService from '@/services/AuthService'
@@ -12,9 +12,12 @@ import { useNotificationStore } from '@/stores/NotificationStore'
 const AuthStore = useAuthStore()
 const NotificationStore = useNotificationStore()
 
-const route = useRoute()
 const router = useRouter()
-const isLoginView = computed(() => route.path === '/login')
+const isLoginView = computed(() => props.mode === 'login')
+
+const props = defineProps<{
+  mode: 'login' | 'register'
+}>()
 
 watch(isLoginView, () => {
   email.value = ''
@@ -119,7 +122,7 @@ async function Login() {
 </script>
 
 <template>
-  <main id="Login">
+  <main id="LoginRegister">
     <div class="login-wrapper">
       <header class="header">
         <h1>{{ isLoginView ? 'Welcome Back!' : 'Welcome!' }}</h1>
@@ -223,7 +226,7 @@ async function Login() {
 </template>
 
 <style scoped lang="scss">
-#Login {
+#LoginRegister {
   display: grid;
   grid-template-columns: 2fr 3fr;
   gap: 8rem;

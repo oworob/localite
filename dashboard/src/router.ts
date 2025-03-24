@@ -11,12 +11,14 @@ const router = createRouter({
     {
       path: '/login',
       name: 'login',
-      component: () => import('@/sections/login/LoginView.vue'),
+      component: () => import('@/sections/login-register/LoginRegister.vue'),
+      props: { mode: 'login' },
     },
     {
       path: '/register',
       name: 'register',
-      component: () => import('@/sections/login/LoginView.vue'),
+      component: () => import('@/sections/login-register/LoginRegister.vue'),
+      props: { mode: 'register' },
     },
     {
       path: '/projects',

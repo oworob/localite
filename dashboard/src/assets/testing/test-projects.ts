@@ -1,5 +1,5 @@
 import type { IApiProject, INewProject, INewProjectForm } from '@/models/project/project'
-import { new_entries } from './test-entries'
+import { entries, new_entries } from './test-entries'
 import { languages } from './test-languages'
 import { users } from './test-users'
 
@@ -31,6 +31,8 @@ export const projects: IApiProject[] = [
     description: '',
     owner_id: 1,
     source_language_id: 1,
+    entries: entries,
+    languages: languages,
   },
   {
     id: 2,

@@ -1,4 +1,4 @@
-import type IApiLanguage from './language'
+import type { IApiLanguage } from './language'
 import type { IApiTranslation } from './translation'
 
 export interface IApiEntry {

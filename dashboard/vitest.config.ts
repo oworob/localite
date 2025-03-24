@@ -13,7 +13,14 @@ export default mergeConfig(
       coverage: {
         provider: 'istanbul',
         clean: true,
-        exclude: ['src/**/__tests__', 'src/models', 'src/assets'],
+        exclude: [
+          'src/**/__tests__',
+          'src/models',
+          'src/assets',
+          'src/App.vue',
+          'src/main.ts',
+          'src/router.ts',
+        ],
         include: ['src'],
       },
     },
