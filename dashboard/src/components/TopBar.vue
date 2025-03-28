@@ -5,13 +5,12 @@ import { RouterLink, useRouter } from 'vue-router'
 import { ICONS } from '@/assets/icons'
 import AuthService from '@/services/AuthService'
 import { useAuthStore } from '@/stores/AuthStore'
+import ThemeEditor from './ThemeEditor.vue'
 
-const topbar = ref<HTMLElement | null>(null)
+const topbar = ref<HTMLElement>()
 onMounted(() => {
-  if (topbar.value) {
-    const topbarHeight = topbar.value.clientHeight - 1
-    document.documentElement.style.setProperty('--topbar-height', `${topbarHeight + 1}px`)
-  }
+  const topbarHeight = topbar.value!.clientHeight - 1
+  document.documentElement.style.setProperty('--topbar-height', `${topbarHeight + 1}px`)
 })
 
 const AuthStore = useAuthStore()
@@ -29,27 +28,27 @@ function Logout() {
   <nav id="TopBar" ref="topbar">
     <div class="logo">[LOGO] LOCALITE</div>
     <div class="links">
-      <RouterLink to="/">
+      <!-- <RouterLink to="/">
         <button class="tertiary">Home</button>
-      </RouterLink>
+      </RouterLink> -->
       <RouterLink to="/projects">
         <button class="tertiary with-icon">
           <Icon :icon="ICONS.project" />
           Projects
         </button>
       </RouterLink>
-      <RouterLink to="/users">
+      <!-- <RouterLink to="/users">
         <button class="tertiary with-icon">
           <Icon :icon="ICONS.users" />
           Users
         </button>
-      </RouterLink>
-      <RouterLink to="/messages">
+      </RouterLink> -->
+      <!-- <RouterLink to="/messages">
         <button class="tertiary with-icon">
           <Icon :icon="ICONS.message" />
           Inbox
         </button>
-      </RouterLink>
+      </RouterLink> -->
       <RouterLink to="/projects/1">
         <button class="tertiary">P1</button>
       </RouterLink>
@@ -67,18 +66,22 @@ function Logout() {
       </a>
     </div>
 
-    <div class="actions" v-if="!AuthStore.user">
-      <RouterLink to="/login">
-        <button class="primary">Login</button>
-      </RouterLink>
-      <RouterLink to="/register">
-        <button class="secondary">Register</button>
-      </RouterLink>
-    </div>
+    <div class="right">
+      <div class="actions" v-if="!AuthStore.user">
+        <RouterLink to="/login">
+          <button class="primary">Login</button>
+        </RouterLink>
+        <RouterLink to="/register">
+          <button class="secondary">Register</button>
+        </RouterLink>
+      </div>
 
-    <div class="user" v-else>
-      <p class="username">{{ AuthStore.user.username }}</p>
-      <button class="secondary" @click="Logout">Logout</button>
+      <div class="user" v-else>
+        <p class="username">{{ AuthStore.user.username }}</p>
+        <button class="logout secondary" @click="Logout">Logout</button>
+      </div>
+
+      <ThemeEditor />
     </div>
   </nav>
 </template>
@@ -96,9 +99,14 @@ function Logout() {
     display: flex;
     justify-content: center;
     gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .right {
+    display: flex;
+    gap: 0.5rem;
   }
   > div {
-    padding: 0.5rem 2rem;
+    padding: 0.5rem;
   }
 }
 

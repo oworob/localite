@@ -5,12 +5,23 @@
 @use 'loading.scss';
 
 :root {
+  // colors
+  --theme-green: #2c7d52;
+  --theme-red: #e84d4d;
+  --theme-yellow: #e2b555;
+  --theme-blue: #659fef;
+  --theme-purple: #b07ef7;
+  --theme-orange: #e89140;
+  --theme-pink: #f57891;
+
   --background: #111;
-  --text: #eee;
+  --text-light: #eee;
+  --text-dark: #222;
+  --text: var(--text-light);
   --text-disabled: rgb(from var(--text) r g b / 60%);
   --panel: #181818;
   --panel-border: #333;
-  --theme: #2c7d52;
+  --theme: var(--theme-green);
   --shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
   --transition: 0.2s;
   --error: #e84d4d;
@@ -20,13 +31,44 @@
 
 html {
   scrollbar-gutter: stable;
+
+  &[data-theme='red'] {
+    --theme: var(--theme-red);
+  }
+  &[data-theme='yellow'] {
+    --theme: var(--theme-yellow);
+  }
+  &[data-theme='blue'] {
+    --theme: var(--theme-blue);
+  }
+  &[data-theme='purple'] {
+    --theme: var(--theme-purple);
+  }
+  &[data-theme='orange'] {
+    --theme: var(--theme-orange);
+  }
+  &[data-theme='pink'] {
+    --theme: var(--theme-pink);
+  }
+
+  &[data-light-theme='true'] {
+    --background: #eee;
+    --text: var(--text-dark);
+    --panel: #fff;
+    --panel-border: #ccc;
+  }
+  @media (prefers-color-scheme: light) {
+    --background: #eee;
+    --text: var(--text-dark);
+    --panel: #fff;
+    --panel-border: #ccc;
+  }
 }
 
 body {
   font-family: 'Segoe UI';
   // font-family: 'Trebuchet MS';
   margin: 0;
-  text-shadow: var(--shadow);
   background: var(--background);
   color: var(--text);
   &:has(.modal) {
@@ -53,7 +95,6 @@ p {
   background: var(--panel);
   padding: 10px 15px;
   border-radius: 5px;
-  box-shadow: var(--shadow);
   border: 1px solid var(--panel-border);
   &.hover {
     transition: var(--transition);

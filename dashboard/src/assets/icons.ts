@@ -18,4 +18,7 @@ export const ICONS = {
   settings: 'solar:settings-bold',
   search: 'solar:magnifier-linear',
   language: 'solar:map-bold',
+  theme: 'solar:pallete-2-bold',
+  sun: 'solar:sun-2-bold',
+  moon: 'solar:moon-bold',
 }
