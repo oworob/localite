@@ -7,45 +7,52 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: () => import('@/sections/HomeView.vue'),
+      meta: { title: 'Home' },
     },
     {
       path: '/login',
       name: 'login',
       component: () => import('@/sections/login-register/LoginRegister.vue'),
       props: { mode: 'login' },
+      meta: { title: 'Login' },
     },
     {
       path: '/register',
       name: 'register',
       component: () => import('@/sections/login-register/LoginRegister.vue'),
       props: { mode: 'register' },
+      meta: { title: 'Register' },
     },
     {
       path: '/projects',
       name: 'projects',
       component: () => import('@/sections/projects/ProjectsView.vue'),
+      meta: { title: 'Projects' },
     },
     {
       path: '/projects/new',
       name: 'project-new',
-      component: () => import('@/sections/project-create-edit/ProjectCreateEdit.vue'),
+      component: () => import('@/sections/project-create-edit/ProjectCreate.vue'),
+      meta: { title: 'Create New Project' },
     },
     {
       path: '/projects/:id',
       name: 'project',
       component: () => import('@/sections/project/ProjectView.vue'),
-    },
-    {
-      path: '/projects/:id/manage',
-      name: 'project-manage',
-      component: () => import('@/sections/project-manage/ProjectManage.vue'),
+      meta: { title: 'Project' },
     },
     {
       path: '/:pathMatch(.*)',
       name: 'not-found',
       component: () => import('@/sections/PageNotFoundView.vue'),
+      meta: { title: 'Page Not Found' },
     },
   ],
+})
+
+router.beforeEach((to, from, next) => {
+  document.title = 'Localite | ' + to.meta.title
+  next()
 })
 
 export default router

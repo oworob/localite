@@ -76,8 +76,8 @@ onMounted(() => {
   <main id="Projects" v-if="!loading && !error">
     <header class="header">
       <h2>Your Projects</h2>
-      <RouterLink to="/projects/new">
-        <button class="primary with-icon"><Icon :icon="ICONS.add" />Create New Project</button>
+      <RouterLink to="/projects/new" class="primary with-icon">
+        <Icon :icon="ICONS.add" />Create New Project
       </RouterLink>
     </header>
     <section class="content">

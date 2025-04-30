@@ -10,9 +10,7 @@ const props = defineProps<{
   <div id="Error">
     <Icon class="icon" :icon="ICONS.error" />
     <h4>{{ error || 'Unknown Error' }}</h4>
-    <RouterLink to="/">
-      <button class="secondary">Return Home</button>
-    </RouterLink>
+    <RouterLink to="/" class="secondary">Return Home</RouterLink>
   </div>
 </template>
 

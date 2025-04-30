@@ -21,14 +21,6 @@ const entries_with_status = computed(() => {
 
 <template>
   <main id="EntryList">
-    <nav class="nav">
-      <RouterLink to="/projects">
-        <button class="tertiary with-icon back-button">
-          <Icon :icon="ICONS.arrow_left" />
-          Back to Projects
-        </button>
-      </RouterLink>
-    </nav>
     <header class="header">
       <h3>{{ ProjectStore.project!.title }}</h3>
       <button class="tertiary icon" @click="info_open = !info_open">
@@ -45,6 +37,7 @@ const entries_with_status = computed(() => {
 
     <div class="entries">
       <p>Entries:</p>
+
       <div
         v-for="entry in entries_with_status"
         :key="entry.id"
@@ -52,11 +45,9 @@ const entries_with_status = computed(() => {
         @click="ProjectStore.SetSelectedEntry(entry.id)"
         :class="{ selected: entry.id === ProjectStore.selected_entry!.id }"
       >
-        <div class="title-wrapper">
-          <p class="title">{{ entry.content }}</p>
-          <span class="status-dot" :class="entry.status"> </span>
-        </div>
-        <div class="info hint">
+        <span class="status-dot" :class="entry.status"></span>
+        <p class="content">{{ entry.content }}</p>
+        <!-- <div class="info hint">
           <p v-if="entry.status === 'needs_translation'">Needs translation!</p>
           <p v-else-if="entry.status === 'accepted'">Accepted.</p>
           <p v-else-if="entry.status === 'pending'">
@@ -66,7 +57,7 @@ const entries_with_status = computed(() => {
               )!.translation_count
             }})
           </p>
-        </div>
+        </div> -->
       </div>
     </div>
 
@@ -82,61 +73,52 @@ const entries_with_status = computed(() => {
   padding: 1rem;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.5rem;
 }
 
 .header {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-}
-
-.nav {
-  .back-button {
-    padding-left: 0;
-  }
+  justify-content: space-between;
+  gap: 1rem;
 }
 
 .entries {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.25rem;
   overflow-y: auto;
   max-height: 50vh; // adjust this
   // padding-right: 5px; // add this only when scrollable
 
   .entry {
     cursor: pointer;
-    background: var(--panel);
-    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    .content {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .status-dot {
+      width: 0.5rem;
+      height: 0.5rem;
+      border-radius: 50%;
+      aspect-ratio: 1 / 1;
+      background: var(--text);
+      &.needs_translation {
+        background: var(--error);
+      }
+      &.accepted {
+        background: var(--success);
+      }
+      &.pending {
+        background: var(--warn);
+      }
+    }
     &.selected {
       border-color: var(--theme);
-    }
-    .title-wrapper {
-      display: flex;
-      justify-content: space-between;
-      gap: 1rem;
-      .title {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-      .status-dot {
-        width: 0.5rem;
-        height: 0.5rem;
-        border-radius: 50%;
-        aspect-ratio: 1 / 1;
-        background: var(--text);
-        &.needs_translation {
-          background: var(--error);
-        }
-        &.accepted {
-          background: var(--success);
-        }
-        &.pending {
-          background: var(--warn);
-        }
-      }
     }
   }
 }

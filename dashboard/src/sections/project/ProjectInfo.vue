@@ -76,12 +76,6 @@ function LeaveProject() {
       </div>
 
       <footer class="actions">
-        <RouterLink
-          :to="'/projects/' + ProjectStore.project!.id + '/manage'"
-          v-if="ProjectStore.IsProjectOwner()"
-        >
-          <button class="primary">Manage Project</button>
-        </RouterLink>
         <button class="secondary danger" @click="leave_confirm_open = true">Leave Project</button>
       </footer>
     </div>

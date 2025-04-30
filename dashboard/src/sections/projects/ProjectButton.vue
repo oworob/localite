@@ -23,8 +23,8 @@ const props = defineProps<{
 </script>
 
 <template>
-  <RouterLink :to="'/projects/' + project.id">
-    <div class="project panel">
+  <RouterLink :to="'/projects/' + project.id" class="project-link">
+    <div class="project panel hover">
       <p class="new hint" v-if="GetNewEntryCount(project) > 0">
         {{ GetNewEntryCount(project) }} new
         {{ GetNewEntryCount(project) === 1 ? 'entry' : 'entries' }} since last visit
@@ -56,15 +56,17 @@ const props = defineProps<{
 </template>
 
 <style scoped lang="scss">
+.project-link {
+  width: 100%;
+}
 .project {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
   transition: var(--transition);
   &:hover {
-    border-color: var(--theme);
     .languages {
-      gap: 0.5rem;
+      gap: 0.4rem;
     }
   }
   .header {

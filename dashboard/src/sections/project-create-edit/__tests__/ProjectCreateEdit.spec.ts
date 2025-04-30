@@ -9,7 +9,7 @@ import { users } from '@/assets/testing/test-users'
 import LanguageService from '@/services/LanguageService'
 import ProjectService from '@/services/ProjectService'
 import { useNotificationStore } from '@/stores/NotificationStore'
-import ProjectCreateEdit from '../ProjectCreateEdit.vue'
+import ProjectCreateEdit from '../ProjectCreate.vue'
 
 describe('ProjectCreateEdit', () => {
   let component: any

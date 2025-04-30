@@ -1,40 +1,54 @@
-button,
-label.label-button {
+button {
   background: none;
   appearance: none;
   font-family: inherit;
-  font-size: 0.9rem;
   border: none;
   color: var(--text);
   cursor: pointer;
-  font-weight: bold;
-  transition: var(--transition);
-  transition-property: color, border-color, opacity;
-  width: fit-content;
-  padding: 5px 20px;
-  border-radius: 5px;
-  border: 1px solid var(--theme);
+}
 
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+a {
+  width: fit-content;
+  transition: var(--transition);
   &:disabled {
     opacity: 0.5;
     cursor: default;
   }
+}
 
-  &:hover:not(:disabled) {
-    &:not(.primary) {
-      color: var(--text) !important; // sometimes doesn't change color so this is needed
-    }
+button,
+a {
+  &.primary,
+  &.secondary,
+  &.tertiary,
+  &.select {
+    font-size: 0.9rem;
+    font-weight: bold;
+    border: 1px solid transparent;
+    border-radius: 5px;
+  }
 
-    &:not(.tertiary, .select) {
-      border-color: var(--text);
-    }
+  &.primary,
+  &.secondary,
+  &.select {
+    padding: 5px 15px;
   }
 
   &.primary {
+    letter-spacing: 0.5px;
     background: var(--theme);
-    letter-spacing: 1px;
     text-shadow: var(--shadow);
     color: var(--text-light);
+    border-color: var(--theme);
+    &:hover:not(:disabled) {
+      border-color: var(--text);
+    }
     &.danger {
       background-color: var(--error);
       border-color: var(--error);
@@ -43,15 +57,25 @@ label.label-button {
 
   &.secondary {
     color: var(--theme);
+    background: var(--panel);
+    border-color: var(--panel-border);
+    &:hover:not(:disabled) {
+      border-color: var(--theme);
+      &.danger {
+        border-color: var(--error);
+      }
+    }
+
     &.danger {
       color: var(--error);
-      border-color: var(--error);
     }
   }
 
   &.tertiary {
     color: var(--theme);
-    border-color: transparent;
+    &:hover:not(:disabled) {
+      color: var(--text);
+    }
     &.danger {
       color: var(--error);
     }
@@ -59,9 +83,7 @@ label.label-button {
 
   &.select {
     background: var(--panel);
-    border: 1px solid var(--panel-border);
-    padding: 5px 15px;
-    border-radius: 5px;
+    border-color: var(--panel-border);
     &:hover:not(:disabled) {
       border-color: var(--theme);
     }
@@ -75,7 +97,7 @@ label.label-button {
   }
 
   &.with-icon {
-    display: inline-flex;
+    display: flex;
     align-items: center;
     gap: 0.5rem;
     svg {
@@ -84,11 +106,8 @@ label.label-button {
   }
 
   &.icon {
-    padding: 3px 5px;
-    display: inline-flex;
-    align-items: center;
-    svg {
-      font-size: 1.4rem;
-    }
+    padding: 5px 5px;
+    display: flex;
+    font-size: 1.2rem;
   }
 }

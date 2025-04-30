@@ -28,52 +28,23 @@ function Logout() {
   <nav id="TopBar" ref="topbar">
     <div class="logo">[LOGO] LOCALITE</div>
     <div class="links">
-      <!-- <RouterLink to="/">
-        <button class="tertiary">Home</button>
-      </RouterLink> -->
-      <RouterLink to="/projects">
-        <button class="tertiary with-icon">
-          <Icon :icon="ICONS.project" />
-          Projects
-        </button>
+      <RouterLink to="/projects" class="tertiary with-icon">
+        <Icon :icon="ICONS.project" />
+        Projects
       </RouterLink>
-      <!-- <RouterLink to="/users">
-        <button class="tertiary with-icon">
-          <Icon :icon="ICONS.users" />
-          Users
-        </button>
-      </RouterLink> -->
-      <!-- <RouterLink to="/messages">
-        <button class="tertiary with-icon">
-          <Icon :icon="ICONS.message" />
-          Inbox
-        </button>
-      </RouterLink> -->
-      <RouterLink to="/projects/1">
-        <button class="tertiary">P1</button>
-      </RouterLink>
-      <RouterLink to="/projects/2">
-        <button class="tertiary">P2</button>
-      </RouterLink>
-      <RouterLink to="/projects/3">
-        <button class="tertiary">P3</button>
-      </RouterLink>
-      <a href="https://github.com/oworob/localite" target="_blank">
-        <button class="tertiary with-icon">
-          <Icon :icon="ICONS.github" />
-          GitHub
-        </button>
+      <RouterLink to="/projects/1" class="tertiary">P1</RouterLink>
+      <RouterLink to="/projects/2" class="tertiary">P2</RouterLink>
+      <RouterLink to="/projects/3" class="tertiary">P3</RouterLink>
+      <a href="https://github.com/oworob/localite" target="_blank" class="tertiary with-icon">
+        <Icon :icon="ICONS.github" />
+        GitHub
       </a>
     </div>
 
     <div class="right">
       <div class="actions" v-if="!AuthStore.user">
-        <RouterLink to="/login">
-          <button class="primary">Login</button>
-        </RouterLink>
-        <RouterLink to="/register">
-          <button class="secondary">Register</button>
-        </RouterLink>
+        <RouterLink to="/login" class="primary"> Login </RouterLink>
+        <RouterLink to="/register" class="secondary"> Register </RouterLink>
       </div>
 
       <div class="user" v-else>
@@ -103,6 +74,7 @@ function Logout() {
   }
   .right {
     display: flex;
+    align-items: center;
     gap: 0.5rem;
   }
   > div {

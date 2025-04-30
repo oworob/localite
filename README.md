@@ -33,11 +33,12 @@
 - [ ] Filtering projects (by name and language)
 - [x] Leaving project
 - [ ] Project owner dashboard
-  - [ ] Editing project (description, notes)
+  - [ ] Editing existing project (description, notes)
   - [ ] Inviting members
   - [ ] Adding entries
   - [ ] Deleting translations
   - [ ] Exporting translations to CSV
+- [ ] Promoting contributors to managers
 
 #### Testing
 

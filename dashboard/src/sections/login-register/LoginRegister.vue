@@ -174,15 +174,11 @@ async function Login() {
 
         <div class="actions" v-if="isLoginView">
           <p class="hint">New around here?</p>
-          <RouterLink to="/register">
-            <button type="button" class="tertiary">Create an Account</button>
-          </RouterLink>
+          <RouterLink to="/register" class="tertiary">Create an Account</RouterLink>
         </div>
         <div class="actions" v-else>
           <p class="hint">Already have an account?</p>
-          <RouterLink to="/login">
-            <button type="button" class="tertiary">Login</button>
-          </RouterLink>
+          <RouterLink to="/login" class="tertiary">Login</RouterLink>
         </div>
       </form>
     </div>
