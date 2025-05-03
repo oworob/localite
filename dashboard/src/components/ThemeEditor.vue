@@ -68,6 +68,7 @@ onClickOutside(component, (event) => {
       class="toggle icon"
       :class="theme_window_open ? 'primary' : 'tertiary'"
       @click="theme_window_open = !theme_window_open"
+      aria-label="Theme editor toggle"
     >
       <Icon :icon="ICONS.theme" />
     </button>
@@ -75,7 +76,12 @@ onClickOutside(component, (event) => {
     <div class="theme-window panel" v-if="theme_window_open">
       <div class="dark-theme">
         <Icon :icon="ICONS.sun" />
-        <Switch class="theme-switch" :checked="!light_theme" @click="UpdateLightTheme" />
+        <Switch
+          class="theme-switch"
+          :checked="!light_theme"
+          @click="UpdateLightTheme"
+          aria-label="Dark mode toggle"
+        />
         <Icon :icon="ICONS.moon" />
       </div>
 
@@ -88,6 +94,7 @@ onClickOutside(component, (event) => {
           v-for="theme in color_themes"
           :key="theme"
           :style="{ '--theme-color': `var(--theme-${theme})` }"
+          :aria-label="'Theme color ' + theme"
         >
           {{ capitalize(theme) }}
           <input type="radio" :id="theme" name="color-theme" :value="theme" v-model="color_theme" />
@@ -102,6 +109,7 @@ onClickOutside(component, (event) => {
             :key="label"
             :class="[font_size === size ? 'primary' : 'tertiary', label + '-button']"
             @click="UpdateFontSize(size)"
+            :aria-label="'Font size ' + label"
           >
             {{ capitalize(label) }}
           </button>

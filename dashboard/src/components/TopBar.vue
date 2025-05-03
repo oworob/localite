@@ -26,16 +26,18 @@ function Logout() {
 
 <template>
   <nav id="TopBar" ref="topbar">
-    <div class="logo">[LOGO] LOCALITE</div>
     <div class="links">
-      <RouterLink to="/projects" class="tertiary with-icon">
+      <RouterLink to="/" class="logo">
+        <img src="@/assets/images/Logo.png" alt="Logo" />
+      </RouterLink>
+      <RouterLink to="/projects" class="secondary with-icon">
         <Icon :icon="ICONS.project" />
         Projects
       </RouterLink>
-      <RouterLink to="/projects/1" class="tertiary">P1</RouterLink>
-      <RouterLink to="/projects/2" class="tertiary">P2</RouterLink>
-      <RouterLink to="/projects/3" class="tertiary">P3</RouterLink>
-      <a href="https://github.com/oworob/localite" target="_blank" class="tertiary with-icon">
+      <RouterLink to="/projects/1" class="secondary">P1</RouterLink>
+      <RouterLink to="/projects/2" class="secondary">P2</RouterLink>
+      <RouterLink to="/projects/3" class="secondary">P3</RouterLink>
+      <a href="https://github.com/oworob/localite" target="_blank" class="secondary with-icon">
         <Icon :icon="ICONS.github" />
         GitHub
       </a>
@@ -69,7 +71,8 @@ function Logout() {
   .links {
     display: flex;
     justify-content: center;
-    gap: 1rem;
+    align-items: center;
+    gap: 0.5rem;
     flex-wrap: wrap;
   }
   .right {
@@ -79,6 +82,20 @@ function Logout() {
   }
   > div {
     padding: 0.5rem;
+  }
+}
+
+.logo {
+  display: flex;
+  img {
+    height: 1.7rem;
+    background-color: var(--theme);
+    border-radius: 5px;
+    padding: 2px;
+    transition: var(--transition);
+    &:hover {
+      transform: scale(1.1);
+    }
   }
 }
 
