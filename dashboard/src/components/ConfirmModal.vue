@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onClickOutside } from '@vueuse/core'
 import { ref } from 'vue'
-import { useConfirmStore } from '@/stores/ConfirmSTore'
+import { useConfirmStore } from '@/stores/ConfirmStore'
 
 const ConfirmStore = useConfirmStore()
 
