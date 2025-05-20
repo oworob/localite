@@ -3,7 +3,7 @@
 #### Core Goals
 
 1. High test coverage
-2. Code open for extension
+2. Code open for extension & DRY
 3. Usage of services
 4. Reusable components
 5. UX & Accessibility
@@ -39,6 +39,7 @@
   - [ ] Deleting translations
   - [ ] Exporting translations to CSV
 - [ ] Promoting contributors to managers
+- [ ] Project changelog (updated fields, added or removed entries, users etc)
 
 #### Testing
 

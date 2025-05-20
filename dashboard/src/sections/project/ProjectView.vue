@@ -7,16 +7,22 @@ import Error from '@/components/Error.vue'
 import Loading from '@/components/Loading.vue'
 import ProjectService from '@/services/ProjectService'
 import { useProjectStore } from '@/stores/ProjectStore'
+import ProjectInfoView from './ProjectDetailsView.vue'
 import TranslationsView from './TranslationsView.vue'
 
 const ProjectStore = useProjectStore()
 const loading = ref(true)
 const error = ref('')
 const tabs = [
-  { name: 'Translations', path: '', icon: ICONS.translation, admin_only: false },
+  {
+    name: '',
+    path: '',
+    icon: ICONS.project,
+    admin_only: false,
+  },
+  { name: 'Translations', path: '?tab=translations', icon: ICONS.translation, admin_only: false },
   { name: 'Entries', path: '?tab=entries', icon: ICONS.entry, admin_only: true },
   { name: 'Contributors', path: '?tab=contributors', icon: ICONS.users, admin_only: true },
-  { name: 'Project Details', path: '?tab=details', icon: ICONS.settings, admin_only: false },
 ]
 const Route = useRoute()
 
@@ -72,11 +78,12 @@ async function FetchData() {
         class="hint with-icon"
       >
         <Icon :icon="tab.icon" />
-        {{ tab.name }}
+        {{ !tab.name ? ProjectStore.project.title : tab.name }}
       </RouterLink>
     </div>
 
-    <TranslationsView v-if="!Route.query.tab" />
+    <ProjectInfoView v-if="!Route.query.tab" />
+    <TranslationsView v-if="Route.query.tab === 'translations'" />
   </main>
 </template>
 

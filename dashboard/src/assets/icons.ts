@@ -10,6 +10,7 @@ export const ICONS = {
   entry: 'solar:notes-bold',
   translation: 'solar:earth-bold',
   add: 'solar:add-circle-bold',
+  edit: 'solar:pen-bold',
   upload: 'solar:upload-square-bold',
   delete: 'solar:trash-bin-2-bold',
   menu: 'solar:menu-dots-bold',
@@ -21,4 +22,6 @@ export const ICONS = {
   theme: 'solar:pallete-2-bold',
   sun: 'solar:sun-2-bold',
   moon: 'solar:moon-bold',
+  leave: 'solar:exit-bold',
+  save: 'fluent:save-32-filled',
 }

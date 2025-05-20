@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import { RouterView } from 'vue-router'
+import ConfirmModal from './components/ConfirmModal.vue'
 import Notifications from './components/Notifications.vue'
 import TopBar from './components/TopBar.vue'
 import AuthService from './services/AuthService'
@@ -18,6 +19,7 @@ onMounted(() => {
 <template>
   <TopBar />
   <Notifications />
+  <ConfirmModal />
 
   <RouterView />
 </template>

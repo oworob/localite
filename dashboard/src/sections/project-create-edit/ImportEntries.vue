@@ -169,13 +169,6 @@ input[type='file'] {
   display: none;
 }
 
-.actions {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 1rem;
-}
-
 .options {
   display: flex;
   gap: 1rem;

@@ -103,11 +103,9 @@ onMounted(() => {
 
       <div class="invites">
         <header class="invites-header">
-          <h3>Invites</h3>
+          <h3>Invites {{ invites.length > 0 ? `(${invites.length})` : '' }}</h3>
         </header>
-        <span class="hint"
-          >You have {{ invites.length }} pending invite{{ invites.length !== 1 ? 's' : '' }}.</span
-        >
+
         <div class="invites-list">
           <Invite
             v-for="invite in invites"

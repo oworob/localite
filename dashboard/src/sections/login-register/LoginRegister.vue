@@ -37,28 +37,23 @@ const entries_stats_count = ref(0)
 const translations_stats_count = ref(0)
 
 function AnimateStats() {
+  const stats = [
+    { target: app_stats.value!.users, counter: users_stats_count },
+    { target: app_stats.value!.projects, counter: projects_stats_count },
+    { target: app_stats.value!.entries, counter: entries_stats_count },
+    { target: app_stats.value!.translations, counter: translations_stats_count },
+  ]
+  const max = Math.max(...stats.map((stat) => stat.target))
+
   let i = 0
-  const max = Math.max(
-    app_stats.value!.users,
-    app_stats.value!.projects,
-    app_stats.value!.entries,
-    app_stats.value!.translations,
-  )
   const interval = setInterval(() => {
-    if (i < app_stats.value!.users) {
-      users_stats_count.value = i
-    }
-    if (i < app_stats.value!.projects) {
-      projects_stats_count.value = i
-    }
-    if (i < app_stats.value!.entries) {
-      entries_stats_count.value = i
-    }
-    if (i < app_stats.value!.translations) {
-      translations_stats_count.value = i
-    }
+    stats.forEach((stat) => {
+      if (i < stat.target) {
+        stat.counter.value = i
+      }
+    })
     i++
-    if (i > max) {
+    if (i == max) {
       clearInterval(interval)
     }
   }, 20)
@@ -72,12 +67,10 @@ onMounted(() => {
 })
 
 function Submit() {
-  if (!submitting.value) {
-    if (isLoginView.value) {
-      Login()
-    } else {
-      Register()
-    }
+  if (isLoginView.value) {
+    Login()
+  } else {
+    Register()
   }
 }
 
@@ -136,6 +129,7 @@ async function Login() {
         <div class="form-item" v-if="!isLoginView">
           <label class="hint">E-mail</label>
           <input
+            class="email-input"
             type="email"
             placeholder="john.doe@email.com"
             v-model="email"
@@ -146,6 +140,7 @@ async function Login() {
         <div class="form-item">
           <label class="hint">Username</label>
           <input
+            class="username-input"
             type="text"
             placeholder="JohnDoe1"
             v-model="username"
@@ -156,6 +151,7 @@ async function Login() {
         <div class="form-item">
           <label class="hint">Password</label>
           <input
+            class="password-input"
             type="password"
             placeholder="••••••••"
             v-model="password"

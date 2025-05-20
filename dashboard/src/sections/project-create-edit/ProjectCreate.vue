@@ -161,7 +161,7 @@ function SaveImportedEntries(new_entries: INewEntry[], mode: 'append' | 'overwri
   <Loading v-if="loading" />
   <Error v-if="error" :error="error" />
 
-  <main class="ProjectCreateEdit" v-if="!loading && !error">
+  <main class="ProjectCreate" v-if="!loading && !error">
     <header class="header">
       <h2>Create New Project</h2>
     </header>
@@ -444,7 +444,7 @@ function SaveImportedEntries(new_entries: INewEntry[], mode: 'append' | 'overwri
 </template>
 
 <style scoped lang="scss">
-.ProjectCreateEdit {
+.ProjectCreate {
   // margin-bottom: 1rem; // leave space for the footer
   .header {
     padding: 1rem 2rem;

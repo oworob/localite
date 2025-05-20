@@ -9,15 +9,15 @@ import { users } from '@/assets/testing/test-users'
 import LanguageService from '@/services/LanguageService'
 import ProjectService from '@/services/ProjectService'
 import { useNotificationStore } from '@/stores/NotificationStore'
-import ProjectCreateEdit from '../ProjectCreate.vue'
+import ProjectCreate from '../ProjectCreate.vue'
 
-describe('ProjectCreateEdit', () => {
+describe('ProjectCreate', () => {
   let component: any
   let NotificationStore: any
   vi.spyOn(LanguageService, 'GetLanguages').mockResolvedValue({ data: languages, status: 200 })
 
   beforeEach(() => {
-    component = mount(ProjectCreateEdit, {
+    component = mount(ProjectCreate, {
       global: {
         plugins: [
           createTestingPinia({
@@ -26,7 +26,7 @@ describe('ProjectCreateEdit', () => {
           createRouter({
             history: createWebHistory(),
             routes: [
-              { path: '/', component: ProjectCreateEdit },
+              { path: '/', component: ProjectCreate },
               { path: '/projects/:id', component: { template: '<div>Project</div>' } },
               { path: '/users/:id', component: { template: '<div>Users</div>' } },
             ],

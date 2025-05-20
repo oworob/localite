@@ -1,13 +1,9 @@
 <script setup lang="ts">
-import { Icon } from '@iconify/vue/dist/iconify.js'
-import { computed, ref } from 'vue'
-import { ICONS } from '@/assets/icons'
+import { computed } from 'vue'
 import { useProjectStore } from '@/stores/ProjectStore'
 import LanguageSelect from '../../components/LanguageSelect.vue'
-import ProjectInfo from './ProjectInfo.vue'
 
 const ProjectStore = useProjectStore()
-const info_open = ref(false)
 
 const entries_with_status = computed(() => {
   return ProjectStore.project!.entries!.map((entry) => {
@@ -23,9 +19,6 @@ const entries_with_status = computed(() => {
   <main id="EntryList">
     <header class="header">
       <h3>{{ ProjectStore.project!.title }}</h3>
-      <button class="tertiary icon" @click="info_open = !info_open">
-        <Icon :icon="ICONS.settings" />
-      </button>
     </header>
 
     <p>Language:</p>
@@ -53,15 +46,13 @@ const entries_with_status = computed(() => {
           <p v-else-if="entry.status === 'pending'">
             Pending ({{
               entry.languages!.find(
-                (language) => language.id === ProjectStore.selected_language!.id,
+                (language) => language.id === ProjectStore.selectedw_language!.id,
               )!.translation_count
             }})
           </p>
         </div> -->
       </div>
     </div>
-
-    <ProjectInfo v-if="info_open" @close="info_open = false" />
   </main>
 </template>
 
