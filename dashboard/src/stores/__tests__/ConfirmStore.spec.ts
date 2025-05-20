@@ -1,6 +1,6 @@
 import { createPinia, setActivePinia } from 'pinia'
 import { beforeEach, describe, expect, it } from 'vitest'
-import { useConfirmStore } from '../ConfirmSTore'
+import { useConfirmStore } from '../ConfirmStore'
 
 describe('ConfirmStore', () => {
   let store: ReturnType<typeof useConfirmStore>

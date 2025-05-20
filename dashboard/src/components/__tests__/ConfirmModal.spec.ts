@@ -1,7 +1,7 @@
 import { createTestingPinia } from '@pinia/testing'
 import { flushPromises, mount } from '@vue/test-utils'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { useConfirmStore } from '@/stores/ConfirmSTore'
+import { useConfirmStore } from '@/stores/ConfirmStore'
 import ConfirmModal from '../ConfirmModal.vue'
 
 describe('ConfirmModal', () => {
