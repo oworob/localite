@@ -24,7 +24,7 @@ const entries_with_status = computed(() => {
     <p>Language:</p>
     <LanguageSelect
       :languages="ProjectStore.project!.languages!"
-      :selected_language_id="ProjectStore.selected_language!.id"
+      :selected="ProjectStore.selected_language!"
       @languageSelected="ProjectStore.SetSelectedLanguage($event)"
     />
 

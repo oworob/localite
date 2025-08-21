@@ -121,7 +121,7 @@ describe('ProjectCreate', () => {
     expect(component.vm.project_form.notes).toHaveLength(5)
   })
 
-  it('opens and closes desired languages tab', async () => {
+  it('opens and closes target languages tab', async () => {
     await component.find('.toggle-languages').trigger('click')
     expect(component.find('.selected-languages').exists()).toBe(false)
 
@@ -136,15 +136,15 @@ describe('ProjectCreate', () => {
     expect(component.vm.project_form.languages).not.toContain(languages[0])
   })
 
-  it('selects and unselects desired language', async () => {
-    component.vm.HandleDesiredLanguageSelected(languages[1].id)
+  it('selects and unselects target language', async () => {
+    component.vm.HandleTargetLanguageSelected(languages[1].id)
     expect(component.vm.project_form.languages[0]).toEqual(languages[1])
 
-    component.vm.HandleDesiredLanguageSelected(languages[1].id)
+    component.vm.HandleTargetLanguageSelected(languages[1].id)
     expect(component.vm.project_form.languages).toHaveLength(0)
   })
 
-  it('deletes desired language', async () => {
+  it('deletes target language', async () => {
     component.vm.project_form.languages = new_project_form.languages
     await flushPromises()
     await component.find('.delete-language').trigger('click')

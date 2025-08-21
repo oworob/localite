@@ -8,17 +8,19 @@ import Checkbox from './Checkbox.vue'
 
 const props = defineProps<{
   languages: IApiLanguage[]
-  selected_language_id: number
+  selected: IApiLanguage | IApiLanguage[]
   disabled?: boolean
 }>()
 
 const emit = defineEmits(['languageSelected'])
 
-const selected_language = computed(() => {
-  return props.languages.find((language) => language.id === props.selected_language_id || 0)!
-})
 const select_open = ref(false)
 const query = ref('')
+const selected_languages = computed(() => {
+  // convert to array if single language is passed
+  return Array.isArray(props.selected) ? props.selected : [props.selected]
+})
+const multiselect = computed(() => Array.isArray(props.selected))
 
 const filtered_languages = computed(() => {
   const lower_query = query.value.toLowerCase()
@@ -31,11 +33,15 @@ const filtered_languages = computed(() => {
 })
 
 function SelectLanguage(id: number) {
-  if (id !== props.selected_language_id) {
+  if (multiselect.value) {
     emit('languageSelected', id)
+  } else {
+    if (id !== selected_languages.value[0].id) {
+      emit('languageSelected', id)
+    }
+    select_open.value = false
+    query.value = ''
   }
-  select_open.value = !select_open.value
-  query.value = ''
 }
 
 const component = ref(null)
@@ -51,20 +57,28 @@ onClickOutside(component, (event) => {
     <div class="select-container">
       <button
         type="button"
-        class="select with-icon select-header"
-        :class="{ open: select_open }"
-        @click="select_open = !select_open"
         :disabled="props.disabled"
+        class="select with-icon select-header"
+        @click="select_open = !select_open"
+        :class="{ open: select_open }"
       >
-        <div class="main">
-          <Icon :icon="'circle-flags:' + selected_language.code" />
-          <span>{{ selected_language.title_eng }} ({{ selected_language.title_native }})</span>
+        <div class="main" v-if="multiselect">
+          <Icon :icon="ICONS.language" />
+          <span
+            >{{ selected_languages.length }}
+            {{ selected_languages.length === 1 ? 'language' : 'languages' }} selected</span
+          >
+        </div>
+        <div class="main" v-else>
+          <Icon :icon="'circle-flags:' + selected_languages[0].code" />
+          <span
+            >{{ selected_languages[0].title_eng }} ({{ selected_languages[0].title_native }})</span
+          >
         </div>
         <Icon :icon="ICONS.arrow_down" :rotate="select_open ? 2 : 0" />
       </button>
       <div class="select-window panel" v-if="select_open">
         <input type="text" class="search" placeholder="Search languages" v-model="query" />
-
         <button
           type="button"
           v-for="language in filtered_languages"
@@ -72,7 +86,7 @@ onClickOutside(component, (event) => {
           class="language-button tertiary with-icon"
           @click="SelectLanguage(language.id)"
         >
-          <Checkbox :checked="language.id === selected_language.id" />
+          <Checkbox :checked="selected_languages.some((lang) => lang.id === language.id)" />
           <Icon :icon="'circle-flags:' + language.code" />
           <span>{{ language.title_eng }} ({{ language.title_native }})</span>
         </button>
@@ -99,19 +113,20 @@ onClickOutside(component, (event) => {
 
 .select-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   padding: 10px 15px;
   .main {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    flex-grow: 1;
   }
 }
 
 .select-window {
   display: flex;
   flex-direction: column;
+  gap: 0.2rem;
   position: absolute;
   top: calc(100%);
   width: calc(100% - 32px);

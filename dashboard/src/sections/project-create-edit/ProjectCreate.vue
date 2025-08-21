@@ -4,7 +4,6 @@ import { computed, onMounted, ref } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 import { ICONS } from '@/assets/icons'
 import Error from '@/components/Error.vue'
-import LanguageMultiSelect from '@/components/LanguageMultiSelect.vue'
 import LanguageSelect from '@/components/LanguageSelect.vue'
 import Loading from '@/components/Loading.vue'
 import UserMultiSelect from '@/components/UserMultiSelect.vue'
@@ -25,7 +24,7 @@ const error = ref('')
 const submitting = ref(false)
 const languages = ref<IApiLanguage[]>([])
 const notes_collapsed = ref(false)
-const desired_languages_collapsed = ref(false)
+const target_languages_collapsed = ref(false)
 const users_collapsed = ref(false)
 const entries_collapsed = ref(false)
 const import_window_open = ref(false)
@@ -119,16 +118,16 @@ function HandleSourceLanguageSelected(id: number) {
   )
 }
 
-function HandleDesiredLanguageSelected(id: number) {
+function HandleTargetLanguageSelected(id: number) {
   const language = languages.value.find((language) => language.id === id)!
   if (!project_form.value.languages.find((language) => language.id === id)) {
     project_form.value.languages.push(language)
   } else {
-    DeleteDesiredLanguage(id)
+    DeleteTargetLanguage(id)
   }
 }
 
-function DeleteDesiredLanguage(id: number) {
+function DeleteTargetLanguage(id: number) {
   project_form.value.languages = project_form.value.languages.filter(
     (language) => language.id !== id,
   )
@@ -169,7 +168,7 @@ function SaveImportedEntries(new_entries: INewEntry[], mode: 'append' | 'overwri
     <form class="project-form" @submit.prevent="SubmitProject">
       <!-- DETAILS -->
       <div class="form-section">
-        <h3 class="section-title">I. Project Details</h3>
+        <h3 class="section-title">Project Details</h3>
         <div class="form-item">
           <h4>Title</h4>
           <input
@@ -237,7 +236,7 @@ function SaveImportedEntries(new_entries: INewEntry[], mode: 'append' | 'overwri
 
       <!-- LANGUAGES -->
       <div class="form-section">
-        <h3 class="section-title">II. Languages</h3>
+        <h3 class="section-title">Languages</h3>
         <div class="form-item">
           <h4>Source Language</h4>
           <p class="hint">
@@ -246,36 +245,36 @@ function SaveImportedEntries(new_entries: INewEntry[], mode: 'append' | 'overwri
           </p>
           <LanguageSelect
             :languages="languages"
-            :selected_language_id="project_form.source_language_id"
+            :selected="languages.find((lang) => lang.id === project_form.source_language_id)!"
             @language-selected="HandleSourceLanguageSelected"
           />
         </div>
 
         <div class="form-item">
           <div class="languages-header">
-            <h4>Desired Languages</h4>
+            <h4>Target Languages</h4>
             <button
               type="button"
               class="toggle-languages secondary icon"
-              @click="desired_languages_collapsed = !desired_languages_collapsed"
+              @click="target_languages_collapsed = !target_languages_collapsed"
             >
-              <Icon :icon="ICONS.arrow_down" :rotate="desired_languages_collapsed ? 0 : 2" />
+              <Icon :icon="ICONS.arrow_down" :rotate="target_languages_collapsed ? 0 : 2" />
             </button>
           </div>
 
-          <p class="hint" v-if="!desired_languages_collapsed">
+          <p class="hint" v-if="!target_languages_collapsed">
             The languages you would like your project to be translated into.
           </p>
-          <LanguageMultiSelect
-            v-if="!desired_languages_collapsed"
+          <LanguageSelect
+            v-if="!target_languages_collapsed"
             :languages="
               languages.filter((language) => language.id !== project_form.source_language_id)
             "
-            :selected_languages="project_form.languages"
-            @language-selected="HandleDesiredLanguageSelected"
+            :selected="project_form.languages"
+            @language-selected="HandleTargetLanguageSelected"
           />
 
-          <div class="selected-languages" v-if="!desired_languages_collapsed">
+          <div class="selected-languages" v-if="!target_languages_collapsed">
             <div class="lang" v-for="language in project_form.languages" :key="language.id">
               <div class="lang-info panel">
                 <Icon :icon="'circle-flags:' + language.code" />
@@ -284,7 +283,7 @@ function SaveImportedEntries(new_entries: INewEntry[], mode: 'append' | 'overwri
               <button
                 type="button"
                 class="delete-language tertiary icon danger"
-                @click="DeleteDesiredLanguage(language.id)"
+                @click="DeleteTargetLanguage(language.id)"
               >
                 <Icon :icon="ICONS.delete" />
               </button>
@@ -295,7 +294,7 @@ function SaveImportedEntries(new_entries: INewEntry[], mode: 'append' | 'overwri
 
       <!-- USERS -->
       <div class="form-section">
-        <h3 class="section-title">III. Contributors</h3>
+        <h3 class="section-title">Contributors</h3>
         <div class="form-item">
           <p class="hint users-header">
             Users you would like to translate your entries. Invites will be sent after the project
@@ -353,7 +352,7 @@ function SaveImportedEntries(new_entries: INewEntry[], mode: 'append' | 'overwri
 
       <!-- ENTRIES -->
       <div class="form-section entry-section">
-        <h3 class="section-title">IV. Entries</h3>
+        <h3 class="section-title">Entries</h3>
         <div class="form-item">
           <header class="entry-header">
             <p class="hint">
