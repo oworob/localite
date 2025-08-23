@@ -9,7 +9,7 @@ class Entry(db.Model, BaseModel):
     content = db.Column(db.String(ENTRY_CONTENT_MAX_LENGTH), nullable=False)
     context = db.Column(db.String(ENTRY_CONTEXT_MAX_LENGTH))
     context_requested = db.Column(db.Boolean, nullable=False, default=False)
-    translations = db.relationship('Translation', backref='entry', lazy=True)
+    translations = db.relationship('Translation', backref='entry', lazy=True, cascade='all, delete-orphan')
 
     def to_dict(self, follow=[]):
         data = super().to_dict(follow)

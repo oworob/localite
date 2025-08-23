@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios, { type AxiosInstance } from 'axios'
 
 const ApiClient = axios.create({
   baseURL: 'http://localhost:5000/api',
@@ -10,7 +10,7 @@ const ApiClient = axios.create({
 
 export default abstract class BaseService {
   protected url: string
-  protected ApiClient: axios.AxiosInstance
+  protected ApiClient: AxiosInstance
 
   constructor(url: string) {
     this.url = url

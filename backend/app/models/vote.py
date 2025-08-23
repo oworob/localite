@@ -9,4 +9,3 @@ class Vote(db.Model, BaseModel):
     is_upvote = db.Column(db.Boolean, nullable=False)
     
     user = db.relationship('User', backref=db.backref('votes', lazy=True))
-    translation = db.relationship('Translation', backref=db.backref('votes', lazy=True))

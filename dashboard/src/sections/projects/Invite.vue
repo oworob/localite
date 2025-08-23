@@ -76,7 +76,7 @@ function DeclineInvite() {
 
     <div class="actions">
       <button class="primary join" :disabled="submitting" @click="AcceptInvite">Join</button>
-      <button class="secondary" :disabled="submitting" @click="DeclineInvite">Ignore</button>
+      <button class="secondary danger" :disabled="submitting" @click="DeclineInvite">Delete</button>
     </div>
   </div>
 </template>

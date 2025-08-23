@@ -7,6 +7,7 @@ import Error from '@/components/Error.vue'
 import Loading from '@/components/Loading.vue'
 import ProjectService from '@/services/ProjectService'
 import { useProjectStore } from '@/stores/ProjectStore'
+import ProjectEntries from './entries/ProjectEntries.vue'
 import ProjectInfoView from './ProjectDetailsView.vue'
 import TranslationsView from './TranslationsView.vue'
 
@@ -50,6 +51,7 @@ async function FetchData() {
       'entries.translations.comments',
       'entries.translations.votes',
       'owner',
+      'updates',
     ])
     ProjectStore.SetProject(res.data)
   } catch (err: any) {
@@ -82,8 +84,9 @@ async function FetchData() {
       </RouterLink>
     </div>
 
-    <ProjectInfoView v-if="!Route.query.tab" />
+    <ProjectInfoView v-if="!Route.query.tab" v-on:refresh-project="FetchData" />
     <TranslationsView v-if="Route.query.tab === 'translations'" />
+    <ProjectEntries v-if="Route.query.tab === 'entries'" />
   </main>
 </template>
 

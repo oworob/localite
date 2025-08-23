@@ -5,6 +5,7 @@ import { useRouter } from 'vue-router'
 import { ICONS } from '@/assets/icons'
 import type { IApiAppStats } from '@/models/system/app-stats'
 import AuthService from '@/services/AuthService'
+import LiveService from '@/services/LiveService'
 import MiscService from '@/services/MiscService'
 import { useAuthStore } from '@/stores/AuthStore'
 import { useNotificationStore } from '@/stores/NotificationStore'
@@ -79,6 +80,7 @@ async function Register() {
   try {
     const res = await AuthService.Register(email.value, username.value, password.value)
     AuthStore.SetUser(res.data)
+    LiveService.connect()
     router.push({ path: '/projects' })
     NotificationStore.AddNotification(
       `Account created successfully! Welcome, ${res.data.username}!`,
@@ -100,6 +102,7 @@ async function Login() {
   try {
     const res = await AuthService.Login(username.value, password.value)
     AuthStore.SetUser(res.data)
+    LiveService.connect()
     router.push({ path: '/projects' })
     NotificationStore.AddNotification(`Welcome back, ${res.data.username}!`, 'success')
   } catch (err: any) {

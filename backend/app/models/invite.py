@@ -8,7 +8,6 @@ class Invite(db.Model, BaseModel):
     project_id = db.Column(db.Integer, db.ForeignKey('project.id'), nullable=False)
 
     user = db.relationship('User', backref=db.backref('invites', lazy=True))
-    project = db.relationship('Project', backref=db.backref('invites', lazy=True))
 
     
 

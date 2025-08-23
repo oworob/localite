@@ -10,7 +10,6 @@ import type { IApiProject } from '@/models/project/project'
 import InviteService from '@/services/InviteService'
 import ProjectService from '@/services/ProjectService'
 import { useAuthStore } from '@/stores/AuthStore'
-import Filters from './Filters.vue'
 import Invite from './Invite.vue'
 import ProjectButton from './ProjectButton.vue'
 
@@ -19,8 +18,9 @@ const AuthStore = useAuthStore()
 const loading = ref(true)
 const error = ref('')
 const projects = ref<IApiProject[]>([])
+
 const invites = ref<IApiInvite[]>([])
-const created_projects = computed(() =>
+const owned_projects = computed(() =>
   projects.value.filter((project) => project.owner_id === AuthStore.user?.id),
 )
 const joined_projects = computed(() =>
@@ -73,16 +73,15 @@ onMounted(() => {
   <Loading v-if="loading" />
   <Error v-if="error" :error="error" />
 
-  <main id="Projects" v-if="!loading && !error">
+  <main id="Projects" v-if="!loading && !error && AuthStore.user">
     <header class="header">
       <h2>Your Projects</h2>
       <RouterLink to="/projects/new" class="primary with-icon">
         <Icon :icon="ICONS.add" />Create New Project
       </RouterLink>
     </header>
-    <section class="content">
-      <Filters />
 
+    <section class="content">
       <div class="joined">
         <header class="project-header">
           <h3>Joined</h3>
@@ -92,12 +91,12 @@ onMounted(() => {
         </div>
       </div>
 
-      <div class="created">
+      <div class="owned">
         <header class="project-header">
-          <h3>Created</h3>
+          <h3>Owned</h3>
         </header>
         <div class="projects">
-          <ProjectButton v-for="project in created_projects" :key="project.id" :project="project" />
+          <ProjectButton v-for="project in owned_projects" :key="project.id" :project="project" />
         </div>
       </div>
 
@@ -123,19 +122,20 @@ onMounted(() => {
 <style scoped lang="scss">
 #Projects {
   .header {
-    padding: 1rem 2rem;
+    padding: 1rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
   }
   .content {
+    padding: 0 1rem;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
   }
 }
 
 .joined,
-.created,
+.owned,
 .invites {
   padding: 1rem;
   display: flex;

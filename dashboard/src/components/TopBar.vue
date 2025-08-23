@@ -4,7 +4,10 @@ import { onMounted, ref } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 import { ICONS } from '@/assets/icons'
 import AuthService from '@/services/AuthService'
+import LiveService from '@/services/LiveService'
 import { useAuthStore } from '@/stores/AuthStore'
+import { useProjectStore } from '@/stores/ProjectStore'
+import Messages from './Messages.vue'
 import ThemeEditor from './ThemeEditor.vue'
 
 const topbar = ref<HTMLElement>()
@@ -14,11 +17,13 @@ onMounted(() => {
 })
 
 const AuthStore = useAuthStore()
+const ProjectStore = useProjectStore()
 const router = useRouter()
 
 function Logout() {
   AuthService.Logout().then(() => {
     router.push('/login')
+    LiveService.disconnect()
     AuthStore.SetUser(null)
   })
 }
@@ -50,7 +55,9 @@ function Logout() {
       </div>
 
       <div class="user" v-else>
+        <div class="socket" :class="{ connected: LiveService.connected.value }"></div>
         <p class="username">{{ AuthStore.user.username }}</p>
+        <Messages v-if="AuthStore.user" />
         <button class="logout secondary" @click="Logout">Logout</button>
       </div>
 
@@ -106,6 +113,17 @@ function Logout() {
   gap: 0.5rem;
   .username {
     font-weight: bold;
+  }
+}
+
+.socket {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: var(--theme-color);
+  background-color: var(--panel-border);
+  &.connected {
+    background-color: var(--success);
   }
 }
 </style>

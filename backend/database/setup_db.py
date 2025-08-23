@@ -2,7 +2,6 @@ from .db import db
 from sqlalchemy import text
 from .init_data import init_data
 
-
 def setup_db(app, add_init_data=False):
     db.init_app(app)
 

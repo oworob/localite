@@ -13,7 +13,7 @@ import ProjectCreate from '../ProjectCreate.vue'
 
 describe('ProjectCreate', () => {
   let component: any
-  let NotificationStore: any
+  let NotificationStore: ReturnType<typeof useNotificationStore>
   vi.spyOn(LanguageService, 'GetLanguages').mockResolvedValue({ data: languages, status: 200 })
 
   beforeEach(() => {

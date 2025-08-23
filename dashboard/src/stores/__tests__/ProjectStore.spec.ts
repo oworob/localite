@@ -20,13 +20,6 @@ describe('ProjectStore', () => {
     expect(store.selected_language).toEqual(projects[0].languages![0])
   })
 
-  it('clears the project', () => {
-    store.ClearProject()
-    expect(store.project).toBeUndefined()
-    expect(store.selected_entry).toBeUndefined()
-    expect(store.selected_language).toBeUndefined()
-  })
-
   it('sets the selected entry', () => {
     store.SetProject(projects[0])
     store.SetSelectedEntry(2)
@@ -41,6 +34,7 @@ describe('ProjectStore', () => {
 
   it('checks if the user is the owner of the project', () => {
     store.SetProject(projects[0])
+    expect(store.IsProjectOwner()).toBe(false)
     const auth_store = useAuthStore()
     auth_store.SetUser(users[0])
     expect(store.IsProjectOwner()).toBe(true)

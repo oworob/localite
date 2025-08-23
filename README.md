@@ -15,41 +15,46 @@
 - [ ] Editing user profile
   - [ ] Changing status
 - [ ] Browsing users
-- [ ] Browsing messages
+- [ ] Live messages via sockets (browse window, redirect, delete, mark as read)
 
 #### Projects
 
 - [x] Browsing project
   - [x] Submitting translations
   - [ ] Translation voting
+  - [ ] Requesting context
 - [ ] Updating _last_project_visit_
 - [x] Creating project
   - [x] Importing entries from CSV
   - [x] Contributor multiselect
   - [x] Inviting members
-- [x] Accepting and rejecting invitations
 - [x] Browsing projects
   - [x] Accepting and declining invitations
 - [ ] Filtering projects (by name and language)
-- [x] Leaving project
+- [x] Leaving project as a user
+- [ ] Leaving project as an owner and passing ownership
 - [ ] Project owner dashboard
-  - [ ] Editing existing project (description, notes)
-  - [ ] Inviting members
-  - [ ] Adding entries
-  - [ ] Deleting translations
+  - [x] Editing existing project (name, description)
+  - [x] Editing notes
+  - [x] Deleting project
+  - [ ] Changing source language
+  - [ ] Adding and removing target languages
+  - [ ] Inviting, removing, promoting members
+  - [ ] Adding, editing, deleting entries
+  - [ ] Deleting, approving translations
   - [ ] Exporting translations to CSV
+  - [ ] Project statistics (languages summary, % translated, top translators)
 - [ ] Promoting contributors to managers
-- [ ] Project changelog (updated fields, added or removed entries, users etc)
+- [x] Project changelog (updated fields, added or removed entries, users etc)
 
 #### Testing
 
 - [ ] Backend setup
-  - [ ] Improved coverage
 - [x] Frontend setup
-  - [ ] Improved coverage
 - [x] CI
 
 #### Bugs To Fix
 
-- [ ] Submitting a translation doesn't update the pending(n) count in entries list and the translations doesn't appear immediately under translations
-- [ ] User multiselect sometimes unselects the wrong user
+- Submitting a translation doesn't update the pending(n) count in entries list and the translations doesn't appear immediately under translations
+- Logging out sometimes doesn't redirect to login screen
+- Notes should be unique

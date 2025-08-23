@@ -9,6 +9,7 @@ vi.mock('axios', () => {
         get: vi.fn(),
         post: vi.fn(),
         delete: vi.fn(),
+        patch: vi.fn(),
       })),
     },
   }
@@ -18,11 +19,13 @@ describe('ProjectService', () => {
   let mock_get: any
   let mock_post: any
   let mock_delete: any
+  let mock_patch: any
 
   beforeEach(() => {
     mock_get = vi.spyOn(ProjectService['ApiClient'], 'get')
     mock_post = vi.spyOn(ProjectService['ApiClient'], 'post')
     mock_delete = vi.spyOn(ProjectService['ApiClient'], 'delete')
+    mock_patch = vi.spyOn(ProjectService['ApiClient'], 'patch')
   })
 
   afterEach(() => {
@@ -48,8 +51,29 @@ describe('ProjectService', () => {
   })
 
   it('leaves a project', async () => {
-    mock_delete.mockResolvedValueOnce(true)
+    mock_delete.mockResolvedValueOnce(null)
     const result = await ProjectService.LeaveProject(1)
-    expect(result).toEqual(true)
+    expect(result).toEqual(null)
+  })
+
+  it('updates project details', async () => {
+    mock_patch.mockResolvedValueOnce(null)
+    const result = await ProjectService.UpdateProjectDetails(1, {
+      title: 'New Title',
+      description: 'New Description',
+    })
+    expect(result).toEqual(null)
+  })
+
+  it('updates project notes', async () => {
+    mock_patch.mockResolvedValueOnce(null)
+    const result = await ProjectService.UpdateProjectNotes(1, ['Note1', 'Note2'])
+    expect(result).toEqual(null)
+  })
+
+  it('deletes a project', async () => {
+    mock_delete.mockResolvedValueOnce(null)
+    const result = await ProjectService.DeleteProject(1)
+    expect(result).toEqual(null)
   })
 })

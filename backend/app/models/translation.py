@@ -12,6 +12,7 @@ class Translation(db.Model, BaseModel):
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     content = db.Column(db.String(TRANSLATION_CONTENT_MAX_LENGTH), nullable=False)
     language_id = db.Column(db.Integer, db.ForeignKey('language.id'), nullable=False)
+    votes = db.relationship('Vote', backref='translation', lazy=True, cascade='all, delete-orphan')
 
     def to_dict(self, follow=[]):
         data = super().to_dict(follow)

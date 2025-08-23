@@ -28,6 +28,8 @@ def get_one(id):
     item = Project.query.get(id)
     if current_user not in item.contributors:
         return {'message': 'You do not have access to this project.'}, 403
+    else :
+        item.update_last_visit(current_user.id)
     if not item:
         abort(404)
     return item.to_dict(follow)
@@ -36,9 +38,9 @@ def get_one(id):
 @login_required
 def create():
     data = request.get_json()
-    title = data.get('title')
-    description = data.get('description')
-    notes = data.get('notes')
+    title = data.get('title').strip()
+    description = data.get('description').strip()
+    notes = [note.strip() for note in data.get('notes')]
     entries = data.get('entries')
     source_language_id = data.get('source_language_id')
     languages = data.get('languages')
@@ -57,14 +59,16 @@ def create():
     elif len(languages) == 0:
         return {'message': 'Please add at least one language to translate to.'}, 400
 
-    for note in data.get('notes'):
+    for note in notes:
         if len(note) < PROJECT_NOTE_CONTENT_MIN_LENGTH or len(note) > PROJECT_NOTE_CONTENT_MAX_LENGTH:
             return {'message': f"Project notes must be between {PROJECT_NOTE_CONTENT_MIN_LENGTH} and {PROJECT_NOTE_CONTENT_MAX_LENGTH} characters."}, 400
 
-    for entry in data.get('entries'):
-        if len(entry.get('content')) < ENTRY_CONTENT_MIN_LENGTH or len(entry.get('content')) > ENTRY_CONTENT_MAX_LENGTH:
+    for entry in entries:
+        entry['content'] = entry.get('content').strip()
+        entry['context'] = entry.get('context').strip()
+        if len(entry['content']) < ENTRY_CONTENT_MIN_LENGTH or len(entry['content']) > ENTRY_CONTENT_MAX_LENGTH:
             return {'message': f"Entry content must be between {ENTRY_CONTENT_MIN_LENGTH} and {ENTRY_CONTENT_MAX_LENGTH} characters."}, 400
-        if len(entry.get('context')) > ENTRY_CONTEXT_MAX_LENGTH:
+        if len(entry['context']) > ENTRY_CONTEXT_MAX_LENGTH:
             return {'message': f"Entry context must be less than {ENTRY_CONTEXT_MAX_LENGTH} characters."}, 400
 
     db_entries = [Entry(**entry) for entry in entries]
@@ -92,18 +96,80 @@ def create():
         invite = Invite(user_id=contributor_id, project_id=project.id)
         db.session.add(invite)
         message_content = f"{current_user.username} has invited you to join '{project.title}'."
-        message = Message(user_id=contributor_id, content=message_content, link=f"/projects/{project.id}")
+        message = Message(user_id=contributor_id, content=message_content, link=f"/projects")
         db.session.add(message)
     db.session.commit()
-
+    
     return str(project.id), 201
 
 @project_router.route('/<int:id>/leave', methods=['DELETE'])
 @login_required
-def leave_project(id):
+def leave(id):
     project = Project.query.get(id)
     if current_user not in project.contributors:
         return {'message': 'You do not have access to this project.'}, 403
+    if current_user.id == project.owner_id:
+        return {'message': 'You must transfer project ownership before leaving.'}, 403
     project.contributors.remove(current_user)
     db.session.commit()
-    return True, 204
+    return '', 204
+
+@project_router.route('/<int:id>/details', methods=['PATCH'])
+@login_required
+def update_project_details(id):
+    project = Project.query.get(id)
+    if current_user.id != project.owner_id:
+        return {'message': 'You are not allowed to change this data.'}, 403
+
+    data = request.get_json()
+    title = data.get('title').strip()
+    description = data.get('description').strip()
+
+    if len(title) < PROJECT_TITLE_MIN_LENGTH or len(title) > PROJECT_TITLE_MAX_LENGTH:
+        return {'message': f"Project title must be between {PROJECT_TITLE_MIN_LENGTH} and {PROJECT_TITLE_MAX_LENGTH} characters."}, 400
+    elif len(description) > PROJECT_DESCRIPTION_MAX_LENGTH:
+        return {'message': f"Project description must be less than {PROJECT_DESCRIPTION_MAX_LENGTH} characters."}, 400
+
+    if title != project.title:
+        project.title = title
+    if description != project.description:
+        project.description = description
+  
+    db.session.commit()
+
+    return '', 204
+
+@project_router.route('/<int:id>/notes', methods=['PATCH'])
+@login_required
+def update_project_notes(id):
+    project = Project.query.get(id)
+    if current_user.id != project.owner_id:
+        return {'message': 'You are not allowed to change this data.'}, 403
+
+    notes = request.get_json()
+    
+    if len(notes) > PROJECT_MAX_NOTE_COUNT:
+        return {'message': f"Project can have maximum {PROJECT_MAX_NOTE_COUNT} notes."}, 400
+    
+    stripped_notes = [note.strip() for note in notes]
+    for note in stripped_notes:
+        if len(note) < PROJECT_NOTE_CONTENT_MIN_LENGTH or len(note) > PROJECT_NOTE_CONTENT_MAX_LENGTH:
+            return {'message': f"Note content must be between {PROJECT_NOTE_CONTENT_MIN_LENGTH} and {PROJECT_NOTE_CONTENT_MAX_LENGTH} characters."}, 400
+
+    project.notes = [Note(content=note) for note in stripped_notes]
+    db.session.commit()
+
+    return '', 204
+
+@project_router.route('/<int:id>', methods=['DELETE'])
+@login_required
+def delete(id):
+    project = Project.query.get(id)
+    if current_user.id != project.owner_id:
+        return {'message': 'You are not allowed to delete this project.'}, 403
+        
+    # Delete all entries, notes, translations, and updates related to the project
+    db.session.delete(project)
+
+    db.session.commit()
+    return '', 204

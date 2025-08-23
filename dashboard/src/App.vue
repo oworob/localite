@@ -5,6 +5,7 @@ import ConfirmModal from './components/ConfirmModal.vue'
 import Notifications from './components/Notifications.vue'
 import TopBar from './components/TopBar.vue'
 import AuthService from './services/AuthService'
+import LiveService from './services/LiveService'
 import { useAuthStore } from './stores/AuthStore'
 
 const AuthStore = useAuthStore()
@@ -12,6 +13,7 @@ const AuthStore = useAuthStore()
 onMounted(() => {
   AuthService.GetCurrentUser().then((res) => {
     AuthStore.SetUser(res.data)
+    LiveService.connect()
   })
 })
 </script>

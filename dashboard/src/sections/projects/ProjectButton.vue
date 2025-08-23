@@ -1,16 +1,21 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue/dist/iconify.js'
+import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
 import { ICONS } from '@/assets/icons'
 import type { IApiProject } from '@/models/project/project'
 import { useAuthStore } from '@/stores/AuthStore'
+import { FormatDate } from '@/tools/FormatDate'
 
 const AuthStore = useAuthStore()
 
+const user = computed(() =>
+  props.project.contributors?.find((contributor) => contributor.id === AuthStore.user?.id),
+)
+
 function GetNewEntryCount(project: IApiProject): number {
-  const user = project.contributors?.find((contributor) => contributor.id === AuthStore.user?.id)
   const new_entries = project.entries?.filter((entry) => {
-    const visit_date = new Date(user!.last_project_visit!)
+    const visit_date = new Date(user.value!.last_project_visit!)
     const entry_date = new Date(entry.created_at)
     return entry_date > visit_date
   })
@@ -51,6 +56,7 @@ const props = defineProps<{
           <p class="entries"><Icon :icon="ICONS.entry" />{{ project.entries?.length }}</p>
         </div>
       </div>
+      <p class="hint">Last visit: {{ FormatDate(user?.last_project_visit!, true, true) }}</p>
     </div>
   </RouterLink>
 </template>

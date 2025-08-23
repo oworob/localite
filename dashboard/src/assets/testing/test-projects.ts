@@ -28,11 +28,25 @@ export const projects: IApiProject[] = [
     id: 1,
     created_at: new Date(),
     title: 'Project1',
-    description: '',
+    description: 'Description1',
     owner_id: 1,
     source_language_id: 1,
     entries: entries,
     languages: languages,
+    updates: [
+      {
+        id: 1,
+        created_at: new Date(),
+        content: 'Update1',
+        project_id: 1,
+      },
+      {
+        id: 2,
+        created_at: new Date(),
+        content: 'Update2',
+        project_id: 1,
+      },
+    ],
   },
   {
     id: 2,

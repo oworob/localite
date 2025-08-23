@@ -16,12 +16,6 @@ export const useProjectStore = defineStore('ProjectStore', () => {
     selected_language.value = new_project.languages![0]
   }
 
-  function ClearProject() {
-    project.value = undefined
-    selected_entry.value = undefined
-    selected_language.value = undefined
-  }
-
   function SetSelectedEntry(id: number) {
     selected_entry.value = project.value!.entries!.find((entry) => entry.id === id)
   }
@@ -30,9 +24,10 @@ export const useProjectStore = defineStore('ProjectStore', () => {
     selected_language.value = project.value!.languages!.find((language) => language.id === id)
   }
 
-  function IsProjectOwner() {
+  function IsProjectOwner(): boolean {
     const AuthStore = useAuthStore()
-    return project.value!.owner_id === AuthStore.user!.id
+    if (!AuthStore.user) return false
+    return project.value!.owner_id === AuthStore.user?.id
   }
 
   return {
@@ -40,7 +35,6 @@ export const useProjectStore = defineStore('ProjectStore', () => {
     selected_entry,
     selected_language,
     SetProject,
-    ClearProject,
     SetSelectedEntry,
     SetSelectedLanguage,
     IsProjectOwner,

@@ -1,11 +1,12 @@
 import os
+from dotenv import load_dotenv
 from flask import Flask, Blueprint
 from flask_cors import CORS
 from flask_login import LoginManager
 from app.tools.limiter import limiter
 from database.setup_db import setup_db
+from live.setup_socket import setup_socket
 from app.models.user import User
-from dotenv import load_dotenv
 
 from app.routes.auth_router import auth_router
 from app.routes.project_router import project_router
@@ -19,18 +20,18 @@ from app.routes.invite_router import invite_router
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}}, supports_credentials=True)
-CORS(app, resources={r"/api/*": {"origins": f"http://localhost:{os.getenv('CLIENT_PORT')}"}}, supports_credentials=True)
+CORS(app, origins=f"http://localhost:{os.getenv('CLIENT_PORT')}", supports_credentials=True)
 
 # App Config
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URI')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = os.getenv('SERVER_SECRET_KEY')
+reset_database = False
 
-
-# Initialize the database
-setup_db(app, add_init_data=False)
+# Initialize the database and socket
+setup_db(app, add_init_data=reset_database)
+setup_socket(app)
 
 # Login Manager
 login_manager = LoginManager()

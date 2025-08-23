@@ -2,6 +2,7 @@ import type { IApiUser } from '../user/user'
 import type { IApiEntry, INewEntry } from './entry'
 import type { IApiLanguage } from './language'
 import type { IApiNote } from './note'
+import type { IApiUpdate } from './update'
 
 export interface IApiProject {
   id: number
@@ -17,6 +18,7 @@ export interface IApiProject {
   entries?: IApiEntry[]
   languages?: IApiLanguage[]
   stats?: IApiProjectStats
+  updates?: IApiUpdate[]
 }
 
 export interface IApiProjectStats {
@@ -40,4 +42,9 @@ export interface INewProject {
 export interface INewProjectForm extends Omit<INewProject, 'languages' | 'contributors'> {
   languages: IApiLanguage[]
   contributors: IApiUser[]
+}
+
+export interface IProjectTitleDesc {
+  title: string
+  description: string
 }
