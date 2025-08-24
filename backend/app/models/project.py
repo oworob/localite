@@ -83,8 +83,8 @@ class Project(db.Model, BaseModel):
 
 @event.listens_for(Project, 'after_insert')
 def project_insert_listener(mapper, connection, target):
-    owner = db.session.query(User).get(target.owner_id)
-    source_lang = db.session.query(Language).get(target.source_language_id)
+    owner = db.session.get(User, target.owner_id)
+    source_lang = db.session.get(Language, target.source_language_id)
     target_langs = db.session.query(Language).filter(Language.id.in_([lang.id for lang in target.languages])).all()
     update = Update(project_id=target.id, content=f"Project '{target.title}' created by {owner.username}. Source language set to {source_lang.title_eng}. Target languages added: {', '.join([lang.title_eng for lang in target_langs])}. {len(target.entries)} entries added.")
     if len(target.notes) > 0:
@@ -128,4 +128,3 @@ def project_update_listener(mapper, connection, target):
     if changes:
         update = Update(project_id=target.id, content=' '.join(changes))
         db.session.add(update)
-   

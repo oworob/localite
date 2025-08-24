@@ -23,7 +23,7 @@
   - [x] Submitting translations
   - [ ] Translation voting
   - [ ] Requesting context
-- [ ] Updating _last_project_visit_
+- [x] Updating _last_project_visit_
 - [x] Creating project
   - [x] Importing entries from CSV
   - [x] Contributor multiselect
@@ -33,7 +33,7 @@
 - [ ] Filtering projects (by name and language)
 - [x] Leaving project as a user
 - [ ] Leaving project as an owner and passing ownership
-- [ ] Project owner dashboard
+- [x] Project owner dashboard
   - [x] Editing existing project (name, description)
   - [x] Editing notes
   - [x] Deleting project
@@ -49,7 +49,7 @@
 
 #### Testing
 
-- [ ] Backend setup
+- [x] Backend setup
 - [x] Frontend setup
 - [x] CI
 

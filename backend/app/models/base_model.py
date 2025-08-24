@@ -1,4 +1,4 @@
-from sqlalchemy.ext.declarative import as_declarative
+from sqlalchemy.orm import as_declarative
 from sqlalchemy import Column, Integer, DateTime
 from datetime import datetime
 
@@ -7,7 +7,6 @@ class BaseModel:
 
     id = Column(Integer, primary_key=True)
     created_at = Column(DateTime, nullable=False, default=datetime.now)
-
 
     def to_dict(self, follow=[]):
         data = {column.name: getattr(self, column.name) for column in self.__table__.columns}

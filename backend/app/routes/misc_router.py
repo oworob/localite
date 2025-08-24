@@ -5,16 +5,17 @@ from app.models.project import Project
 from app.models.entry import Entry
 from app.models.translation import Translation
 from app.models.language import Language
+from database.db import db
 
 misc_router = Blueprint('misc', __name__, url_prefix='/misc')
 
 @misc_router.route('/app_stats', methods=['GET'])
 def get_app_stats():
-    users = User.query.count()
-    projects = Project.query.count()
-    entries = Entry.query.count()
-    translations = Translation.query.count()
-    languages = Language.query.count()
+    users = db.session.query(User).count()
+    projects = db.session.query(Project).count()
+    entries = db.session.query(Entry).count()
+    translations = db.session.query(Translation).count()
+    languages = db.session.query(Language).count()
     
     data = {
         'users': users,
