@@ -34,6 +34,7 @@ describe('LoginRegister', () => {
               { path: '/login', component: LoginRegister },
               { path: '/register', component: LoginRegister },
               { path: '/projects', component: { template: '<div>Projects</div>' } },
+              { path: '/', component: { template: '<div>Home</div>' } },
             ],
           }),
         ],

@@ -2,7 +2,7 @@
 import { Icon } from '@iconify/vue/dist/iconify.js'
 import { ICONS } from '@/assets/icons'
 const props = defineProps<{
-  error: string
+  error?: string
 }>()
 </script>
 

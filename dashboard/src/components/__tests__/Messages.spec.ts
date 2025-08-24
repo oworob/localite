@@ -1,6 +1,7 @@
 import { createTestingPinia } from '@pinia/testing'
 import { mount } from '@vue/test-utils'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { createRouter, createWebHistory } from 'vue-router'
 import { messages } from '@/assets/testing/test-messages'
 import LiveService from '@/services/LiveService'
 import MessageService from '@/services/MessageService'
@@ -32,6 +33,10 @@ describe('Messages', () => {
           createTestingPinia({
             createSpy: vi.fn,
             initialState: {},
+          }),
+          createRouter({
+            history: createWebHistory(),
+            routes: [{ path: '/:pathMatch(.*)', component: { template: '<div>Section</div>' } }],
           }),
         ],
       },

@@ -1,15 +1,30 @@
 import { mount } from '@vue/test-utils'
-import { describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it } from 'vitest'
+import { createRouter, createWebHistory } from 'vue-router'
 import Error from '../Error.vue'
 
 describe('Error', () => {
+  let component: any
+
+  beforeEach(() => {
+    component = mount(Error, {
+      global: {
+        plugins: [
+          createRouter({
+            history: createWebHistory(),
+            routes: [{ path: '/', component: { template: '<div>Home</div>' } }],
+          }),
+        ],
+      },
+    })
+  })
+
   it('renders correctly with props', () => {
-    const component = mount(Error, { props: { error: 'Error' } })
+    component.setProps({ error: 'Error' })
     expect(component.text()).toContain('Error')
   })
 
   it('renders correctly without props', () => {
-    const component = mount(Error)
     expect(component.text()).toContain('Unknown Error')
   })
 })
