@@ -1,5 +1,5 @@
 import { createTestingPinia } from '@pinia/testing'
-import { flushPromises, mount } from '@vue/test-utils'
+import { flushPromises, shallowMount } from '@vue/test-utils'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { createRouter, createWebHistory } from 'vue-router'
 import { users } from '@/assets/testing/test-users'
@@ -12,7 +12,7 @@ describe('TopBar', () => {
   let AuthStore: any
 
   beforeEach(() => {
-    component = mount(TopBar, {
+    component = shallowMount(TopBar, {
       global: {
         plugins: [
           createTestingPinia({
