@@ -10,10 +10,6 @@ class LanguageService extends BaseService {
   GetLanguages(follow?: string[]): Promise<IApiResponse<IApiLanguage[]>> {
     return this.ApiClient.get(`${this.url}?${this.parse_follow(follow)}`)
   }
-
-  GetLanguage(id: number, follow?: string[]): Promise<IApiResponse<IApiLanguage>> {
-    return this.ApiClient.get(`${this.url}/${id}?${this.parse_follow(follow)}`)
-  }
 }
 
 export default new LanguageService()

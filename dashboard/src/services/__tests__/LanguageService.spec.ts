@@ -28,10 +28,4 @@ describe('LanguageService', () => {
     const result = await LanguageService.GetLanguages()
     expect(result).toEqual(languages)
   })
-
-  it('fetches one language', async () => {
-    mock_get.mockResolvedValueOnce(languages[0])
-    const result = await LanguageService.GetLanguage(1)
-    expect(result).toEqual(languages[0])
-  })
 })

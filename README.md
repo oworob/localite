@@ -1,12 +1,13 @@
 # Project Roadmap
 
-#### Core Goals
+#### Core Project Goals
 
 1. High test coverage
 2. Code open for extension & DRY
 3. Usage of services
 4. Reusable components
 5. UX & Accessibility
+6. Smaller commits
 
 #### Authentication & Users
 
@@ -47,14 +48,16 @@
 - [ ] Promoting contributors to managers
 - [x] Project changelog (updated fields, added or removed entries, users etc)
 
-#### Testing
+#### Testing & Tools
 
-- [x] Backend setup
-- [x] Frontend setup
+- [x] Backend test setup
+- [ ] Backend linter
+- [x] Frontend test setup
+- [x] Frontend linter
 - [x] CI
 
 #### Bugs To Fix
 
 - Submitting a translation doesn't update the pending(n) count in entries list and the translations doesn't appear immediately under translations
 - Logging out sometimes doesn't redirect to login screen
-- Notes should be unique
+- Notes should be unique per project

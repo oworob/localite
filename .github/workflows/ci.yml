@@ -44,10 +44,10 @@ jobs:
           cd backend
           pip install -r requirements.txt
 
-      # - name: Run backend lint
-      #   run: |
-      #     cd backend
-      #     npm run lint
+      - name: Run backend lint
+        run: |
+          cd backend
+          ruff check
 
       - name: Run backend tests
         run: |

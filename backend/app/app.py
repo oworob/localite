@@ -1,6 +1,6 @@
 import os
 from dotenv import load_dotenv
-from flask import Flask, Blueprint, app
+from flask import Flask, Blueprint
 from flask_cors import CORS
 from flask_login import LoginManager
 from app.tools.limiter import limiter
@@ -24,18 +24,16 @@ def create_app(testing=False):
     CORS(app, origins=f"http://localhost:{os.getenv('CLIENT_PORT')}", supports_credentials=True)
 
     # App Config
-
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URI')
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SECRET_KEY'] = os.getenv('SERVER_SECRET_KEY')
-    reset_database = False
 
     if testing:
         app.config['TESTING'] = True
         app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URI_TEST')
 
     # Initialize the database and socket
-    setup_db(app, add_init_data=reset_database)
+    setup_db(app, reset_db=testing)
     setup_socket(app)
 
     # Login Manager
@@ -46,7 +44,8 @@ def create_app(testing=False):
     def load_user(user_id):
         return User.query.get(user_id)
 
-    limiter.init_app(app)
+    if not testing:
+        limiter.init_app(app)
 
     # Routes
     api = Blueprint('api', __name__, url_prefix='/api')

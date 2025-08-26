@@ -10,8 +10,20 @@ from app.models.message import Message
 from app.models.comment import Comment
 from app.models.invite import Invite
 
-def init_data(app):
+def add_test_data(app):
     with app.app_context():
+        
+        # users
+        user1 = User(username='admin', email='admin@example.com')
+        user1.set_password('admin')
+        user2 = User(username='user', email='user@example.com')
+        user2.set_password('user')
+        user3 = User(username='user3', email='user3@example.com')
+        user3.set_password('user3')
+
+        db.session.add(user1)
+        db.session.add(user2)
+        db.session.add(user3)
 
         # languages
         language1 = Language(code='en', title_eng='English', title_native='English')
@@ -23,7 +35,6 @@ def init_data(app):
         language7 = Language(code='pt', title_eng='Portuguese', title_native='Português')
         language8 = Language(code='ru', title_eng='Russian', title_native='Русский')
         language9 = Language(code='ja', title_eng='Japanese', title_native='日本語')
-        language10 = Language(code='zh', title_eng='Chinese', title_native='中文')
 
         db.session.add(language1)
         db.session.add(language2)
@@ -34,35 +45,6 @@ def init_data(app):
         db.session.add(language7)
         db.session.add(language8)
         db.session.add(language9)
-        db.session.add(language10)
-        db.session.commit()
-
-        # users
-        user1 = User(username='admin', email='admin@email.com')
-        user1.set_password('admin')
-        user2 = User(username='user', email='user@email.com')
-        user2.set_password('user')
-        user3 = User(username='bob', email='bob@email.com')
-        user3.set_password('bob')
-        user4 = User(username='user4', email='user4@email.com')
-        user4.set_password('user4')
-        user5 = User(username='user5', email='user5@email.com')
-        user5.set_password('user5')
-
-        db.session.add(user1)
-        db.session.add(user2)
-        db.session.add(user3)
-        db.session.add(user4)
-        db.session.add(user5)
-        db.session.commit()
-
-        # messages
-        message1 = Message(
-            user_id=user1.id,
-            content='Hello!'
-        )
-
-        db.session.add(message1)
         db.session.commit()
 
         # projects
@@ -78,24 +60,15 @@ def init_data(app):
             source_language_id=language5.id,
             description='A Polish cookbook.'
         )
-        project3 = Project(
-            title='Social media app',
-            owner_id=user3.id,
-            source_language_id=language1.id,
-            description='An app for sharing photos and messages.'
-        )
 
         db.session.add(project1)
         db.session.add(project2)
-        db.session.add(project3)
         db.session.commit()
 
         # invites
         invite1 = Invite(user_id=user3.id, project_id=project1.id)
-        invite2 = Invite(user_id=user1.id, project_id=project3.id)
 
         db.session.add(invite1)
-        db.session.commit()
 
         # project contributors and languages
         project1.contributors.append(user1)
@@ -109,10 +82,6 @@ def init_data(app):
         project2.languages.append(language1)
         project2.languages.append(language2)
         project2.languages.append(language3)
-        project2.languages.append(language4)
-
-        project3.languages.append(language2)
-        db.session.commit()
 
         # notes
         note1 = Note(
@@ -121,7 +90,6 @@ def init_data(app):
         )
 
         db.session.add(note1)
-        db.session.commit()
 
         # entries
         entry1 = Entry(
@@ -181,39 +149,5 @@ def init_data(app):
         db.session.add(translation2)
         db.session.add(translation3)
         db.session.add(translation4)
-        db.session.commit()
 
-        # comments
-
-        # comment1 = Comment(
-        #     user_id=user1.id,
-        #     entry_id=entry1.id,
-        #     language_id=lang
-        #     content='You forgot to translate the word "press".'
-        # )
-
-        # comment2 = Comment(
-        #     user_id=user1.id,
-        #     entry_id=entry2.id,
-        #     content='Hello everyone!'
-        # )
-
-        # db.session.add(comment1)
-        # db.session.commit()
-
-        # votes
-
-        vote1 = Vote(
-            user_id=user1.id,
-            translation_id=translation1.id,
-            is_upvote=True
-        )
-        vote2 = Vote(
-            user_id=user2.id,
-            translation_id=translation2.id,
-            is_upvote=False
-        )
-
-        db.session.add(vote1)
-        db.session.add(vote2)
         db.session.commit()

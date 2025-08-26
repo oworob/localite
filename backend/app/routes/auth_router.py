@@ -1,8 +1,6 @@
-from datetime import datetime
 import re
 from flask import Blueprint, request
 from flask_login import login_user, logout_user, current_user, login_required
-from sqlalchemy import Update
 from app.models.user import User
 from app.tools.limiter import limiter
 from database.db import db
