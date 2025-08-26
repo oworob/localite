@@ -31,6 +31,7 @@ def create_app(testing=False):
     if testing:
         app.config['TESTING'] = True
         app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URI_TEST')
+        app.config['SECRET_KEY'] = 'test'
 
     # Initialize the database and socket
     setup_db(app, reset_db=testing)
