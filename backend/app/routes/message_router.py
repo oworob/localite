@@ -1,4 +1,4 @@
-from flask import Blueprint, request, abort
+from flask import Blueprint, request
 from flask_login import current_user, login_required
 from app.tools.parse_follow import parse_follow
 from app.models.message import Message

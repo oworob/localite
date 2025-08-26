@@ -96,7 +96,7 @@ def create():
         invite = Invite(user_id=contributor_id, project_id=project.id)
         db.session.add(invite)
         message_content = f"{current_user.username} has invited you to join '{project.title}'."
-        message = Message(user_id=contributor_id, content=message_content, link=f"/projects")
+        message = Message(user_id=contributor_id, content=message_content, link="/projects")
         db.session.add(message)
     db.session.commit()
     

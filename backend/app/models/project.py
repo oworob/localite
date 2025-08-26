@@ -76,7 +76,7 @@ class Project(db.Model, BaseModel):
         result = db.session.query(project_contributor).filter(
             project_contributor.c.user_id == user_id,
             project_contributor.c.project_id == self.id,
-            project_contributor.c.is_manager == True
+            project_contributor.c.is_manager
         ).one_or_none()
         return result is not None
     

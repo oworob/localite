@@ -2,7 +2,7 @@ import enum
 from sqlalchemy import Enum
 from database.db import db
 from app.models.base_model import BaseModel
-from app.config import EMAIL_MAX_LENGTH, PASSWORD_HASH_MAX_LENGTH, USERNAME_MAX_LENGTH, PASSWORD_MAX_LENGTH
+from app.config import EMAIL_MAX_LENGTH, PASSWORD_HASH_MAX_LENGTH, USERNAME_MAX_LENGTH
 from flask_login import UserMixin
 from flask_bcrypt import generate_password_hash, check_password_hash
 

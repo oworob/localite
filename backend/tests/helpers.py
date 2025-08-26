@@ -1,4 +1,3 @@
-from numpy import add
 from app.models.user import User
 from app.models.language import Language
 from database.db import db

@@ -4,10 +4,7 @@ from app.models.project import Project
 from app.models.user import User
 from app.models.entry import Entry
 from app.models.translation import Translation
-from app.models.vote import Vote
 from app.models.note import Note
-from app.models.message import Message
-from app.models.comment import Comment
 from app.models.invite import Invite
 
 def add_test_data(app):
