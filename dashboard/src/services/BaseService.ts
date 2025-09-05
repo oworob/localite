@@ -1,4 +1,5 @@
 import axios, { type AxiosInstance } from 'axios'
+import qs from 'qs'
 
 const ApiClient = axios.create({
   baseURL: 'http://localhost:5000/api',
@@ -6,6 +7,9 @@ const ApiClient = axios.create({
     'Content-Type': 'application/json',
   },
   withCredentials: true,
+  paramsSerializer: (params) => {
+    return qs.stringify(params, { arrayFormat: 'comma' })
+  },
 })
 
 export default abstract class BaseService {
@@ -15,13 +19,5 @@ export default abstract class BaseService {
   constructor(url: string) {
     this.url = url
     this.ApiClient = ApiClient
-  }
-
-  parse_follow(follow?: string[]): string {
-    return follow ? `follow=${follow.join(',')}` : ''
-  }
-
-  parse_filter(filter?: string): string {
-    return filter ? `filter=${filter}` : ''
   }
 }

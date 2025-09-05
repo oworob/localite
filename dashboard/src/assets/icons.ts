@@ -26,4 +26,7 @@ export const ICONS = {
   moon: 'solar:moon-bold',
   leave: 'solar:exit-bold',
   save: 'fluent:save-32-filled',
+  plus: 'fluent-emoji-high-contrast:plus',
+  minus: 'fluent-emoji-high-contrast:minus',
+  bug: 'solar:bug-bold',
 }

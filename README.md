@@ -16,22 +16,23 @@
 - [ ] Editing user profile
   - [ ] Changing status
 - [ ] Browsing users
-- [ ] Live messages via sockets (browse window, redirect, delete, mark as read)
+- [x] Live messages via sockets (browse window, redirect, delete, mark as read)
 
 #### Projects
 
-- [x] Browsing project
-  - [x] Submitting translations
-  - [ ] Translation voting
-  - [ ] Requesting context
-- [x] Updating _last_project_visit_
 - [x] Creating project
   - [x] Importing entries from CSV
   - [x] Contributor multiselect
   - [x] Inviting members
 - [x] Browsing projects
   - [x] Accepting and declining invitations
-- [ ] Filtering projects (by name and language)
+- [x] Browsing project
+  - [ ] Updating _last_project_visit_
+  - [x] Submitting translations
+  - [ ] Translation voting
+  - [x] Deleting translations
+  - [x] Requesting context
+  - [ ] Approving translations
 - [x] Leaving project as a user
 - [ ] Leaving project as an owner and passing ownership
 - [x] Project owner dashboard
@@ -42,7 +43,6 @@
   - [ ] Adding and removing target languages
   - [ ] Inviting, removing, promoting members
   - [ ] Adding, editing, deleting entries
-  - [ ] Deleting, approving translations
   - [ ] Exporting translations to CSV
   - [ ] Project statistics (languages summary, % translated, top translators)
 - [ ] Promoting contributors to managers
@@ -51,13 +51,12 @@
 #### Testing & Tools
 
 - [x] Backend test setup
-- [ ] Backend linter
+- [x] Backend linter
 - [x] Frontend test setup
 - [x] Frontend linter
 - [x] CI
 
 #### Bugs To Fix
 
-- Submitting a translation doesn't update the pending(n) count in entries list and the translations doesn't appear immediately under translations
 - Logging out sometimes doesn't redirect to login screen
 - Notes should be unique per project

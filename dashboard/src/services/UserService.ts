@@ -8,13 +8,11 @@ class UserService extends BaseService {
   }
 
   GetUsers(follow?: string[], filter?: string): Promise<IApiResponse<IApiUser[]>> {
-    return this.ApiClient.get(
-      `${this.url}?${this.parse_follow(follow)}&${this.parse_filter(filter)}`,
-    )
+    return this.ApiClient.get(this.url, { params: { follow, filter } })
   }
 
   GetUser(id: number, follow?: string[]): Promise<IApiResponse<IApiUser>> {
-    return this.ApiClient.get(`${this.url}/${id}?${this.parse_follow(follow)}`)
+    return this.ApiClient.get(`${this.url}/${id}`, { params: { follow } })
   }
 }
 

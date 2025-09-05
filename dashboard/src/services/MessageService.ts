@@ -8,7 +8,7 @@ class MessageService extends BaseService {
   }
 
   GetMessages(follow?: string[]): Promise<IApiResponse<IApiMessage[]>> {
-    return this.ApiClient.get(`${this.url}?${this.parse_follow(follow)}`)
+    return this.ApiClient.get(this.url, { params: { follow } })
   }
 
   MarkMessageAsRead(id: number): Promise<IApiResponse<null>> {

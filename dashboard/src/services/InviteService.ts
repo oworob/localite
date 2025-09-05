@@ -8,7 +8,7 @@ class InviteService extends BaseService {
   }
 
   GetInvites(follow?: string[]): Promise<IApiResponse<IApiInvite[]>> {
-    return this.ApiClient.get(`${this.url}?${this.parse_follow(follow)}`)
+    return this.ApiClient.get(this.url, { params: { follow } })
   }
 
   AcceptInvite(id: number): Promise<IApiResponse<any>> {
