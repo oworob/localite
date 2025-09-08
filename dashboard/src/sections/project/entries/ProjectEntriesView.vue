@@ -19,15 +19,15 @@ const edited_entry = ref<IApiEntry>()
 
 const emit = defineEmits(['refreshProject'])
 
-function GetCompletionPercentage(entry: IApiEntry): number {
-  let submitted = 0
-  // entry.languages?.forEach((lang) => {
-  //   if (lang.translation_count > 0) {
-  //     submitted++
-  //   }
-  // })
-  return (submitted / entry.languages!.length) * 100
-}
+// function GetCompletionPercentage(entry: IApiEntry): number {
+//   const submitted = 0
+//   entry.languages?.forEach((lang) => {
+//     if (lang.translation_count > 0) {
+//       submitted++
+//     }
+//   })
+//   return (submitted / entry.languages!.length) * 100
+// }
 
 function OpenEditEntry(entry: IApiEntry) {
   edited_entry.value = entry
@@ -56,7 +56,7 @@ function OpenEditEntry(entry: IApiEntry) {
         <p class="count">{{ i + 1 }}.</p>
         <button class="main panel hover" :onclick="OpenEditEntry">
           <p>{{ entry.content }}</p>
-          <span class="hint">{{ GetCompletionPercentage(entry) }}%</span>
+          <!-- <span class="hint">{{ GetCompletionPercentage(entry) }}%</span> -->
         </button>
       </div>
     </section>
