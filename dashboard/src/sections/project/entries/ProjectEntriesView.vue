@@ -21,11 +21,11 @@ const emit = defineEmits(['refreshProject'])
 
 function GetCompletionPercentage(entry: IApiEntry): number {
   let submitted = 0
-  entry.languages?.forEach((lang) => {
-    if (lang.translation_count > 0) {
-      submitted++
-    }
-  })
+  // entry.languages?.forEach((lang) => {
+  //   if (lang.translation_count > 0) {
+  //     submitted++
+  //   }
+  // })
   return (submitted / entry.languages!.length) * 100
 }
 

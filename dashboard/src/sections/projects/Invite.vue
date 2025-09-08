@@ -16,34 +16,34 @@ const emit = defineEmits(['accept', 'reject'])
 
 const submitting = ref(false)
 
-function AcceptInvite() {
-  InviteService.AcceptInvite(props.invite.id)
-    .then(() => {
-      emit('accept', props.invite.id)
-    })
-    .catch((err) => {
-      if (err.response?.data.message) {
-        NotificationStore.AddNotification(err.response.data.message, 'error')
-      } else {
-        NotificationStore.AddNotification(err.message, 'error')
-      }
-      submitting.value = false
-    })
+async function AcceptInvite() {
+  try {
+    submitting.value = true
+    await InviteService.AcceptInvite(props.invite.id)
+    emit('accept', props.invite.id)
+  } catch (err: any) {
+    if (err.response?.data.message) {
+      NotificationStore.AddNotification(err.response.data.message, 'error')
+    } else {
+      NotificationStore.AddNotification(err.message, 'error')
+    }
+    submitting.value = false
+  }
 }
 
-function DeclineInvite() {
-  InviteService.DeclineInvite(props.invite.id)
-    .then(() => {
-      emit('reject', props.invite.id)
-    })
-    .catch((err) => {
-      if (err.response?.data.message) {
-        NotificationStore.AddNotification(err.response.data.message, 'error')
-      } else {
-        NotificationStore.AddNotification(err.message, 'error')
-      }
-      submitting.value = false
-    })
+async function DeclineInvite() {
+  try {
+    submitting.value = true
+    await InviteService.DeclineInvite(props.invite.id)
+    emit('reject', props.invite.id)
+  } catch (err: any) {
+    if (err.response?.data.message) {
+      NotificationStore.AddNotification(err.response.data.message, 'error')
+    } else {
+      NotificationStore.AddNotification(err.message, 'error')
+    }
+    submitting.value = false
+  }
 }
 </script>
 
@@ -75,8 +75,10 @@ function DeclineInvite() {
     </div>
 
     <div class="actions">
-      <button class="primary join" :disabled="submitting" @click="AcceptInvite">Join</button>
-      <button class="secondary danger" :disabled="submitting" @click="DeclineInvite">Delete</button>
+      <button class="primary accept" :disabled="submitting" @click="AcceptInvite">Join</button>
+      <button class="secondary decline danger" :disabled="submitting" @click="DeclineInvite">
+        Delete
+      </button>
     </div>
   </div>
 </template>
@@ -143,7 +145,7 @@ a {
 .actions {
   display: flex;
   gap: 0.5rem;
-  .join {
+  .accept {
     flex-grow: 1;
   }
 }

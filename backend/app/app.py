@@ -16,6 +16,7 @@ from app.routes.language_router import language_router
 from app.routes.message_router import message_router
 from app.routes.translation_router import translation_router
 from app.routes.invite_router import invite_router
+from app.routes.entry_router import entry_router
 
 load_dotenv()
 
@@ -58,6 +59,7 @@ def create_app(testing=False):
     api.register_blueprint(message_router)
     api.register_blueprint(translation_router)
     api.register_blueprint(invite_router)
+    api.register_blueprint(entry_router)
     app.register_blueprint(api)
 
     return app

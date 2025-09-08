@@ -11,11 +11,11 @@ class InviteService extends BaseService {
     return this.ApiClient.get(this.url, { params: { follow } })
   }
 
-  AcceptInvite(id: number): Promise<IApiResponse<any>> {
+  AcceptInvite(id: number): Promise<IApiResponse<null>> {
     return this.ApiClient.post(`${this.url}/${id}/accept`)
   }
 
-  DeclineInvite(id: number): Promise<IApiResponse<any>> {
+  DeclineInvite(id: number): Promise<IApiResponse<null>> {
     return this.ApiClient.post(`${this.url}/${id}/decline`)
   }
 }

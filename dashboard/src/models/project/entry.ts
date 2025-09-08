@@ -9,15 +9,11 @@ export interface IApiEntry {
   context_requested: boolean
   project_id: number
   translations?: IApiTranslation[]
-  languages?: IApiEntryLanguage[]
+  languages?: IApiLanguage[]
+  status?: string
 }
 
 export interface INewEntry {
   content: string
   context: string
-}
-
-export interface IApiEntryLanguage extends IApiLanguage {
-  status: string
-  translation_count: number
 }

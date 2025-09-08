@@ -77,6 +77,7 @@ onClickOutside(component, (event) => {
         </div>
         <Icon :icon="ICONS.arrow_down" :rotate="select_open ? 2 : 0" />
       </button>
+
       <div class="select-window panel" v-if="select_open">
         <input type="text" class="search" placeholder="Search languages" v-model="query" />
         <button

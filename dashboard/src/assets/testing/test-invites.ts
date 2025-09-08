@@ -1,4 +1,5 @@
 import type { IApiInvite } from '@/models/project/invite'
+import { projects } from './test-projects'
 
 export const invites: IApiInvite[] = [
   {
@@ -6,6 +7,7 @@ export const invites: IApiInvite[] = [
     created_at: new Date(),
     project_id: 1,
     user_id: 1,
+    project: projects[0],
   },
   {
     id: 2,

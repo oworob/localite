@@ -27,7 +27,7 @@ def accept_invite(id):
     project.contributors.append(current_user)
     db.session.delete(invite)
     db.session.commit()
-    return {'message': 'Invite accepted'}, 200
+    return '', 200
 
 @invite_router.route('/<int:id>/decline', methods=['POST'])
 @login_required
@@ -38,4 +38,4 @@ def decline_invite(id):
 
     db.session.delete(invite)
     db.session.commit()
-    return {'message': 'Invite declined'}, 200
+    return '', 200

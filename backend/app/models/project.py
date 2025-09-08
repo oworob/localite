@@ -1,4 +1,5 @@
 from datetime import datetime
+from flask_login import current_user
 from sqlalchemy import event
 from app.models.update import Update
 from app.models.language import Language
@@ -24,7 +25,6 @@ class Project(db.Model, BaseModel):
     
     title = db.Column(db.String(PROJECT_TITLE_MAX_LENGTH), nullable=False)
     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    owner_last_project_visit = db.Column(db.DateTime, nullable=False, default=datetime.now)
     description = db.Column(db.String(PROJECT_DESCRIPTION_MAX_LENGTH), nullable=True)
     source_language_id = db.Column(db.Integer, db.ForeignKey('language.id'), nullable=False)
     source_language = db.relationship('Language', foreign_keys=[source_language_id]) # ???
@@ -40,6 +40,7 @@ class Project(db.Model, BaseModel):
         
     def to_dict(self, follow=[]):
         data = super().to_dict(follow)
+        data['last_project_visit'] = self.get_last_visit(current_user.id)
         if 'contributors' in follow:
             for contributor in data['contributors']:
                 contributor['last_project_visit'] = self.get_last_visit(contributor['id'])

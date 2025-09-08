@@ -39,12 +39,17 @@ function Logout() {
         <Icon :icon="ICONS.project" />
         Projects
       </RouterLink>
-      <RouterLink to="/projects/1" class="secondary">P1</RouterLink>
-      <RouterLink to="/projects/2" class="secondary">P2</RouterLink>
-      <RouterLink to="/projects/3" class="secondary">P3</RouterLink>
       <a href="https://github.com/oworob/localite" target="_blank" class="secondary with-icon">
         <Icon :icon="ICONS.github" />
         GitHub
+      </a>
+      <a
+        href="https://github.com/oworob/localite/issues"
+        target="_blank"
+        class="secondary with-icon"
+      >
+        <Icon :icon="ICONS.bug" />
+        Submit a Bug
       </a>
     </div>
 

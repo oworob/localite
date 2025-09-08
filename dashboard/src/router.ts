@@ -30,7 +30,7 @@ const router = createRouter({
     {
       path: '/projects/new',
       name: 'project-new',
-      component: () => import('@/sections/project-create-edit/ProjectCreate.vue'),
+      component: () => import('@/sections/project-create/ProjectCreate.vue'),
       meta: { title: 'Create New Project' },
     },
     {
@@ -42,7 +42,8 @@ const router = createRouter({
     {
       path: '/:pathMatch(.*)',
       name: 'not-found',
-      component: () => import('@/sections/PageNotFoundView.vue'),
+      component: () => import('@/components/Error.vue'),
+      props: { error: 'This page does not exist.' },
       meta: { title: 'Page Not Found' },
     },
   ],

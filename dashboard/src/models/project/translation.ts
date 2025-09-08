@@ -1,11 +1,12 @@
 import type { IApiUser } from '../user/user'
 import type { IApiEntry } from './entry'
 import type { IApiProject } from './project'
+import type { IApiVote } from './vote'
 
 export interface IApiTranslation {
   id: number
   created_at: Date
-  accepted: boolean
+  approved: boolean
   author_id: number
   author?: IApiUser
   content: string
@@ -14,9 +15,9 @@ export interface IApiTranslation {
   language_id: number
   project_id: number
   project?: IApiProject
-  total_votes: number
-  user_upvoted: boolean
-  user_downvoted: boolean
+  votes?: IApiVote[]
+  rating: number
+  user_vote: -1 | 0 | 1
 }
 
 export interface INewTranslation {

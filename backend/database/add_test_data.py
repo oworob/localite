@@ -118,7 +118,7 @@ def add_test_data(app):
             author_id=user2.id,
             language_id=language2.id,
             content='Presiona E para comer.',
-            accepted=True
+            approved=True
         )
         translation2 = Translation(
             project_id=project1.id,

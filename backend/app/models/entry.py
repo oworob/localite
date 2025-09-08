@@ -11,24 +11,11 @@ class Entry(db.Model, BaseModel):
     context_requested = db.Column(db.Boolean, nullable=False, default=False)
     translations = db.relationship('Translation', backref='entry', lazy=True, cascade='all, delete-orphan')
 
-    def to_dict(self, follow=[]):
-        data = super().to_dict(follow)
-
-        if 'languages' in follow: # language report
-            languages = [lang.to_dict() for lang in self.project.languages]
-            
-            for lang in languages:
-                lang['status'] = 'needs_translation'
-                lang['translation_count'] = 0
-                for translation in self.translations:
-                    if translation.language.id == lang['id']:
-                        lang['translation_count'] += 1
-                        lang['status'] = 'pending'
-                        if translation.accepted:
-                            lang['status'] = 'accepted'
-                            break
-
-            data['languages'] = languages
-        
-        
-        return data
+    def get_language_status(self, language_id):
+        for translation in self.translations:
+            if translation.language_id == language_id:
+                if translation.approved:
+                    return 'approved'
+                else:
+                    return 'pending'
+        return 'needs_translation'

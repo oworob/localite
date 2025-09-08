@@ -19,6 +19,7 @@ export interface IApiProject {
   languages?: IApiLanguage[]
   stats?: IApiProjectStats
   updates?: IApiUpdate[]
+  last_project_visit?: Date | null
 }
 
 export interface IApiProjectStats {

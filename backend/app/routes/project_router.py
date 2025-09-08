@@ -167,9 +167,7 @@ def delete(id):
     project = Project.query.get(id)
     if current_user.id != project.owner_id:
         return {'message': 'You are not allowed to delete this project.'}, 403
-        
-    # Delete all entries, notes, translations, and updates related to the project
+    
     db.session.delete(project)
-
     db.session.commit()
     return '', 204

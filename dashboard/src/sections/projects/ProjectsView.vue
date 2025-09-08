@@ -30,13 +30,7 @@ const joined_projects = computed(() =>
 async function FetchData() {
   try {
     loading.value = true
-    const res = await ProjectService.GetProjects([
-      'owner',
-      'languages',
-      'source_language',
-      'contributors',
-      'entries',
-    ])
+    const res = await ProjectService.GetProjects(['owner', 'languages', 'source_language', 'stats'])
     projects.value = res.data
     const res2 = await InviteService.GetInvites([
       'project.owner',

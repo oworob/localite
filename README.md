@@ -27,12 +27,12 @@
 - [x] Browsing projects
   - [x] Accepting and declining invitations
 - [x] Browsing project
-  - [ ] Updating _last_project_visit_
+  - [x] Updating _last_project_visit_
   - [x] Submitting translations
-  - [ ] Translation voting
+  - [x] Translation voting
   - [x] Deleting translations
   - [x] Requesting context
-  - [ ] Approving translations
+  - [x] Approving translations
 - [x] Leaving project as a user
 - [ ] Leaving project as an owner and passing ownership
 - [x] Project owner dashboard
@@ -56,7 +56,8 @@
 - [x] Frontend linter
 - [x] CI
 
-#### Bugs To Fix
+#### Issues To Fix
 
 - Logging out sometimes doesn't redirect to login screen
 - Notes should be unique per project
+- Theme editor is not accessible

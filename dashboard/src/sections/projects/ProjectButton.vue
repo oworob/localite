@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue/dist/iconify.js'
-import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
 import { ICONS } from '@/assets/icons'
 import type { IApiProject } from '@/models/project/project'
@@ -8,19 +7,6 @@ import { useAuthStore } from '@/stores/AuthStore'
 import { FormatDate } from '@/tools/FormatDate'
 
 const AuthStore = useAuthStore()
-
-const user = computed(() =>
-  props.project.contributors?.find((contributor) => contributor.id === AuthStore.user?.id),
-)
-
-function GetNewEntryCount(project: IApiProject): number {
-  const new_entries = project.entries?.filter((entry) => {
-    const visit_date = new Date(user.value!.last_project_visit!)
-    const entry_date = new Date(entry.created_at)
-    return entry_date > visit_date
-  })
-  return new_entries!.length
-}
 
 const props = defineProps<{
   project: IApiProject
@@ -30,10 +16,6 @@ const props = defineProps<{
 <template>
   <RouterLink :to="'/projects/' + project.id" class="project-link">
     <div class="project panel hover">
-      <p class="new hint" v-if="GetNewEntryCount(project) > 0">
-        {{ GetNewEntryCount(project) }} new
-        {{ GetNewEntryCount(project) === 1 ? 'entry' : 'entries' }} since last visit
-      </p>
       <header class="header">
         <div class="main">
           <Icon :icon="'circle-flags:' + project.source_language?.code" />
@@ -52,11 +34,11 @@ const props = defineProps<{
           />
         </div>
         <div class="other hint">
-          <p class="contributors"><Icon :icon="ICONS.users" />{{ project.contributors?.length }}</p>
-          <p class="entries"><Icon :icon="ICONS.entry" />{{ project.entries?.length }}</p>
+          <p class="contributors"><Icon :icon="ICONS.users" />{{ project.stats!.contributors }}</p>
+          <p class="entries"><Icon :icon="ICONS.entry" />{{ project.stats!.entries }}</p>
         </div>
       </div>
-      <p class="hint">Last visit: {{ FormatDate(user?.last_project_visit!, true, true) }}</p>
+      <p class="hint">Last visit: {{ FormatDate(project.last_project_visit!, true, true) }}</p>
     </div>
   </RouterLink>
 </template>

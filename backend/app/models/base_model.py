@@ -11,7 +11,7 @@ class BaseModel:
     def to_dict(self, follow=[]):
         data = {column.name: getattr(self, column.name) for column in self.__table__.columns}
 
-        dont_return = ['password', 'password_hash, email']
+        dont_return = ['password', 'password_hash', 'email']
         for key in dont_return:
             if key in data:
                 del data[key]

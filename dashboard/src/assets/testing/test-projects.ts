@@ -47,6 +47,13 @@ export const projects: IApiProject[] = [
         project_id: 1,
       },
     ],
+    stats: {
+      languages: languages.length,
+      contributors: 2,
+      entries: entries.length,
+      translations: 2,
+      notes: 2,
+    },
   },
   {
     id: 2,
@@ -55,6 +62,13 @@ export const projects: IApiProject[] = [
     description: '',
     owner_id: 2,
     source_language_id: 2,
+    stats: {
+      languages: languages.length,
+      contributors: 2,
+      entries: entries.length,
+      translations: 2,
+      notes: 2,
+    },
   },
   {
     id: 3,
@@ -63,5 +77,12 @@ export const projects: IApiProject[] = [
     description: '',
     owner_id: 3,
     source_language_id: 3,
+    stats: {
+      languages: languages.length,
+      contributors: 2,
+      entries: entries.length,
+      translations: 2,
+      notes: 2,
+    },
   },
 ]

@@ -128,8 +128,8 @@ async function UpdateNotes() {
 </script>
 
 <template>
-  <main id="ProjectInfoView">
-    <div class="project-info">
+  <main id="ProjectDetailsView">
+    <div class="project-details">
       <div class="content">
         <div class="details panel">
           <div class="header">
@@ -369,7 +369,7 @@ async function UpdateNotes() {
 </template>
 
 <style scoped lang="scss">
-.project-info {
+.project-details {
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -380,7 +380,7 @@ async function UpdateNotes() {
   }
   > .content {
     display: grid;
-    grid-template-columns: 1fr 2fr;
+    grid-template-columns: 2fr 3fr;
     gap: 1rem;
   }
 }

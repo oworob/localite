@@ -7,10 +7,12 @@ const ApiClient = axios.create({
     'Content-Type': 'application/json',
   },
   withCredentials: true,
-  paramsSerializer: (params) => {
-    return qs.stringify(params, { arrayFormat: 'comma' })
-  },
+  paramsSerializer: serializer,
 })
+
+export function serializer(params: Record<string, any>): string {
+  return qs.stringify(params, { arrayFormat: 'comma' })
+}
 
 export default abstract class BaseService {
   protected url: string
