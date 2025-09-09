@@ -96,8 +96,8 @@ onClickOutside(component, (event) => {
           :style="{ '--theme-color': `var(--theme-${theme})` }"
           :aria-label="'Theme color ' + theme"
         >
-          {{ capitalize(theme) }}
           <input type="radio" :id="theme" name="color-theme" :value="theme" v-model="color_theme" />
+          {{ capitalize(theme) }}
         </label>
       </div>
 

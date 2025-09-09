@@ -98,14 +98,14 @@ const { isOverDropZone } = useDropZone(drop_zone, {
       </div>
 
       <div class="options">
-        <label for="append" class="radio-label"
-          >Append to existing entries
+        <label for="append" class="radio-label">
           <input type="radio" id="append" name="mode" value="append" v-model="mode" />
+          Append to existing entries
         </label>
 
-        <label for="overwrite" class="radio-label"
-          >Overwrite existing entries
+        <label for="overwrite" class="radio-label">
           <input type="radio" id="overwrite" name="mode" value="overwrite" v-model="mode" />
+          Overwrite existing entries
         </label>
       </div>
 

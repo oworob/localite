@@ -60,4 +60,3 @@
 
 - Logging out sometimes doesn't redirect to login screen
 - Notes should be unique per project
-- Theme editor is not accessible

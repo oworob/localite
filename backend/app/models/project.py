@@ -61,8 +61,8 @@ class Project(db.Model, BaseModel):
         result = db.session.query(project_contributor).filter(
             project_contributor.c.user_id == user_id,
             project_contributor.c.project_id == self.id
-        ).one()
-        return result.last_project_visit
+        ).one_or_none()
+        return result.last_project_visit if result else None
     
     def update_last_visit(self, user_id):
         db.session.execute(
