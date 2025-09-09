@@ -9,9 +9,9 @@ const props = defineProps<{
 
 <template>
   <div id="Switch" :class="{ checked: props.checked }">
-    <div class="switch-wrapper">
+    <button class="switch-wrapper">
       <Icon class="icon" :icon="ICONS.check" />
-    </div>
+    </button>
   </div>
 </template>
 
@@ -19,6 +19,7 @@ const props = defineProps<{
 #Switch {
   cursor: pointer;
   .switch-wrapper {
+    padding: 0;
     transition: var(--transition);
     background-color: var(--panel-border);
     border-radius: 1rem;
