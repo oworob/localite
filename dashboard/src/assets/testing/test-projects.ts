@@ -60,7 +60,7 @@ export const projects: IApiProject[] = [
     created_at: new Date(),
     title: 'Project2',
     description: '',
-    owner_id: 2,
+    owner_id: 1,
     source_language_id: 2,
     stats: {
       languages: languages.length,
@@ -75,7 +75,7 @@ export const projects: IApiProject[] = [
     created_at: new Date(),
     title: 'Project3',
     description: '',
-    owner_id: 3,
+    owner_id: 2,
     source_language_id: 3,
     stats: {
       languages: languages.length,
@@ -83,6 +83,21 @@ export const projects: IApiProject[] = [
       entries: entries.length,
       translations: 2,
       notes: 2,
+    },
+  },
+  {
+    id: 4,
+    created_at: new Date(),
+    title: 'Project4',
+    description: '',
+    owner_id: 2,
+    source_language_id: 4,
+    stats: {
+      languages: languages.length,
+      contributors: 3,
+      entries: entries.length,
+      translations: 3,
+      notes: 3,
     },
   },
 ]

@@ -21,10 +21,20 @@ const projects = ref<IApiProject[]>([])
 
 const invites = ref<IApiInvite[]>([])
 const owned_projects = computed(() =>
-  projects.value.filter((project) => project.owner_id === AuthStore.user?.id),
+  projects.value
+    .filter((project) => project.owner_id === AuthStore.user?.id)
+    .sort(
+      (a, b) =>
+        new Date(b.last_project_visit!).getTime() - new Date(a.last_project_visit!).getTime(),
+    ),
 )
 const joined_projects = computed(() =>
-  projects.value.filter((project) => project.owner_id !== AuthStore.user?.id),
+  projects.value
+    .filter((project) => project.owner_id !== AuthStore.user?.id)
+    .sort(
+      (a, b) =>
+        new Date(b.last_project_visit!).getTime() - new Date(a.last_project_visit!).getTime(),
+    ),
 )
 
 async function FetchData() {
