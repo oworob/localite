@@ -4,11 +4,12 @@
   position: fixed;
   top: 0;
   left: 0;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.2);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 300;
+  z-index: 200;
+  backdrop-filter: blur(5px);
 
   .panel {
     margin: 5rem;

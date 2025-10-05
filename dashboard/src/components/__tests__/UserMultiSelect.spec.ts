@@ -36,7 +36,7 @@ describe('UserMultiSelect', () => {
   })
 
   it('displays the number of selected users', async () => {
-    const header = component.find('.select-header span')
+    const header = component.find('.select-header .main')
     expect(header.text()).toBe('0 users selected')
 
     await component.setProps({ selected_users: [users[0]] })

@@ -55,7 +55,7 @@ onClickOutside(component, (event) => {
           type="button"
           v-for="option in options"
           :key="option.value"
-          class="language-button tertiary with-icon"
+          class="option-button tertiary with-icon"
           @click="SelectOption(option.value)"
         >
           <Checkbox :checked="props.selected === option.value" />
@@ -70,27 +70,17 @@ onClickOutside(component, (event) => {
 #EntryFilterSelect {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  button {
-    width: 100%;
-  }
 }
 
 .select-container {
-  display: flex;
-  flex-direction: column;
   position: relative;
 }
 
 .select-header {
-  display: flex;
-  align-items: center;
-  padding: 10px 15px;
+  width: 100%;
   .main {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    flex-grow: 1;
+    flex: 1;
+    text-align: left;
   }
 }
 
@@ -109,10 +99,7 @@ onClickOutside(component, (event) => {
   border-top: 0;
   button.tertiary {
     padding-left: 0;
+    padding-right: 0;
   }
-}
-
-.search {
-  margin-bottom: 0.5rem;
 }
 </style>

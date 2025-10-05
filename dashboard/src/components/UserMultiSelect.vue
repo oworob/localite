@@ -70,10 +70,10 @@ onClickOutside(component, () => {
         @click="select_open = !select_open"
       >
         <Icon :icon="ICONS.users" />
-        <span>
+        <div class="main">
           {{ selected_users.length }}
-          {{ selected_users.length === 1 ? 'user' : 'users' }} selected</span
-        >
+          {{ selected_users.length === 1 ? 'user' : 'users' }} selected
+        </div>
         <Icon :icon="ICONS.arrow_down" :rotate="select_open ? 2 : 0" />
       </button>
       <div class="select-window panel" v-if="select_open">
@@ -87,12 +87,10 @@ onClickOutside(component, () => {
             class="tertiary with-icon user-button"
             @click="emit('userSelected', user)"
           >
-            <div class="main">
-              <Checkbox
-                :checked="selected_users.some((selected_user) => selected_user.id === user.id)"
-              />
-              <span>{{ user.username }}</span>
-            </div>
+            <Checkbox
+              :checked="selected_users.some((selected_user) => selected_user.id === user.id)"
+            />
+            <span class="user">{{ user.username }}</span>
             <span class="hint status">{{ UserStatus[user.status] }}</span>
           </button>
         </div>
@@ -105,24 +103,17 @@ onClickOutside(component, () => {
 #UserSelect {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  button {
-    width: 100%;
-  }
 }
 
 .select-container {
-  display: flex;
-  flex-direction: column;
   position: relative;
 }
 
 .select-header {
-  display: flex;
-  align-items: center;
+  width: 100%;
   padding: 10px 15px;
-  span {
-    flex-grow: 1;
+  .main {
+    flex: 1;
     text-align: left;
   }
 }
@@ -142,12 +133,12 @@ onClickOutside(component, () => {
   border-top-right-radius: 0;
 
   .user-button {
+    width: 100%;
     padding-left: 0;
-    justify-content: space-between;
-    .main {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
+    padding-right: 0;
+    .user {
+      flex: 1;
+      text-align: left;
     }
     .status {
       font-weight: normal;

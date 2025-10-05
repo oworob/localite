@@ -100,27 +100,19 @@ onClickOutside(component, (event) => {
 #LanguageSelect {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  button {
-    width: 100%;
-  }
 }
 
 .select-container {
-  display: flex;
-  flex-direction: column;
   position: relative;
 }
 
 .select-header {
-  display: flex;
-  align-items: center;
+  width: 100%;
   padding: 10px 15px;
   .main {
     display: flex;
-    align-items: center;
     gap: 0.5rem;
-    flex-grow: 1;
+    flex: 1;
   }
 }
 
@@ -139,6 +131,7 @@ onClickOutside(component, (event) => {
   border-top: 0;
   button.tertiary {
     padding-left: 0;
+    padding-right: 0;
   }
 }
 
