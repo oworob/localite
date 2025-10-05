@@ -7,15 +7,8 @@ import PersistenceService from '@/services/PersistenceService'
 import Switch from './Switch.vue'
 
 const color_themes = ['green', 'blue', 'red', 'yellow', 'purple', 'orange', 'pink']
-const font_sizes = ref({
-  small: 0.9,
-  normal: 1,
-  large: 1.1,
-  huge: 1.2,
-})
 
 const theme_window_open = ref(false)
-const font_size = ref(1)
 const light_theme = ref(false)
 const color_theme = ref('green')
 
@@ -30,12 +23,6 @@ function UpdateColorTheme(theme: string) {
   PersistenceService.Set('theme', theme)
 }
 
-function UpdateFontSize(size: number) {
-  font_size.value = size
-  document.documentElement.style.fontSize = `${size}rem`
-  PersistenceService.Set('font_size', size)
-}
-
 watch(color_theme, UpdateColorTheme)
 
 onMounted(() => {
@@ -48,11 +35,6 @@ onMounted(() => {
   if (saved_light_theme !== null) {
     light_theme.value = saved_light_theme
     document.documentElement.setAttribute('data-light-theme', saved_light_theme.toString())
-  }
-  const saved_font_size = PersistenceService.Get<number>('font_size')
-  if (saved_font_size) {
-    font_size.value = saved_font_size
-    document.documentElement.style.fontSize = `${saved_font_size}rem`
   }
 })
 
@@ -100,21 +82,6 @@ onClickOutside(component, (event) => {
           {{ capitalize(theme) }}
         </label>
       </div>
-
-      <div class="list-item font-size">
-        <label class="hint">Font Size</label>
-        <div class="sizes">
-          <button
-            v-for="(size, label) in font_sizes"
-            :key="label"
-            :class="[font_size === size ? 'primary' : 'tertiary', label + '-button']"
-            @click="UpdateFontSize(size)"
-            :aria-label="'Font size ' + label"
-          >
-            {{ capitalize(label) }}
-          </button>
-        </div>
-      </div>
     </div>
   </div>
 </template>
@@ -151,20 +118,6 @@ onClickOutside(component, (event) => {
       }
       &:has(input[type='radio']:checked):before {
         background-color: var(--theme-color);
-      }
-    }
-  }
-
-  .font-size {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    .sizes {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.25rem;
-      button {
-        width: 100%;
       }
     }
   }

@@ -44,19 +44,12 @@ describe('ThemeEditor', () => {
     expect(component.vm.color_theme).toBe('blue')
   })
 
-  it('updates the font size', async () => {
-    await component.find('.toggle').trigger('click')
-    await component.find('.huge-button').trigger('click')
-    expect(component.vm.font_size).toBe(1.2)
-  })
-
   it('loads saved theme settings', async () => {
     localStorage.setItem('light_theme', 'true')
     localStorage.setItem('color_theme', 'blue')
-    localStorage.setItem('font_size', '1.2')
+
     component = mount(ThemeEditor)
     expect(component.vm.light_theme).toBe(true)
     expect(component.vm.color_theme).toBe('blue')
-    expect(component.vm.font_size).toBe(1.2)
   })
 })
