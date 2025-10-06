@@ -46,7 +46,7 @@ describe('ProjectsView', () => {
     expect(component).toBeTruthy()
   })
 
-  it('fetches data', async () => {
+  it('fetches data', () => {
     expect(component.vm.projects).toEqual(projects)
     expect(component.vm.invites).toEqual(invites)
   })
@@ -63,7 +63,7 @@ describe('ProjectsView', () => {
     expect(component.vm.error).toBe('Failed to fetch projects')
   })
 
-  it('handles accepting and declining invites', async () => {
+  it('handles accepting and declining invites', () => {
     expect(component.vm.invites).toEqual(invites)
     component.vm.HandleInviteDecline(invites[0].id)
     expect(component.vm.invites).toEqual(invites.filter((i) => i.id !== invites[0].id))

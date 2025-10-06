@@ -17,7 +17,7 @@ const NotificationStore = useNotificationStore()
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 #Notifications {
   position: fixed;
   top: var(--topbar-height);
@@ -28,7 +28,7 @@ const NotificationStore = useNotificationStore()
   gap: 0.5rem;
   width: 20%;
   pointer-events: none;
-  z-index: 200;
+  z-index: 300;
 }
 .notification {
   cursor: pointer;
@@ -36,6 +36,7 @@ const NotificationStore = useNotificationStore()
   transform: translateY(0);
   position: relative;
   pointer-events: initial;
+  color: var(--text-light);
   &.removing {
     transform: translateX(calc(100% + 1rem));
   }

@@ -136,7 +136,7 @@ describe('ProjectCreate', () => {
     expect(component.vm.project_form.languages).not.toContain(languages[0])
   })
 
-  it('selects and unselects target language', async () => {
+  it('selects and unselects target language', () => {
     component.vm.HandleTargetLanguageSelected(languages[1].id)
     expect(component.vm.project_form.languages[0]).toEqual(languages[1])
 
@@ -159,7 +159,7 @@ describe('ProjectCreate', () => {
     expect(component.find('.selected-users').exists()).toBe(true)
   })
 
-  it('selects and unselects users', async () => {
+  it('selects and unselects users', () => {
     component.vm.HandleUserSelected(users[0])
     expect(component.vm.project_form.contributors[0].id).toBe(1)
 

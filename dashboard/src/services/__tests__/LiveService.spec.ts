@@ -15,7 +15,7 @@ vi.mock('socket.io-client', () => {
 })
 
 describe('LiveService', () => {
-  it('connects to and disconnects from socket', async () => {
+  it('connects to and disconnects from socket', () => {
     LiveService.connect()
     expect(LiveService.connected.value).toBe(true)
 

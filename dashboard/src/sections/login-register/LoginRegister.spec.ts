@@ -8,7 +8,7 @@ import AuthService from '@/services/AuthService'
 import MiscService from '@/services/MiscService'
 import { useAuthStore } from '@/stores/AuthStore'
 import { useNotificationStore } from '@/stores/NotificationStore'
-import LoginRegister from '../LoginRegister.vue'
+import LoginRegister from './LoginRegister.vue'
 
 describe('LoginRegister', () => {
   let component: any
@@ -44,7 +44,7 @@ describe('LoginRegister', () => {
     AuthStore = useAuthStore()
   })
 
-  it('renders correctly', async () => {
+  it('renders correctly', () => {
     expect(component).toBeTruthy()
   })
 

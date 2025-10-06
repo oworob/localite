@@ -139,7 +139,7 @@ describe('Messages', () => {
     expect(NotificationStore.AddNotification).toHaveBeenCalled()
   })
 
-  it('receives new messages via LiveService', async () => {
+  it('receives new messages via LiveService', () => {
     const new_message = {
       id: 3,
       content: 'New message',

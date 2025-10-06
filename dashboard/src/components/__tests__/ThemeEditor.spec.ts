@@ -44,7 +44,7 @@ describe('ThemeEditor', () => {
     expect(component.vm.color_theme).toBe('blue')
   })
 
-  it('loads saved theme settings', async () => {
+  it('loads saved theme settings', () => {
     localStorage.setItem('light_theme', 'true')
     localStorage.setItem('color_theme', 'blue')
 

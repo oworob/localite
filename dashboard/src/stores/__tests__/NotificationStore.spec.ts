@@ -16,7 +16,7 @@ describe('NotificationStore', () => {
     vi.useRealTimers()
   })
 
-  it('adds a notification and removes it after timeout', async () => {
+  it('adds a notification and removes it after timeout', () => {
     store.AddNotification('test', 'success')
     expect(store.notifications).toHaveLength(1)
     vi.advanceTimersByTime(2000)

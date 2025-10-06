@@ -37,6 +37,9 @@ onClickOutside(component, (event) => {
 </template>
 
 <style scoped lang="scss">
+#ConfirmModal {
+  z-index: 201;
+}
 .content {
   display: flex;
   flex-direction: column;
